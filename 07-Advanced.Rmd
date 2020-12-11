@@ -3,24 +3,14 @@
 
 ## Custom regional summaries
 
-Yes, you can calculate the trend and trajectories for custom combinations of strata, such as the trends for Eastern and Western populations of Horned Lark.
+Yes, you can calculate the trend and trajectories for custom combinations of strata, such as a formal trend estimate for populations of Scarlet Tanager in the North East (BCRs 7, 8, 12, 13, and 14).
 
 ``` {r A1}
-    #stratification <- "bbs_cws"
-    #strat_data <- stratify(by = stratification, sample_data = TRUE)
-    jags_data <- prepare_jags_data(strat_data,
-                              species_to_run = "Lincoln's Sparrow",
-                              model = "gamye")
-
-    #jags_mod <- run_model(jags_data = jags_data)
-```
-
-```{r A2, echo=FALSE}
-load("data/jags_mod_full_Lincolns_Sparrow.RData")
+load("jags_mod_full.RData") #saved Scarlet Tanager model output and data
 ```
 
 
-Assuming the above setup has been run. The user could then generate population trajectories using a customized grouping of the original strata.
+### Define the custom regions as a collection of the existing strata.
 
 First extract a dataframe that defines the original strata used in the analysis.
 
@@ -29,21 +19,39 @@ st_comp_regions <- get_composite_regions(strata_type = "bbs_cws")
 knitr::kable(head(st_comp_regions))
 ```
 
-The add a column to the dataframe that groups the original strata into the desired custom regions.
+Then add a column to the dataframe that groups the original strata into the desired custom regions.
 
 ``` {r A4}
-st_comp_regions$East_West <- ifelse(st_comp_regions$bcr %in% c(7,8,12:14,22:31),"East","West")
+st_comp_regions$NorthEast <- ifelse(st_comp_regions$bcr %in% c(7,8,12:14),"NorthEast","Other")
 ```
 
-st_comp_regions can now be used as the dataframe input to the argument alt_region_names in `generate_indices()`, with "East_West" as the value for the argument regions. The relevant trends can be calculated using just the `generate_trends()` function.
+### Use defined regions to estimate indices and trends
 
-``` {r A5, eval=FALSE}
-east_west_indices <- generate_indices(jags_mod = jags_mod,
+st_comp_regions can now be used as the dataframe input to the argument alt_region_names in `generate_indices()`, with "NorthEast" as the value for the argument regions. The relevant trends can be calculated using just the `generate_trends()` function.
+
+``` {r A5}
+library(patchwork)
+custom_indices <- generate_indices(jags_mod = jags_mod,
                                       jags_data = jags_data,
                                       alt_region_names = st_comp_regions,
-                                      regions = "East_West")
-east_west_trends <- generate_trends(indices = east_west_indices)
-knitr::kable(east_west_trends[,c(1,3,8,9,14)])
+                                      regions = "NorthEast")
+tp = plot_indices(indices = custom_indices,
+                         species = "Scarlet Tanager",
+                  add_observed_means = TRUE,
+                  add_number_routes = TRUE)
+```
+
+``` {r A5plot,fig.height=9}
+print(tp[[1]])
+print(tp[[2]])
+
+```
+
+Calculate trends
+
+``` {r A5trend, eval=FALSE}
+custom_trends <- generate_trends(indices = custom_indices)
+knitr::kable(custom_trends[,c(1,3,8,9,14)])
 ```
 
 

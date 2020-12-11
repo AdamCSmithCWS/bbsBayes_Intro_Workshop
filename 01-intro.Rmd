@@ -16,20 +16,19 @@ bbsBayes is on CRAN! There are two ways to install the package:
 
 Option 1: Stable release from CRAN
 
-``` {r,eval = FALSE}
+```{r,eval = FALSE}
 # To install from CRAN:
 install.packages("bbsBayes")
 ```
 
 Option 2: Less-stable development version
 
-``` {r,eval = FALSE}
+```{r,eval = FALSE}
 # To install the development version from GitHub:
 install.packages("devtools")
 library(devtools)
 devtools::install_github("BrandonEdwards/bbsBayes")
 ```
-
 
 ## Data Retrieval
 
@@ -44,3 +43,7 @@ There are options to download the available stop-level data, so you can use the 
 ## Install JAGS
 
 The modeling functions of bbsBayes require an installation of JAGS. JAGS is installed from SourceForge, an open software distribution agent. Follow [this link](https://sourceforge.net/projects/mcmc-jags/) to install [<https://sourceforge.net/projects/mcmc-jags/>].
+
+## Example data for Scarlet Tanager
+
+This [link allows you to download some example model results for Scarlet Tanager](https://drive.google.com/file/d/1LCZrl0W0AEbXj8_MyUP-CXX3a-j77rFN/view?usp=sharing). This model output can be used with many of the visualization and estimation functions for the package (without having to wait \~24 hours for the model to run). To use this saved results to run some of the functions in this book, save it into your working directory.

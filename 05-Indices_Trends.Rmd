@@ -1,13 +1,15 @@
 # Estimating Annual Indices and Trends {#IndicesTrends}
 
-Once the model has finished running, we can use the saved output to calculate the population trajectories and trends. As an example, we'll load the 2019 CWS saved model output for Scarlet Tanager, from the gamye model.
+Once the model has finished running, we can use the saved output to calculate the population trajectories and trends. As an example, we'll load some saved model output for Scarlet Tanager, from the gamye model. If you haven't already, you can download the model output file [here](https://drive.google.com/file/d/1LCZrl0W0AEbXj8_MyUP-CXX3a-j77rFN/view?usp=sharing), then save it into your working directory.
 
-This saved workspace includes two objects: 1. jags_data - the data object created with the `prepare_jags_data()` function.
+This saved workspace includes two objects:
+
+1.  jags_data - the data object created with the `prepare_jags_data()` function.
 
 2.  jags_mod - the model output created with the `run_model()` function.
 
 ```{r IT1}
-load("data/jags_mod_full_Scarlet_Tanager.RData")
+load("jags_mod_full.RData")
 
 ```
 
@@ -111,7 +113,7 @@ trends_smooth_15 <- generate_trends(indices = indices_smooth,
                           Min_year = (2019-15),
                           Max_year = 2019,
                           prob_decrease = c(30,50),
-                          prob_increase = c(0))
+                          prob_increase = c(0)) 
 
 ```
 
@@ -150,14 +152,11 @@ trends_15_slope <- generate_trends(indices = indices,
                           prob_increase = c(0))
 ```
 
-Setting `slope = TRUE` adds the slope-trend calculation to the output dataframe. 
-Note: The probabilities of decrease and increase values are not based on the slope metric, they are always a function of the difference in population between the start and end of the time-interval.
+Setting `slope = TRUE` adds the slope-trend calculation to the output dataframe. Note: The probabilities of decrease and increase values are not based on the slope metric, they are always a function of the difference in population between the start and end of the time-interval.
 
 ```{r IT16}
 knitr::kable(head(trends_15_slope[,c(1,4,8,22)]))
 ```
-
-
 
 ### Percent Change and probability of change
 
@@ -168,7 +167,3 @@ In addition, the function can optionally calculate the posterior conditional pro
 ```{r IT17}
 knitr::kable(head(trends_smooth_15[,c(1,4,8,15,22)]))
 ```
-
-
-
-

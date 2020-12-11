@@ -1,4 +1,4 @@
-# Stratification and model options {#Stratify}
+# Stratification {#Stratify}
 
 ## Strata
 

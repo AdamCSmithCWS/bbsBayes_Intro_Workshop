@@ -9,7 +9,7 @@ strat_data <- stratify(by = "bbs_cws")
 load("Stratified_data_cws.RData")
 ```
 
-## Prepare data for a model and species
+## Prepare data
 
 The `prepare_jags_data()` function is used to select a species, a model, the time-scale, etc.
 
@@ -21,7 +21,7 @@ The critical arguments are:
 ```{r,eval=FALSE}
 write.csv(strat_data$species_strat,"Full_BBS_speciesList.csv")
 ```
-    Also, if you'd like to select a species using the French name, you can try this:
+    Also, if you'd like to select a species using the French name, you can try this approach:
 ```{r}
 espece = "Colibri à gorge rubis"
 species = strat_data$species_strat$english[which(strat_data$species_strat$french == espece)]

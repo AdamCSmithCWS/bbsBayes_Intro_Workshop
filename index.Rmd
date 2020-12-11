@@ -24,7 +24,7 @@ status and trends from the North American Breeding Bird Survey. The
 package also lets the user generate a suite of alternative metrics using
 the existing model output from the annual CWS analyses.
 
-## Who should attend the workshop?
+## Intended Audience
 
 Everyone is welcome! Some familiarity working with R is required if
 you'd also like to run the code yourself during the workshop, and the

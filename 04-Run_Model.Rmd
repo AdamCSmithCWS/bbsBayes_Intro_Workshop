@@ -1,6 +1,6 @@
 # Running the model {#ModelRun}
 
-```{r, cache=TRUE,echo=TRUE}
+```{r RM1, cache=TRUE,echo=TRUE}
 # set up for the annual CWS status and trend analysis
 # strat_data <- stratify(by = "bbs_cws")
 # jags_data <- prepare_jags_data(strat_data = strat_data,
@@ -18,7 +18,7 @@ load("data/jags_data_Scarlet_Tanager.RData")
 After stratifying and preparing the data for a particular species and model, the `run_model()` function calls the JAGS program to fit the selected model to the species' data. 
 Depending on the model and the size of the dataset (number of counts, number of strata, number of years, etc.), this process can take a long time (hours - days). The following code would shows the settings used for most species in the annual CWS analysis.
 
-```{r, eval=FALSE}
+```{r RM2, eval=FALSE}
     # Not Run
     # jags_mod <- run_model(jags_data = jags_data,
     #                            n_iter = 24000, #higher than the default 10,000
@@ -31,7 +31,27 @@ Depending on the model and the size of the dataset (number of counts, number of 
  
 ```
 
+There is only one critical argument in the `run_model()` function.
 
+-  jags_data - List output from the `prepare_jags_data()` function.
+
+The remaining arguments allow for some customization of the MCMC process. The default settings are sufficient for many species and model combinations, but here is some explanation of the arguments that many users may want to modify:
+
+-  parameters_to_save	- Character vector of parameters to monitor in JAGS. Defaults to just monitoring "n", the annual indices of abundance that make up the estimated population trajectories in each stratum. In the two models with separate parameters for the year-effects and the long-term change ("gamye" and "slope"), there is an optional version of the annual indices of abundance called "n3", which tracks the population trajectory after removing the year-effects. This "n3" parameter represents the smooth-only population trajectory from the gamye and the linear-slope component of the trajectory from the slope model. In the CWS annual analyses, the "n3" parameter is used to estimate trends and the "n" parameter is used to track the full population trajectory.  
+
+-  n_chains - Optional number of chains to run. Defaults to 3.
+
+-  n_burnin - Optional integer specifying the number of iterations to burn in the model. Defaults to 20000 per chain.
+
+-  n_thin	- Optional number of steps to thin or discard. Defaults to 10
+
+-  n_iter - Optional number of iterations per chain. Defaults to 10000.
+
+-  parallel - Logical, Should each chain be run in parallel on separate cores? If TRUE, the number of cores used will be the minimum of the n_chains specified and the number of cores on your computer
+
+
+
+## Pacfic Wren example
 
 Here's a toy example using data for the Pacific Wren and the slope model for a shortened time-series:
 
@@ -51,25 +71,45 @@ jags_mod <- run_model(jags_data = jags_data,
                       n_burnin = 200,
                       n_iter = 200,
                       n_thin = 1,
-                      parameters_to_save = c("n"))
+                      parameters_to_save = c("n","beta","strata"))
 
 ```
-There is only one critical argument in the `run_model()` function.
 
--  jags_data - List output from the `prepare_jags_data()` function.
 
-The remaining arguments allow for some customization of the MCMC process. The default settings are sufficient for many species and model combinations, but here is some explanation of the arguments that many users may want to modify:
 
--  parameters_to_save	- Character vector of parameters to monitor in JAGS. Defaults to just monitoring "n", the annual indices of abundance that make up the estimated population trajectories in each stratum. In the two models with separate parameters for the year-effects and the long-term change ("gamye" and "slope"), there is an optional version of the annual indices of abundance called "n3", which tracks the population trajectory after removing the year-effects. This "n3" parameter represents the smooth-only population trajectory from the gamye and the linear-slope component of the trajectory from the slope model. In the CWS annual analyses, the "n3" parameter is used to estimate trends and the "n" parameter is used to track the full population trajectory.  
+## Convergence of the MCMC
 
--  n_chains - Optional number of chains to run. Defaults to 3.
+The `run_model()` function will send a warning if Gelman-Rubin Rhat cross-chain convergence criterion is \> 1.1 for any of the monitored parameters. Re-running the model with a longer burn-in and/or more posterior iterations or greater thinning rates may improve convergence. 
+The seriousness of these convergence failures is something the user must interpret for themselves. In some cases some parameters of the model may not be separately estimable, but if there is no direct inference drawn from those separate parameters, their convergence may not be necessary. If all or the vast majority of the n parameters have converged (e.g., you're receiving this warning message for other monitored parameters), then inference on population trajectories and trends from the model are reliable.
 
--  n_burnin - Optional integer specifying the number of iterations to burn in the model. Defaults to 20000 per chain.
+``` {r RM4}
+jags_mod$n.eff #shows the effective sample size for each monitored parameter
+jags_mod$Rhat # shows the Rhat values for each monitored parameter
+```
 
--  n_thin	- Optional number of steps to thin or discard. Defaults to 10
+If important monitored parameters have not converged, the shinystan package has some wonderful interactive tools for better understanding convergence issues with MCMC output.
 
--  n_iter - Optional number of iterations per chain. Defaults to 10000.
+``` {r RM5,eval = FALSE}
+#install.packages("shinystan")
+library(shinystan)
+my_sso <- shinystan::launch_shinystan(shinystan::as.shinystan(jags_mod$samples, model_name = "my_toy_example"))
+```
 
--  parallel - Logical, Should each chain be run in parallel on separate cores? If TRUE, the number of cores used will be the minimum of the n_chains specified and the number of cores on your computer
+bbsBayes also includes a function to help re-start an MCMC chain, so that you avoid having to wait for an additional burn-in period.
+
+``` {r RM6}
+### if jags_mod has failed to converge...
+new_initials <- get_final_values(jags_mod)
+
+jags_mod2 <- run_model(jags_data = jags_data,
+                      n_adapt = 0,
+                      n_burnin = 0,
+                      n_iter = 200,
+                      n_thin = 1,
+                      inits = new_initials,
+                      parameters_to_save = c("n","beta","strata"))
+
+```
+
 
 
