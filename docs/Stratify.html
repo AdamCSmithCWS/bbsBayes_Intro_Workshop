@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 3 Stratification and model options | A Quick Introduction to bbsBayes</title>
+  <meta name="description" content="This is a document to support a ~2hr workshop." />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 3 Stratification and model options | A Quick Introduction to bbsBayes" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is a document to support a ~2hr workshop." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 3 Stratification and model options | A Quick Introduction to bbsBayes" />
+  
+  <meta name="twitter:description" content="This is a document to support a ~2hr workshop." />
+  
+
+<meta name="author" content="Adam C. Smith, and Brandon P.M. Edwards" />
+
+
+<meta name="date" content="2020-12-11" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="Intro.html"/>
+<link rel="next" href="DataPrep.html"/>
+<script src="libs/header-attrs-2.4.4/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Quick Introduction to bbsBayes</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Customized BBS trends, trajectories, graphs, and maps using the bbsBayes R-package, an Introduction</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#what-is-the-workshop-about"><i class="fa fa-check"></i><b>1.1</b> What is the workshop about?</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#who-should-attend-the-workshop"><i class="fa fa-check"></i><b>1.2</b> Who should attend the workshop?</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#what-we-hope-you-will-learn-here"><i class="fa fa-check"></i><b>1.3</b> What we hope you will learn here</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="Intro.html"><a href="Intro.html"><i class="fa fa-check"></i><b>2</b> Preparation and Installation</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="Intro.html"><a href="Intro.html#pre-workshop-preparation"><i class="fa fa-check"></i><b>2.1</b> Pre-Workshop preparation</a></li>
+<li class="chapter" data-level="2.2" data-path="Intro.html"><a href="Intro.html#installation"><i class="fa fa-check"></i><b>2.2</b> Installation</a></li>
+<li class="chapter" data-level="2.3" data-path="Intro.html"><a href="Intro.html#data-retrieval"><i class="fa fa-check"></i><b>2.3</b> Data Retrieval</a></li>
+<li class="chapter" data-level="2.4" data-path="Intro.html"><a href="Intro.html#install-jags"><i class="fa fa-check"></i><b>2.4</b> Install JAGS</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="Stratify.html"><a href="Stratify.html"><i class="fa fa-check"></i><b>3</b> Stratification and model options</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="Stratify.html"><a href="Stratify.html#strata"><i class="fa fa-check"></i><b>3.1</b> Strata</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="Stratify.html"><a href="Stratify.html#useful-code-to-access-and-print-the-strata-maps-above"><i class="fa fa-check"></i><b>3.1.1</b> Useful code to access and print the strata maps above</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="DataPrep.html"><a href="DataPrep.html"><i class="fa fa-check"></i><b>4</b> Prepare the data for a model and species</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="DataPrep.html"><a href="DataPrep.html#prepare-data-for-a-model-and-species"><i class="fa fa-check"></i><b>4.1</b> Prepare data for a model and species</a></li>
+<li class="chapter" data-level="4.2" data-path="DataPrep.html"><a href="DataPrep.html#models"><i class="fa fa-check"></i><b>4.2</b> Models</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="DataPrep.html"><a href="DataPrep.html#slope"><i class="fa fa-check"></i><b>4.2.1</b> slope</a></li>
+<li class="chapter" data-level="4.2.2" data-path="DataPrep.html"><a href="DataPrep.html#gam"><i class="fa fa-check"></i><b>4.2.2</b> gam</a></li>
+<li class="chapter" data-level="4.2.3" data-path="DataPrep.html"><a href="DataPrep.html#gamye"><i class="fa fa-check"></i><b>4.2.3</b> gamye</a></li>
+<li class="chapter" data-level="4.2.4" data-path="DataPrep.html"><a href="DataPrep.html#firstdiff"><i class="fa fa-check"></i><b>4.2.4</b> firstdiff</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="DataPrep.html"><a href="DataPrep.html#cws-analysis-example"><i class="fa fa-check"></i><b>4.3</b> CWS analysis example</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="ModelRun.html"><a href="ModelRun.html"><i class="fa fa-check"></i><b>5</b> Running the model</a></li>
+<li class="chapter" data-level="6" data-path="IndicesTrends.html"><a href="IndicesTrends.html"><i class="fa fa-check"></i><b>6</b> Estimating Annual Indices and Trends</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="IndicesTrends.html"><a href="IndicesTrends.html#annual-indices"><i class="fa fa-check"></i><b>6.1</b> Annual Indices</a></li>
+<li class="chapter" data-level="6.2" data-path="IndicesTrends.html"><a href="IndicesTrends.html#population-trends"><i class="fa fa-check"></i><b>6.2</b> Population Trends</a></li>
+<li class="chapter" data-level="6.3" data-path="IndicesTrends.html"><a href="IndicesTrends.html#alternative-time-spans-for-trends"><i class="fa fa-check"></i><b>6.3</b> Alternative time-spans for trends</a></li>
+<li class="chapter" data-level="6.4" data-path="IndicesTrends.html"><a href="IndicesTrends.html#alternative-definitions-of-trends"><i class="fa fa-check"></i><b>6.4</b> Alternative definitions of trends</a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="IndicesTrends.html"><a href="IndicesTrends.html#percent-change-and-probability-of-change"><i class="fa fa-check"></i><b>6.4.1</b> Percent Change and probability of change</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="GraphMap.html"><a href="GraphMap.html"><i class="fa fa-check"></i><b>7</b> Trajectory graphs and trend maps</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="GraphMap.html"><a href="GraphMap.html#graphing-the-trajectories-annual-indices"><i class="fa fa-check"></i><b>7.1</b> Graphing the trajectories (annual indices)</a></li>
+<li class="chapter" data-level="7.2" data-path="GraphMap.html"><a href="GraphMap.html#mapping-the-trends"><i class="fa fa-check"></i><b>7.2</b> Mapping the trends</a></li>
+<li class="chapter" data-level="7.3" data-path="GraphMap.html"><a href="GraphMap.html#geofacet-trajectories"><i class="fa fa-check"></i><b>7.3</b> Geofacet Trajectories</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="Adv.html"><a href="Adv.html"><i class="fa fa-check"></i><b>8</b> Advanced options</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="Adv.html"><a href="Adv.html#custom-regional-summaries"><i class="fa fa-check"></i><b>8.1</b> Custom regional summaries</a></li>
+<li class="chapter" data-level="8.2" data-path="Adv.html"><a href="Adv.html#exporting-the-jags-model"><i class="fa fa-check"></i><b>8.2</b> Exporting the JAGS model</a></li>
+<li class="chapter" data-level="8.3" data-path="Adv.html"><a href="Adv.html#customizing-the-jags-model-and-data"><i class="fa fa-check"></i><b>8.3</b> Customizing the JAGS model and data</a></li>
+<li class="chapter" data-level="8.4" data-path="Adv.html"><a href="Adv.html#comparing-models"><i class="fa fa-check"></i><b>8.4</b> Comparing Models</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="Ref.html"><a href="Ref.html"><i class="fa fa-check"></i><b>9</b> References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">A Quick Introduction to bbsBayes</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="Stratify" class="section level1" number="3">
+<h1><span class="header-section-number">Chapter 3</span> Stratification and model options</h1>
+<div id="strata" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Strata</h2>
+<p>All of the models supported by bbsBayes expect the BBS route-level data to be grouped into geographic strata. These strata are subregions of the survey area, and allow the parameters that model abundance and trend to vary across a species’ range.</p>
+<p>Use the <code>stratify()</code> function to group the BBS data into one of the included stratifications. Select the stratification using the argument <code>by</code> to stratify by the following options:</p>
+<ul>
+<li><p>bbs_cws – <code>stratify(by = "bbs_cws")</code> Political region X Bird Conservation region intersection (Canadian Wildlife Service [CWS] method). Identical to bbs_usgs, except all routes in BCR 7 are combined into a single stratum, and all routes in PEI and Nova Scotia are combined into a single stratum. <img src="images/map_bbs_cws.png"/></p></li>
+<li><p>bbs_usgs – <code>stratify(by = "bbs_usgs")</code> Political region X Bird Conservation region intersection (United Status Geological Survey [USGS] method) <img src="images/map_bbs_usgs.png"/></p></li>
+<li><p>bcr – <code>stratify(by = "bcr")</code> Bird Conservation Region only <img src="images/map_bcr.png"/></p></li>
+<li><p>state – <code>stratify(by = "state")</code> Political Region only <img src="images/map_state.png"/></p></li>
+<li><p>latlong – <code>stratify(by = "latlong")</code> Degree blocks (1 degree of latitude X 1 degree of longitude) <img src="images/map_latlong.png"/></p></li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="Stratify.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set up for the annual CWS status and trend analysis</span></span>
+<span id="cb4-2"><a href="Stratify.html#cb4-2" aria-hidden="true" tabindex="-1"></a>strat_data <span class="ot">&lt;-</span> <span class="fu">stratify</span>(<span class="at">by =</span> <span class="st">&quot;bbs_cws&quot;</span>)</span></code></pre></div>
+<p>The stratified_data object includes 3 dataframes.</p>
+<ul>
+<li><code>strat_data$species_strat</code> is a table of all species included in the dataset. It has columns for species common names in English, French, and Spanish, as well as information on the order, family, genus, species, and the numerical species indicators used in the BBS database in both character format (with leading 0s) and integer format.</li>
+</ul>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="Stratify.html#cb5-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">head</span>(strat_data<span class="sc">$</span>species_strat[,<span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">8</span>,<span class="dv">9</span>,<span class="dv">10</span>)]))</span></code></pre></div>
+<table>
+<colgroup>
+<col width="20%" />
+<col width="25%" />
+<col width="22%" />
+<col width="8%" />
+<col width="17%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">english</th>
+<th align="left">french</th>
+<th align="left">spanish</th>
+<th align="left">genus</th>
+<th align="left">species</th>
+<th align="right">sp.bbs</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Black-bellied Whistling-Duck</td>
+<td align="left">Dendrocygne à ventre noir</td>
+<td align="left">Dendrocygna autumnalis</td>
+<td align="left">Dendrocygna</td>
+<td align="left">autumnalis</td>
+<td align="right">1770</td>
+</tr>
+<tr class="even">
+<td align="left">Fulvous Whistling-Duck</td>
+<td align="left">Dendrocygne fauve</td>
+<td align="left">Dendrocygna bicolor</td>
+<td align="left">Dendrocygna</td>
+<td align="left">bicolor</td>
+<td align="right">1780</td>
+</tr>
+<tr class="odd">
+<td align="left">Emperor Goose</td>
+<td align="left">Oie empereur</td>
+<td align="left">Anser canagicus</td>
+<td align="left">Anser</td>
+<td align="left">canagicus</td>
+<td align="right">1760</td>
+</tr>
+<tr class="even">
+<td align="left">Snow Goose (all forms)</td>
+<td align="left">Oie des neiges (toutes les formes)</td>
+<td align="left">Anser caerulescens</td>
+<td align="left">Anser</td>
+<td align="left">caerulescens</td>
+<td align="right">1690</td>
+</tr>
+<tr class="odd">
+<td align="left">(Blue Goose) Snow Goose</td>
+<td align="left">Oie des neiges (forme bleue)</td>
+<td align="left">Anser caerulescens (blue form)</td>
+<td align="left">Anser</td>
+<td align="left">caerulescens (blue form)</td>
+<td align="right">1691</td>
+</tr>
+<tr class="even">
+<td align="left">Ross’s Goose</td>
+<td align="left">Oie de Ross</td>
+<td align="left">Anser rossii</td>
+<td align="left">Anser</td>
+<td align="left">rossii</td>
+<td align="right">1700</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>strat_data$bird_strat</code> is a very large table of each observed count for a given species * route * year combination. This is the table that includes all of the non-zero observations in the BBS database.</li>
+</ul>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="Stratify.html#cb6-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">head</span>(strat_data<span class="sc">$</span>bird_strat[,<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">6</span>,<span class="dv">7</span>,<span class="dv">14</span>,<span class="dv">16</span>,<span class="dv">17</span>)]))</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">statenum</th>
+<th align="right">Route</th>
+<th align="right">Year</th>
+<th align="right">AOU</th>
+<th align="right">SpeciesTotal</th>
+<th align="left">rt.uni</th>
+<th align="left">rt.uni.y</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">11</td>
+<td align="right">1</td>
+<td align="right">1997</td>
+<td align="right">5880</td>
+<td align="right">28</td>
+<td align="left">11-1</td>
+<td align="left">11-1-1997</td>
+</tr>
+<tr class="even">
+<td align="right">11</td>
+<td align="right">1</td>
+<td align="right">1997</td>
+<td align="right">5671</td>
+<td align="right">6</td>
+<td align="left">11-1</td>
+<td align="left">11-1-1997</td>
+</tr>
+<tr class="odd">
+<td align="right">11</td>
+<td align="right">1</td>
+<td align="right">1997</td>
+<td align="right">6850</td>
+<td align="right">3</td>
+<td align="left">11-1</td>
+<td align="left">11-1-1997</td>
+</tr>
+<tr class="even">
+<td align="right">11</td>
+<td align="right">1</td>
+<td align="right">1991</td>
+<td align="right">6882</td>
+<td align="right">22</td>
+<td align="left">11-1</td>
+<td align="left">11-1-1991</td>
+</tr>
+<tr class="odd">
+<td align="right">11</td>
+<td align="right">1</td>
+<td align="right">2012</td>
+<td align="right">3160</td>
+<td align="right">1</td>
+<td align="left">11-1</td>
+<td align="left">11-1-2012</td>
+</tr>
+<tr class="even">
+<td align="right">11</td>
+<td align="right">1</td>
+<td align="right">1991</td>
+<td align="right">4860</td>
+<td align="right">9</td>
+<td align="left">11-1</td>
+<td align="left">11-1-1991</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>strat_data$route_strat</code> is a large table of each BBS survey conducted. It includes a single row for each survey-event (i.e., a route * year * observer combination). It also includes the information on the weather conditions, timing, date, etc.</li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="Stratify.html#cb7-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">head</span>(strat_data<span class="sc">$</span>route_strat[,<span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">8</span>,<span class="dv">13</span>,<span class="dv">33</span><span class="sc">:</span><span class="dv">35</span>)]))</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">statenum</th>
+<th align="right">Route</th>
+<th align="right">BCR</th>
+<th align="right">Year</th>
+<th align="left">strat_name</th>
+<th align="left">rt.uni</th>
+<th align="left">rt.uni.y</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">11</td>
+<td align="right">1</td>
+<td align="right">5</td>
+<td align="right">1995</td>
+<td align="left">CA-BC-5</td>
+<td align="left">11-1</td>
+<td align="left">11-1-1995</td>
+</tr>
+<tr class="even">
+<td align="right">11</td>
+<td align="right">1</td>
+<td align="right">5</td>
+<td align="right">1994</td>
+<td align="left">CA-BC-5</td>
+<td align="left">11-1</td>
+<td align="left">11-1-1994</td>
+</tr>
+<tr class="odd">
+<td align="right">11</td>
+<td align="right">1</td>
+<td align="right">5</td>
+<td align="right">1976</td>
+<td align="left">CA-BC-5</td>
+<td align="left">11-1</td>
+<td align="left">11-1-1976</td>
+</tr>
+<tr class="even">
+<td align="right">11</td>
+<td align="right">1</td>
+<td align="right">5</td>
+<td align="right">1977</td>
+<td align="left">CA-BC-5</td>
+<td align="left">11-1</td>
+<td align="left">11-1-1977</td>
+</tr>
+<tr class="odd">
+<td align="right">11</td>
+<td align="right">1</td>
+<td align="right">5</td>
+<td align="right">1974</td>
+<td align="left">CA-BC-5</td>
+<td align="left">11-1</td>
+<td align="left">11-1-1974</td>
+</tr>
+<tr class="even">
+<td align="right">11</td>
+<td align="right">1</td>
+<td align="right">5</td>
+<td align="right">1975</td>
+<td align="left">CA-BC-5</td>
+<td align="left">11-1</td>
+<td align="left">11-1-1975</td>
+</tr>
+</tbody>
+</table>
+<div id="useful-code-to-access-and-print-the-strata-maps-above" class="section level3" number="3.1.1">
+<h3><span class="header-section-number">3.1.1</span> Useful code to access and print the strata maps above</h3>
+<p>The package does not include functions to directly access the strata maps (other than the <code>generate_map()</code> function, which displays a map of estimated trends). However this code below should suffice to find the map files in your local installation.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="Stratify.html#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb8-2"><a href="Stratify.html#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sp)</span>
+<span id="cb8-3"><a href="Stratify.html#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb8-4"><a href="Stratify.html#cb8-4" aria-hidden="true" tabindex="-1"></a>laea <span class="ot">=</span> <span class="fu">st_crs</span>(<span class="st">&quot;+proj=laea +lat_0=40 +lon_0=-95&quot;</span>) <span class="co"># Lambert equal area coord reference system</span></span>
+<span id="cb8-5"><a href="Stratify.html#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="Stratify.html#cb8-6" aria-hidden="true" tabindex="-1"></a>strat_maps <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;BBS_CWS_strata&quot;</span>,</span>
+<span id="cb8-7"><a href="Stratify.html#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;BBS_USGS_strata&quot;</span>,</span>
+<span id="cb8-8"><a href="Stratify.html#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;BBS_BCR_strata&quot;</span>,</span>
+<span id="cb8-9"><a href="Stratify.html#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;BBS_LatLong_strata&quot;</span>,</span>
+<span id="cb8-10"><a href="Stratify.html#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;BBS_ProvState_strata&quot;</span>)</span>
+<span id="cb8-11"><a href="Stratify.html#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="Stratify.html#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(strat_maps) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;bbs_cws&quot;</span>,<span class="st">&quot;bbs_usgs&quot;</span>,<span class="st">&quot;bcr&quot;</span>,<span class="st">&quot;latlong&quot;</span>,<span class="st">&quot;state&quot;</span>)</span>
+<span id="cb8-13"><a href="Stratify.html#cb8-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-14"><a href="Stratify.html#cb8-14" aria-hidden="true" tabindex="-1"></a>locat <span class="ot">=</span> <span class="fu">system.file</span>(<span class="st">&quot;maps&quot;</span>,</span>
+<span id="cb8-15"><a href="Stratify.html#cb8-15" aria-hidden="true" tabindex="-1"></a>                    <span class="at">package =</span> <span class="st">&quot;bbsBayes&quot;</span>)</span>
+<span id="cb8-16"><a href="Stratify.html#cb8-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-17"><a href="Stratify.html#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(strat_maps)){</span>
+<span id="cb8-18"><a href="Stratify.html#cb8-18" aria-hidden="true" tabindex="-1"></a>  map.file <span class="ot">=</span> strat_maps[i]</span>
+<span id="cb8-19"><a href="Stratify.html#cb8-19" aria-hidden="true" tabindex="-1"></a>  st_nm <span class="ot">=</span> <span class="fu">names</span>(strat_maps)[i]</span>
+<span id="cb8-20"><a href="Stratify.html#cb8-20" aria-hidden="true" tabindex="-1"></a>strata_map <span class="ot">=</span> <span class="fu">read_sf</span>(<span class="at">dsn =</span> locat,</span>
+<span id="cb8-21"><a href="Stratify.html#cb8-21" aria-hidden="true" tabindex="-1"></a>                     <span class="at">layer =</span> map.file)</span>
+<span id="cb8-22"><a href="Stratify.html#cb8-22" aria-hidden="true" tabindex="-1"></a>strata_map <span class="ot">=</span> <span class="fu">st_transform</span>(strata_map,<span class="at">crs =</span> laea)</span>
+<span id="cb8-23"><a href="Stratify.html#cb8-23" aria-hidden="true" tabindex="-1"></a>st_gg <span class="ot">=</span> <span class="fu">ggplot</span>(<span class="at">data =</span> strata_map)<span class="sc">+</span></span>
+<span id="cb8-24"><a href="Stratify.html#cb8-24" aria-hidden="true" tabindex="-1"></a><span class="fu">geom_sf</span>()<span class="sc">+</span></span>
+<span id="cb8-25"><a href="Stratify.html#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste</span>(<span class="st">&quot;stratify(by =&quot;</span>,st_nm,<span class="st">&quot;)&quot;</span>))</span>
+<span id="cb8-26"><a href="Stratify.html#cb8-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-27"><a href="Stratify.html#cb8-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-28"><a href="Stratify.html#cb8-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-29"><a href="Stratify.html#cb8-29" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="fu">paste0</span>(<span class="st">&quot;images/map_&quot;</span>,st_nm,<span class="st">&quot;.png&quot;</span>))</span>
+<span id="cb8-30"><a href="Stratify.html#cb8-30" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(st_gg)</span>
+<span id="cb8-31"><a href="Stratify.html#cb8-31" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span>
+<span id="cb8-32"><a href="Stratify.html#cb8-32" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="Intro.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="DataPrep.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["bbsBayes_Workshop.pdf", "bbsBayes_Workshop.epub"],
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

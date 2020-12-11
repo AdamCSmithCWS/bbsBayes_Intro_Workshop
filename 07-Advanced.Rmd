@@ -78,6 +78,7 @@ Finally, bbsBayes can be used to run Bayesian cross-validations. For example, th
 
 Paper that includes an example of how to implement a cross-validation using bbsBayes.
 
-Pre-print: <https://doi.org/10.1101/2020.03.26.010215> Supplement: [![DOI](https://zenodo.org/badge/228419725.svg)](https://zenodo.org/badge/latestdoi/228419725)
+Pre-print: <https://doi.org/10.1101/2020.03.26.010215> 
+Supplement: <https://zenodo.org/badge/latestdoi/228419725>
 
 NOTE: although bbsBayes includes functions to calculate WAIC, recent work has shown that WAIC performs very poorly with the BBS data (<https://doi.org/10.1650/CONDOR-17-1.1>). We recommend a k-fold cross-validation approach, as in the above zenodo archive.
