@@ -1,0 +1,75 @@
+# Running the model {#ModelRun}
+
+```{r, cache=TRUE,echo=TRUE}
+# set up for the annual CWS status and trend analysis
+# strat_data <- stratify(by = "bbs_cws")
+# jags_data <- prepare_jags_data(strat_data = strat_data,
+#                   species_to_run = "Scarlet Tanager",
+#                   model = "gamye",
+#                   min_max_route_years = 2,
+#                   heavy_tailed = TRUE)
+
+### previous lines were run to produce this .RData file:
+
+load("data/jags_data_Scarlet_Tanager.RData")
+
+```
+
+After stratifying and preparing the data for a particular species and model, the `run_model()` function calls the JAGS program to fit the selected model to the species' data. 
+Depending on the model and the size of the dataset (number of counts, number of strata, number of years, etc.), this process can take a long time (hours - days). The following code would shows the settings used for most species in the annual CWS analysis.
+
+```{r, eval=FALSE}
+    # Not Run
+    # jags_mod <- run_model(jags_data = jags_data,
+    #                            n_iter = 24000, #higher than the default 10,000
+    #                            n_burnin = 20000,
+    #                            n_chains = 3,
+    #                            n_thin = 20, #saves memory by retaining only 1/20 posterior samples
+    #                            parallel = TRUE,
+    #                       inits = NULL,
+    #                       parameters_to_save = c("n","n3","nu","B.X","beta.X","strata","sdbeta","sdX","alpha"))
+ 
+```
+
+
+
+Here's a toy example using data for the Pacific Wren and the slope model for a shortened time-series:
+
+```{r PAWR,warning=FALSE,eval=FALSE}
+#strat_data <- stratify(by = "bbs_cws")
+
+# Prepare the stratified data for use in a JAGS model.
+jags_data <- prepare_jags_data(strat_data = strat_data,
+                               species_to_run = "Pacific Wren",
+                               model = "slope",
+                               min_year = 2009,
+                               max_year = 2018)
+
+
+jags_mod <- run_model(jags_data = jags_data,
+                      n_adapt = 100,
+                      n_burnin = 200,
+                      n_iter = 200,
+                      n_thin = 1,
+                      parameters_to_save = c("n"))
+
+```
+There is only one critical argument in the `run_model()` function.
+
+-  jags_data - List output from the `prepare_jags_data()` function.
+
+The remaining arguments allow for some customization of the MCMC process. The default settings are sufficient for many species and model combinations, but here is some explanation of the arguments that many users may want to modify:
+
+-  parameters_to_save	- Character vector of parameters to monitor in JAGS. Defaults to just monitoring "n", the annual indices of abundance that make up the estimated population trajectories in each stratum. In the two models with separate parameters for the year-effects and the long-term change ("gamye" and "slope"), there is an optional version of the annual indices of abundance called "n3", which tracks the population trajectory after removing the year-effects. This "n3" parameter represents the smooth-only population trajectory from the gamye and the linear-slope component of the trajectory from the slope model. In the CWS annual analyses, the "n3" parameter is used to estimate trends and the "n" parameter is used to track the full population trajectory.  
+
+-  n_chains - Optional number of chains to run. Defaults to 3.
+
+-  n_burnin - Optional integer specifying the number of iterations to burn in the model. Defaults to 20000 per chain.
+
+-  n_thin	- Optional number of steps to thin or discard. Defaults to 10
+
+-  n_iter - Optional number of iterations per chain. Defaults to 10000.
+
+-  parallel - Logical, Should each chain be run in parallel on separate cores? If TRUE, the number of cores used will be the minimum of the n_chains specified and the number of cores on your computer
+
+

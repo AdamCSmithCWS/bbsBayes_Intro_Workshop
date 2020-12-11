@@ -1,0 +1,93 @@
+# Trajectory graphs and trend maps {#GraphMap}
+
+Now that we have calculated values for the trends and trajectories, bbsBayes also includes functions to plot and map the values.
+
+```{r GM1, cache=FALSE,echo=TRUE}
+# load the trend and indices objects for Scarlet Tanager
+load("Scarlet_Tanager_trends_indices.RData")
+```
+
+## Graphing the trajectories (annual indices)
+
+The `plot_indices()` function produces a list of ggplot figures that can be combined into a single pdf file, or printed to individual devices.
+
+``` {r GM2}
+tp = plot_indices(indices = indices,
+                         species = "Scarlet Tanager")
+ # pdf(file = "Scarlet Tanager Trajectories.pdf")
+ # print(tp)
+ # dev.off()
+print(tp[[1]])
+```
+
+`plot_indices()` also allows the user to add points to show the observed mean counts as well as stacked dots to indicate the number of observations in each year.
+
+``` {r GM3}
+tp2 = plot_indices(indices = indices,
+                         species = paste("Scarlet Tanager","Full"),
+                  add_observed_means = TRUE,
+                  add_number_routes = TRUE)
+ # pdf(file = "Scarlet Tanager Trajectories plus.pdf")
+ # print(tp)
+ # dev.off()
+
+```
+
+And we can compare these indices plots with those generated using only the smooths.
+
+``` {r GM4}
+tp3 = plot_indices(indices = indices_smooth,
+                         species = paste("Scarlet Tanager","Smooth"),
+                  add_observed_means = TRUE,
+                  add_number_routes = TRUE)
+ # pdf(file = "Scarlet Tanager Trajectories smooth plus.pdf")
+ # print(tp)
+ # dev.off()
+
+```
+
+
+```{r GM5}
+library(patchwork)
+print(tp2[[1]]+tp3[[1]])
+```
+
+
+
+## Mapping the trends
+
+
+The trends can be mapped to produce strata maps coloured by species population trends.
+
+``` {r GM6}
+mp = generate_map(trends_smooth,
+                  select = TRUE,
+                  stratify_by = "bbs_cws",
+                  species = "Scarlet Tanager Smooth")
+print(mp)
+```
+
+## Geofacet Trajectories
+
+
+For stratifications that can be compiled by political regions (i.e., `bbs_cws`, `bbs_usgs`, or `state`), the function `geofacet_plot` will generate a ggplot object that plots the state and province level population trajectories in facets arranged in an approximately geographic arrangement. These plots offer a concise, range-wide summary of a species' population trajectory.
+
+``` {r GM7}
+  gf <- geofacet_plot(indices_list = indices_smooth,
+                     select = TRUE,
+                     stratify_by = "bbs_cws",
+                     multiple = TRUE,
+                     trends = trends_smooth,
+                     slope = F,
+                     species = "Scarlet Tanager Smooth")
+  
+  #png("SCTA_geofacet.png",width = 1500, height = 750,res = 150)
+  print(gf)
+  #dev.off()
+```
+
+
+
+
+
+

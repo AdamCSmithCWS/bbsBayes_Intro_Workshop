@@ -1,0 +1,10 @@
+bookdown::gitbook:
+  css: style.css
+  config:
+    toc:
+      collapse: section
+      before: |
+        <li><a href="./">A Quick Introduction to bbsBayes</a></li>
+    download: ["pdf", "epub"]
+bookdown::pdf_book:
+  keep_tex: yes

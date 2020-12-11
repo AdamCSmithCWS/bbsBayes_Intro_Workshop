@@ -1,0 +1,83 @@
+# Advanced options {#Adv}
+
+
+## Custom regional summaries
+
+Yes, you can calculate the trend and trajectories for custom combinations of strata, such as the trends for Eastern and Western populations of Horned Lark.
+
+``` {r A1}
+    #stratification <- "bbs_cws"
+    #strat_data <- stratify(by = stratification, sample_data = TRUE)
+    jags_data <- prepare_jags_data(strat_data,
+                              species_to_run = "Lincoln's Sparrow",
+                              model = "gamye")
+
+    #jags_mod <- run_model(jags_data = jags_data)
+```
+
+```{r A2, echo=FALSE}
+load("data/jags_mod_full_Lincolns_Sparrow.RData")
+```
+
+
+Assuming the above setup has been run. The user could then generate population trajectories using a customized grouping of the original strata.
+
+First extract a dataframe that defines the original strata used in the analysis.
+
+``` {r A3}
+st_comp_regions <- get_composite_regions(strata_type = "bbs_cws")
+knitr::kable(head(st_comp_regions))
+```
+
+The add a column to the dataframe that groups the original strata into the desired custom regions.
+
+``` {r A4}
+st_comp_regions$East_West <- ifelse(st_comp_regions$bcr %in% c(7,8,12:14,22:31),"East","West")
+```
+
+st_comp_regions can now be used as the dataframe input to the argument alt_region_names in `generate_indices()`, with "East_West" as the value for the argument regions. The relevant trends can be calculated using just the `generate_trends()` function.
+
+``` {r A5, eval=FALSE}
+east_west_indices <- generate_indices(jags_mod = jags_mod,
+                                      jags_data = jags_data,
+                                      alt_region_names = st_comp_regions,
+                                      regions = "East_West")
+east_west_trends <- generate_trends(indices = east_west_indices)
+knitr::kable(east_west_trends[,c(1,3,8,9,14)])
+```
+
+
+
+
+## Exporting the JAGS model
+
+You can easily export any of the bbsBayes models to a text file.
+
+``` {r A6, eval=FALSE}
+model_to_file(model = "slope",
+              filename = "my_slope_model.txt")
+```
+
+Then, you can modify the model text (e.g., try a different prior) and run the modified model
+
+``` {r A7, eval=FALSE}
+run_model <- function(... ,
+                      model_file_path = "my_modified_slope_model.txt",
+                      ... )
+```
+
+Details coming soon...
+
+## Customizing the JAGS model and data
+
+You can even export the bbsBayes model as text, and modify it to add in covariates. For example a GAM smooth to estimate the effect of the day of year on the observations, or an annual weather covariate, or... Then add the relevant covariate data to the jags_data object, and you're off! We'll add some more details and examples soon.
+
+## Comparing Models
+
+Finally, bbsBayes can be used to run Bayesian cross-validations. For example, the `get_final_values()` function is useful to provide an efficient starting point for a cross-validation runs, without having to wait for another full burn-in period.
+
+Paper that includes an example of how to implement a cross-validation using bbsBayes.
+
+Pre-print: <https://doi.org/10.1101/2020.03.26.010215> Supplement: [![DOI](https://zenodo.org/badge/228419725.svg)](https://zenodo.org/badge/latestdoi/228419725)
+
+NOTE: although bbsBayes includes functions to calculate WAIC, recent work has shown that WAIC performs very poorly with the BBS data (<https://doi.org/10.1650/CONDOR-17-1.1>). We recommend a k-fold cross-validation approach, as in the above zenodo archive.

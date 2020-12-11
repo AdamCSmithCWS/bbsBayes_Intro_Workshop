@@ -1,0 +1,46 @@
+# Preparation and Installation {#Intro}
+
+## Pre-Workshop preparation
+
+We will present this initial workshop primarily as a demonstration. So you do not need to run any actual code, in order to get a good sense of what the package can do.
+
+If you are reasonably familiar with using R, and you do want to follow along with the coding during the workshop, please ensure you have installed the most recent version of R (4.0.3) and Rstudio.
+
+I addition, please install the bbsBayes package and download the data.
+
+Finally, if you haven't used JAGS before, you'll also need to install this stand-alone program (the Bayesian MCMC software that the package relies on). Follow the link below to download the installer.
+
+## Installation
+
+bbsBayes is on CRAN! There are two ways to install the package:
+
+Option 1: Stable release from CRAN
+
+``` {r,eval = FALSE}
+# To install from CRAN:
+install.packages("bbsBayes")
+```
+
+Option 2: Less-stable development version
+
+``` {r,eval = FALSE}
+# To install the development version from GitHub:
+install.packages("devtools")
+library(devtools)
+devtools::install_github("BrandonEdwards/bbsBayes")
+```
+
+
+## Data Retrieval
+
+You can download BBS data by running `fetch_bbs_data`. This will save the data to a package-specific directory on your computer. You must agree to the terms and conditions of the data usage before the download will run [type yes at the prompt]. You only need run this function once for each annual update of the BBS database.
+
+```{r,eval = FALSE}
+fetch_bbs_data()
+```
+
+There are options to download the available stop-level data, so you can use the package to access these data. However, for now the bbsBayes modeling functions only work with the route-level summaries. So use the defaults in the `r fetch_bbs_data()` function.
+
+## Install JAGS
+
+The modeling functions of bbsBayes require an installation of JAGS. JAGS is installed from SourceForge, an open software distribution agent. Follow [this link](https://sourceforge.net/projects/mcmc-jags/) to install [<https://sourceforge.net/projects/mcmc-jags/>].

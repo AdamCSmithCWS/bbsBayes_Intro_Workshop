@@ -1,0 +1,64 @@
+---
+title: "A Quick Introduction to bbsBayes"
+author: "Adam C. Smith, and Brandon P.M. Edwards"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+documentclass: book
+bibliography: [book.bib, packages.bib]
+biblio-style: apalike
+link-citations: yes
+description: "This is a document to support a ~2hr workshop."
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+# Customized BBS trends, trajectories, graphs, and maps using the bbsBayes R-package, an Introduction
+
+## What is the workshop about?
+
+This is a 2-hour introductory workshop/demonstration of the R-package
+bbsBayes (<https://github.com/BrandonEdwards/bbsBayes>). This package
+allows anyone to apply the hierarchical Bayesian models used to estimate
+status and trends from the North American Breeding Bird Survey. The
+package also lets the user generate a suite of alternative metrics using
+the existing model output from the annual CWS analyses.
+
+## Who should attend the workshop?
+
+Everyone is welcome! Some familiarity working with R is required if
+you'd also like to run the code yourself during the workshop, and the
+relevant packages should be installed beforehand (details will be
+provided with a full outline to be provided closer to the date). Those
+who might particularly be interested in attending include:
+
+1.  Anyone who might wish for a BBS trend for a particular region or
+    time-period (e.g,. I want 15-year trends not 10-year trends, I wish
+    I had a trend for just the western portion of the Barn Swallow's
+    range),
+
+2.  Anyone who might want to analyse the BBS with a customized model
+    (e.g., the effect of weather, land-cover, etc. on trends). Do not
+    worry if Bayesian analyses are new to you. We will not review the
+    basics of Bayesian statistical analyses, but the package can be very
+    useful without understanding those basics.
+
+## What we hope you will learn here
+
+-   Download the raw data
+
+-   Choose and run a model, geographic stratification, and species (we
+    will not cover formal model-selection, just explore the different
+    model-options)
+
+-   Estimate trends for any time-period (1970-2019, 2005-2015,
+    1980-2000, etc.)
+
+-   Graph population trajectories
+
+-   Generate heat maps of population trends
+
+-   Create geofaceted trajectory plots
+
+-   Estimate trends for customized regions (e.g., All of the eastern
+    Boreal, Great Plains vs eastern populations of grassland birds)
