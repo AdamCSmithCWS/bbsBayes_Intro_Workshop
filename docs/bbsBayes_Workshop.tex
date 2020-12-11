@@ -156,8 +156,8 @@ status and trends from the North American Breeding Bird Survey. The
 package also lets the user generate a suite of alternative metrics using
 the existing model output from the annual CWS analyses.
 
-\hypertarget{who-should-attend-the-workshop}{%
-\section{Who should attend the workshop?}\label{who-should-attend-the-workshop}}
+\hypertarget{intended-audience}{%
+\section{Intended Audience}\label{intended-audience}}
 
 Everyone is welcome! Some familiarity working with R is required if
 you'd also like to run the code yourself during the workshop, and the
@@ -261,8 +261,13 @@ There are options to download the available stop-level data, so you can use the 
 
 The modeling functions of bbsBayes require an installation of JAGS. JAGS is installed from SourceForge, an open software distribution agent. Follow \href{https://sourceforge.net/projects/mcmc-jags/}{this link} to install {[}\url{https://sourceforge.net/projects/mcmc-jags/}{]}.
 
+\hypertarget{example-data-for-scarlet-tanager}{%
+\section{Example data for Scarlet Tanager}\label{example-data-for-scarlet-tanager}}
+
+This \href{https://drive.google.com/file/d/1LCZrl0W0AEbXj8_MyUP-CXX3a-j77rFN/view?usp=sharing}{link allows you to download some example model results for Scarlet Tanager}. This model output can be used with many of the visualization and estimation functions for the package (without having to wait \textasciitilde24 hours for the model to run). To use this saved results to run some of the functions in this book, save it into your working directory.
+
 \hypertarget{Stratify}{%
-\chapter{Stratification and model options}\label{Stratify}}
+\chapter{Stratification}\label{Stratify}}
 
 \hypertarget{strata}{%
 \section{Strata}\label{strata}}
@@ -428,8 +433,8 @@ The package does not include functions to directly access the strata maps (other
 \hypertarget{DataPrep}{%
 \chapter{Prepare the data for a model and species}\label{DataPrep}}
 
-\hypertarget{prepare-data-for-a-model-and-species}{%
-\section{Prepare data for a model and species}\label{prepare-data-for-a-model-and-species}}
+\hypertarget{prepare-data}{%
+\section{Prepare data}\label{prepare-data}}
 
 The \texttt{prepare\_jags\_data()} function is used to select a species, a model, the time-scale, etc.
 
@@ -451,7 +456,7 @@ The critical arguments are:
 \end{Shaded}
 
 \begin{verbatim}
-Also, if you'd like to select a species using the French name, you can try this:
+Also, if you'd like to select a species using the French name, you can try this approach:
 \end{verbatim}
 
 \begin{Shaded}
@@ -540,10 +545,6 @@ The annual CWS analysis uses the heavy-tailed version of the GAMYE model. Here's
 \CommentTok{\#                   model = "gamye",}
 \CommentTok{\#                   min\_max\_route\_years = 2,}
 \CommentTok{\#                   heavy\_tailed = TRUE)}
-
-\DocumentationTok{\#\#\# previous lines were run to produce this .RData file:}
-
-\FunctionTok{load}\NormalTok{(}\StringTok{"data/jags\_data\_Scarlet\_Tanager.RData"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -562,29 +563,6 @@ Depending on the model and the size of the dataset (number of counts, number of 
     \CommentTok{\#                       inits = NULL,}
     \CommentTok{\#                       parameters\_to\_save = c("n","n3","nu","B.X","beta.X","strata","sdbeta","sdX","alpha"))}
  
-\end{Highlighting}
-\end{Shaded}
-
-Here's a toy example using data for the Pacific Wren and the slope model for a shortened time-series:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\#strat\_data \textless{}{-} stratify(by = "bbs\_cws")}
-
-\CommentTok{\# Prepare the stratified data for use in a JAGS model.}
-\NormalTok{jags\_data }\OtherTok{\textless{}{-}} \FunctionTok{prepare\_jags\_data}\NormalTok{(}\AttributeTok{strat\_data =}\NormalTok{ strat\_data,}
-                               \AttributeTok{species\_to\_run =} \StringTok{"Pacific Wren"}\NormalTok{,}
-                               \AttributeTok{model =} \StringTok{"slope"}\NormalTok{,}
-                               \AttributeTok{min\_year =} \DecValTok{2009}\NormalTok{,}
-                               \AttributeTok{max\_year =} \DecValTok{2018}\NormalTok{)}
-
-
-\NormalTok{jags\_mod }\OtherTok{\textless{}{-}} \FunctionTok{run\_model}\NormalTok{(}\AttributeTok{jags\_data =}\NormalTok{ jags\_data,}
-                      \AttributeTok{n\_adapt =} \DecValTok{100}\NormalTok{,}
-                      \AttributeTok{n\_burnin =} \DecValTok{200}\NormalTok{,}
-                      \AttributeTok{n\_iter =} \DecValTok{200}\NormalTok{,}
-                      \AttributeTok{n\_thin =} \DecValTok{1}\NormalTok{,}
-                      \AttributeTok{parameters\_to\_save =} \FunctionTok{c}\NormalTok{(}\StringTok{"n"}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
 
@@ -613,24 +591,90 @@ The remaining arguments allow for some customization of the MCMC process. The de
   parallel - Logical, Should each chain be run in parallel on separate cores? If TRUE, the number of cores used will be the minimum of the n\_chains specified and the number of cores on your computer
 \end{itemize}
 
+\hypertarget{pacfic-wren-example}{%
+\section{Pacfic Wren example}\label{pacfic-wren-example}}
+
+Here's a toy example using data for the Pacific Wren and the slope model for a shortened time-series:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#strat\_data \textless{}{-} stratify(by = "bbs\_cws")}
+
+\CommentTok{\# Prepare the stratified data for use in a JAGS model.}
+\NormalTok{jags\_data }\OtherTok{\textless{}{-}} \FunctionTok{prepare\_jags\_data}\NormalTok{(}\AttributeTok{strat\_data =}\NormalTok{ strat\_data,}
+                               \AttributeTok{species\_to\_run =} \StringTok{"Pacific Wren"}\NormalTok{,}
+                               \AttributeTok{model =} \StringTok{"slope"}\NormalTok{,}
+                               \AttributeTok{min\_year =} \DecValTok{2009}\NormalTok{,}
+                               \AttributeTok{max\_year =} \DecValTok{2018}\NormalTok{)}
+
+
+\NormalTok{jags\_mod }\OtherTok{\textless{}{-}} \FunctionTok{run\_model}\NormalTok{(}\AttributeTok{jags\_data =}\NormalTok{ jags\_data,}
+                      \AttributeTok{n\_adapt =} \DecValTok{100}\NormalTok{,}
+                      \AttributeTok{n\_burnin =} \DecValTok{200}\NormalTok{,}
+                      \AttributeTok{n\_iter =} \DecValTok{200}\NormalTok{,}
+                      \AttributeTok{n\_thin =} \DecValTok{1}\NormalTok{,}
+                      \AttributeTok{parameters\_to\_save =} \FunctionTok{c}\NormalTok{(}\StringTok{"n"}\NormalTok{,}\StringTok{"beta"}\NormalTok{,}\StringTok{"strata"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{convergence-of-the-mcmc}{%
+\section{Convergence of the MCMC}\label{convergence-of-the-mcmc}}
+
+The \texttt{run\_model()} function will send a warning if Gelman-Rubin Rhat cross-chain convergence criterion is \textgreater{} 1.1 for any of the monitored parameters. Re-running the model with a longer burn-in and/or more posterior iterations or greater thinning rates may improve convergence.
+The seriousness of these convergence failures is something the user must interpret for themselves. In some cases some parameters of the model may not be separately estimable, but if there is no direct inference drawn from those separate parameters, their convergence may not be necessary. If all or the vast majority of the n parameters have converged (e.g., you're receiving this warning message for other monitored parameters), then inference on population trajectories and trends from the model are reliable.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{jags\_mod}\SpecialCharTok{$}\NormalTok{n.eff }\CommentTok{\#shows the effective sample size for each monitored parameter}
+\NormalTok{jags\_mod}\SpecialCharTok{$}\NormalTok{Rhat }\CommentTok{\# shows the Rhat values for each monitored parameter}
+\end{Highlighting}
+\end{Shaded}
+
+If important monitored parameters have not converged, the shinystan package has some wonderful interactive tools for better understanding convergence issues with MCMC output.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#install.packages("shinystan")}
+\FunctionTok{library}\NormalTok{(shinystan)}
+\NormalTok{my\_sso }\OtherTok{\textless{}{-}}\NormalTok{ shinystan}\SpecialCharTok{::}\FunctionTok{launch\_shinystan}\NormalTok{(shinystan}\SpecialCharTok{::}\FunctionTok{as.shinystan}\NormalTok{(jags\_mod}\SpecialCharTok{$}\NormalTok{samples, }\AttributeTok{model\_name =} \StringTok{"my\_toy\_example"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+bbsBayes also includes a function to help re-start an MCMC chain, so that you avoid having to wait for an additional burn-in period.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DocumentationTok{\#\#\# if jags\_mod has failed to converge...}
+\NormalTok{new\_initials }\OtherTok{\textless{}{-}} \FunctionTok{get\_final\_values}\NormalTok{(jags\_mod)}
+
+\NormalTok{jags\_mod2 }\OtherTok{\textless{}{-}} \FunctionTok{run\_model}\NormalTok{(}\AttributeTok{jags\_data =}\NormalTok{ jags\_data,}
+                      \AttributeTok{n\_adapt =} \DecValTok{0}\NormalTok{,}
+                      \AttributeTok{n\_burnin =} \DecValTok{0}\NormalTok{,}
+                      \AttributeTok{n\_iter =} \DecValTok{200}\NormalTok{,}
+                      \AttributeTok{n\_thin =} \DecValTok{1}\NormalTok{,}
+                      \AttributeTok{inits =}\NormalTok{ new\_initials,}
+                      \AttributeTok{parameters\_to\_save =} \FunctionTok{c}\NormalTok{(}\StringTok{"n"}\NormalTok{,}\StringTok{"beta"}\NormalTok{,}\StringTok{"strata"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
 \hypertarget{IndicesTrends}{%
 \chapter{Estimating Annual Indices and Trends}\label{IndicesTrends}}
 
-Once the model has finished running, we can use the saved output to calculate the population trajectories and trends. As an example, we'll load the 2019 CWS saved model output for Scarlet Tanager, from the gamye model.
+Once the model has finished running, we can use the saved output to calculate the population trajectories and trends. As an example, we'll load some saved model output for Scarlet Tanager, from the gamye model. If you haven't already, you can download the model output file \href{https://drive.google.com/file/d/1LCZrl0W0AEbXj8_MyUP-CXX3a-j77rFN/view?usp=sharing}{here}, then save it into your working directory.
 
-This saved workspace includes two objects: 1. jags\_data - the data object created with the \texttt{prepare\_jags\_data()} function.
+This saved workspace includes two objects:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
-\setcounter{enumi}{1}
-\tightlist
+\item
+  jags\_data - the data object created with the \texttt{prepare\_jags\_data()} function.
 \item
   jags\_mod - the model output created with the \texttt{run\_model()} function.
 \end{enumerate}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{load}\NormalTok{(}\StringTok{"data/jags\_mod\_full\_Scarlet\_Tanager.RData"}\NormalTok{)}
+\FunctionTok{load}\NormalTok{(}\StringTok{"jags\_mod\_full.RData"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -812,7 +856,7 @@ It is simple to estimate trends for alternative intervals of time. For example, 
                           \AttributeTok{Min\_year =}\NormalTok{ (}\DecValTok{2019{-}15}\NormalTok{),}
                           \AttributeTok{Max\_year =} \DecValTok{2019}\NormalTok{,}
                           \AttributeTok{prob\_decrease =} \FunctionTok{c}\NormalTok{(}\DecValTok{30}\NormalTok{,}\DecValTok{50}\NormalTok{),}
-                          \AttributeTok{prob\_increase =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{))}
+                          \AttributeTok{prob\_increase =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{)) }
 \end{Highlighting}
 \end{Shaded}
 
@@ -848,8 +892,7 @@ For example, we could use the full annual indices from the gamye model (indices 
 \end{Highlighting}
 \end{Shaded}
 
-Setting \texttt{slope\ =\ TRUE} adds the slope-trend calculation to the output dataframe.
-Note: The probabilities of decrease and increase values are not based on the slope metric, they are always a function of the difference in population between the start and end of the time-interval.
+Setting \texttt{slope\ =\ TRUE} adds the slope-trend calculation to the output dataframe. Note: The probabilities of decrease and increase values are not based on the slope metric, they are always a function of the difference in population between the start and end of the time-interval.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1019,21 +1062,16 @@ For stratifications that can be compiled by political regions (i.e., \texttt{bbs
 \hypertarget{custom-regional-summaries}{%
 \section{Custom regional summaries}\label{custom-regional-summaries}}
 
-Yes, you can calculate the trend and trajectories for custom combinations of strata, such as the trends for Eastern and Western populations of Horned Lark.
+Yes, you can calculate the trend and trajectories for custom combinations of strata, such as a formal trend estimate for populations of Scarlet Tanager in the North East (BCRs 7, 8, 12, 13, and 14).
 
 \begin{Shaded}
 \begin{Highlighting}[]
-    \CommentTok{\#stratification \textless{}{-} "bbs\_cws"}
-    \CommentTok{\#strat\_data \textless{}{-} stratify(by = stratification, sample\_data = TRUE)}
-\NormalTok{    jags\_data }\OtherTok{\textless{}{-}} \FunctionTok{prepare\_jags\_data}\NormalTok{(strat\_data,}
-                              \AttributeTok{species\_to\_run =} \StringTok{"Lincoln\textquotesingle{}s Sparrow"}\NormalTok{,}
-                              \AttributeTok{model =} \StringTok{"gamye"}\NormalTok{)}
-
-    \CommentTok{\#jags\_mod \textless{}{-} run\_model(jags\_data = jags\_data)}
+\FunctionTok{load}\NormalTok{(}\StringTok{"jags\_mod\_full.RData"}\NormalTok{) }\CommentTok{\#saved Scarlet Tanager model output and data}
 \end{Highlighting}
 \end{Shaded}
 
-Assuming the above setup has been run. The user could then generate population trajectories using a customized grouping of the original strata.
+\hypertarget{define-the-custom-regions-as-a-collection-of-the-existing-strata.}{%
+\subsection{Define the custom regions as a collection of the existing strata.}\label{define-the-custom-regions-as-a-collection-of-the-existing-strata.}}
 
 First extract a dataframe that defines the original strata used in the analysis.
 
@@ -1062,24 +1100,48 @@ AK & US-AK-2 & 283405 & US & 2 & ALASKA & United States of America & United Stat
 \hline
 \end{tabular}
 
-The add a column to the dataframe that groups the original strata into the desired custom regions.
+Then add a column to the dataframe that groups the original strata into the desired custom regions.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{st\_comp\_regions}\SpecialCharTok{$}\NormalTok{East\_West }\OtherTok{\textless{}{-}} \FunctionTok{ifelse}\NormalTok{(st\_comp\_regions}\SpecialCharTok{$}\NormalTok{bcr }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\DecValTok{7}\NormalTok{,}\DecValTok{8}\NormalTok{,}\DecValTok{12}\SpecialCharTok{:}\DecValTok{14}\NormalTok{,}\DecValTok{22}\SpecialCharTok{:}\DecValTok{31}\NormalTok{),}\StringTok{"East"}\NormalTok{,}\StringTok{"West"}\NormalTok{)}
+\NormalTok{st\_comp\_regions}\SpecialCharTok{$}\NormalTok{NorthEast }\OtherTok{\textless{}{-}} \FunctionTok{ifelse}\NormalTok{(st\_comp\_regions}\SpecialCharTok{$}\NormalTok{bcr }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\DecValTok{7}\NormalTok{,}\DecValTok{8}\NormalTok{,}\DecValTok{12}\SpecialCharTok{:}\DecValTok{14}\NormalTok{),}\StringTok{"NorthEast"}\NormalTok{,}\StringTok{"Other"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
-st\_comp\_regions can now be used as the dataframe input to the argument alt\_region\_names in \texttt{generate\_indices()}, with ``East\_West'' as the value for the argument regions. The relevant trends can be calculated using just the \texttt{generate\_trends()} function.
+\hypertarget{use-defined-regions-to-estimate-indices-and-trends}{%
+\subsection{Use defined regions to estimate indices and trends}\label{use-defined-regions-to-estimate-indices-and-trends}}
+
+st\_comp\_regions can now be used as the dataframe input to the argument alt\_region\_names in \texttt{generate\_indices()}, with ``NorthEast'' as the value for the argument regions. The relevant trends can be calculated using just the \texttt{generate\_trends()} function.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{east\_west\_indices }\OtherTok{\textless{}{-}} \FunctionTok{generate\_indices}\NormalTok{(}\AttributeTok{jags\_mod =}\NormalTok{ jags\_mod,}
+\FunctionTok{library}\NormalTok{(patchwork)}
+\NormalTok{custom\_indices }\OtherTok{\textless{}{-}} \FunctionTok{generate\_indices}\NormalTok{(}\AttributeTok{jags\_mod =}\NormalTok{ jags\_mod,}
                                       \AttributeTok{jags\_data =}\NormalTok{ jags\_data,}
                                       \AttributeTok{alt\_region\_names =}\NormalTok{ st\_comp\_regions,}
-                                      \AttributeTok{regions =} \StringTok{"East\_West"}\NormalTok{)}
-\NormalTok{east\_west\_trends }\OtherTok{\textless{}{-}} \FunctionTok{generate\_trends}\NormalTok{(}\AttributeTok{indices =}\NormalTok{ east\_west\_indices)}
-\NormalTok{knitr}\SpecialCharTok{::}\FunctionTok{kable}\NormalTok{(east\_west\_trends[,}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{8}\NormalTok{,}\DecValTok{9}\NormalTok{,}\DecValTok{14}\NormalTok{)])}
+                                      \AttributeTok{regions =} \StringTok{"NorthEast"}\NormalTok{)}
+\NormalTok{tp }\OtherTok{=} \FunctionTok{plot\_indices}\NormalTok{(}\AttributeTok{indices =}\NormalTok{ custom\_indices,}
+                         \AttributeTok{species =} \StringTok{"Scarlet Tanager"}\NormalTok{,}
+                  \AttributeTok{add\_observed\_means =} \ConstantTok{TRUE}\NormalTok{,}
+                  \AttributeTok{add\_number\_routes =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(tp[[}\DecValTok{1}\NormalTok{]])}
+\FunctionTok{print}\NormalTok{(tp[[}\DecValTok{2}\NormalTok{]])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics[width=\textwidth]{bbsBayes_Workshop_files/figure-latex/A5plot-1} \includegraphics[width=\textwidth]{bbsBayes_Workshop_files/figure-latex/A5plot-2} \end{center}
+
+Calculate trends
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{custom\_trends }\OtherTok{\textless{}{-}} \FunctionTok{generate\_trends}\NormalTok{(}\AttributeTok{indices =}\NormalTok{ custom\_indices)}
+\NormalTok{knitr}\SpecialCharTok{::}\FunctionTok{kable}\NormalTok{(custom\_trends[,}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{8}\NormalTok{,}\DecValTok{9}\NormalTok{,}\DecValTok{14}\NormalTok{)])}
 \end{Highlighting}
 \end{Shaded}
 

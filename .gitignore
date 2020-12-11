@@ -5,3 +5,7 @@
 _bookdown_files/
 data/
 jags_mod_full.RData
+Full_BBS_speciesList.csv
+Scarlet_Tanager_trajectories.csv
+Scarlet_Tanager_trends_indices.RData
+Stratified_data_cws.RData

@@ -9,9 +9,6 @@
 #                   min_max_route_years = 2,
 #                   heavy_tailed = TRUE)
 
-### previous lines were run to produce this .RData file:
-
-load("data/jags_data_Scarlet_Tanager.RData")
 
 ```
 
@@ -82,7 +79,7 @@ jags_mod <- run_model(jags_data = jags_data,
 The `run_model()` function will send a warning if Gelman-Rubin Rhat cross-chain convergence criterion is \> 1.1 for any of the monitored parameters. Re-running the model with a longer burn-in and/or more posterior iterations or greater thinning rates may improve convergence. 
 The seriousness of these convergence failures is something the user must interpret for themselves. In some cases some parameters of the model may not be separately estimable, but if there is no direct inference drawn from those separate parameters, their convergence may not be necessary. If all or the vast majority of the n parameters have converged (e.g., you're receiving this warning message for other monitored parameters), then inference on population trajectories and trends from the model are reliable.
 
-``` {r RM4}
+``` {r RM4,eval = FALSE}
 jags_mod$n.eff #shows the effective sample size for each monitored parameter
 jags_mod$Rhat # shows the Rhat values for each monitored parameter
 ```
@@ -97,7 +94,7 @@ my_sso <- shinystan::launch_shinystan(shinystan::as.shinystan(jags_mod$samples, 
 
 bbsBayes also includes a function to help re-start an MCMC chain, so that you avoid having to wait for an additional burn-in period.
 
-``` {r RM6}
+``` {r RM6,eval = FALSE}
 ### if jags_mod has failed to converge...
 new_initials <- get_final_values(jags_mod)
 
