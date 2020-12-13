@@ -9,14 +9,21 @@ load("Scarlet_Tanager_trends_indices.RData")
 
 ## Graphing the trajectories (annual indices)
 
-The `plot_indices()` function produces a list of ggplot figures that can be combined into a single pdf file, or printed to individual devices.
-
-``` {r GM2}
+The `plot_indices()` function produces a list of ggplot figures that can be combined into a single pdf file:
+``` {r GM2_a, eval = FALSE}
+# Not run
 tp = plot_indices(indices = indices,
                          species = "Scarlet Tanager")
- # pdf(file = "Scarlet Tanager Trajectories.pdf")
- # print(tp)
- # dev.off()
+pdf(file = "Scarlet Tanager Trajectories.pdf")
+print(tp)
+dev.off()
+```
+
+Or, we can print plots to individual devices:
+
+``` {r GM2_b}
+tp = plot_indices(indices = indices,
+                         species = "Scarlet Tanager")
 print(tp[[1]])
 ```
 
@@ -27,9 +34,6 @@ tp2 = plot_indices(indices = indices,
                          species = paste("Scarlet Tanager","Full"),
                   add_observed_means = TRUE,
                   add_number_routes = TRUE)
- # pdf(file = "Scarlet Tanager Trajectories plus.pdf")
- # print(tp)
- # dev.off()
 
 ```
 
@@ -40,13 +44,10 @@ tp3 = plot_indices(indices = indices_smooth,
                          species = paste("Scarlet Tanager","Smooth"),
                   add_observed_means = TRUE,
                   add_number_routes = TRUE)
- # pdf(file = "Scarlet Tanager Trajectories smooth plus.pdf")
- # print(tp)
- # dev.off()
 
 ```
 
-
+Using the patchwork library, we can show these plots side-by-side:
 ```{r GM5}
 library(patchwork)
 print(tp2[[1]]+tp3[[1]])
@@ -81,9 +82,7 @@ For stratifications that can be compiled by political regions (i.e., `bbs_cws`, 
                      slope = F,
                      species = "Scarlet Tanager Smooth")
   
-  #png("SCTA_geofacet.png",width = 1500, height = 750,res = 150)
   print(gf)
-  #dev.off()
 ```
 
 
