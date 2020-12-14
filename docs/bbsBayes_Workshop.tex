@@ -1031,6 +1031,43 @@ Using the patchwork library, we can show these plots side-by-side:
 
 \begin{center}\includegraphics[width=\textwidth]{bbsBayes_Workshop_files/figure-latex/GM5-1} \end{center}
 
+\hypertarget{adding-elements-to-indices-plots}{%
+\section{Adding elements to indices plots}\label{adding-elements-to-indices-plots}}
+
+The output of the \texttt{plot\_indices()} function is a list of ggplot objects, it is relatively easy to add components to the basic plot.
+
+Here, we'll use the first plot (continental trajectory) from the full population trajectory version above \texttt{tp2{[}{[}1{]}{]}} as the base plot, and we'll add the smooth population trajectory information to the graph in a different colour.
+
+First, extract the smooth population trajectory information in a dataframe.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tidyverse)}
+\NormalTok{continental\_smooth }\OtherTok{\textless{}{-}}\NormalTok{ indices\_smooth}\SpecialCharTok{$}\NormalTok{data\_summary }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{filter}\NormalTok{(Region }\SpecialCharTok{==} \StringTok{"Continental"}\NormalTok{)}
+  
+\end{Highlighting}
+\end{Shaded}
+
+Then we overlap the original plot with a new line and uncertainty ribbon.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+
+\NormalTok{overlay\_plot }\OtherTok{\textless{}{-}}\NormalTok{ tp2[[}\DecValTok{1}\NormalTok{]] }\SpecialCharTok{+}
+  \FunctionTok{geom\_ribbon}\NormalTok{(}\AttributeTok{data =}\NormalTok{ continental\_smooth,}\AttributeTok{inherit.aes =} \ConstantTok{FALSE}\NormalTok{,}
+              \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Year,}\AttributeTok{ymax =}\NormalTok{ Index\_q\_0}\FloatTok{.25}\NormalTok{,}\AttributeTok{ymin =}\NormalTok{ Index\_q\_0}\FloatTok{.975}\NormalTok{),}
+              \AttributeTok{alpha =} \FloatTok{0.2}\NormalTok{,}
+              \AttributeTok{fill =} \StringTok{"darkgreen"}\NormalTok{)}\SpecialCharTok{+}
+  \FunctionTok{geom\_line}\NormalTok{(}\AttributeTok{data =}\NormalTok{ continental\_smooth, }\AttributeTok{inherit.aes =} \ConstantTok{FALSE}\NormalTok{,}
+            \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Year,}\AttributeTok{y =}\NormalTok{ Index),}
+            \AttributeTok{colour =} \StringTok{"darkgreen"}\NormalTok{)}
+\FunctionTok{print}\NormalTok{(overlay\_plot)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics[width=\textwidth]{bbsBayes_Workshop_files/figure-latex/GM5b-1} \end{center}
+
 \hypertarget{mapping-the-trends}{%
 \section{Mapping the trends}\label{mapping-the-trends}}
 

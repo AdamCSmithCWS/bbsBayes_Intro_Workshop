@@ -53,6 +53,35 @@ library(patchwork)
 print(tp2[[1]]+tp3[[1]])
 ```
 
+## Adding elements to indices plots
+
+The output of the `plot_indices()` function is a list of ggplot objects, it is relatively easy to add components to the basic plot. 
+
+Here, we'll use the first plot (continental trajectory) from the full population trajectory version above `tp2[[1]]` as the base plot, and we'll add the smooth population trajectory information to the graph in a different colour.
+
+First, extract the smooth population trajectory information in a dataframe.
+
+```{r GM5a}
+library(tidyverse)
+continental_smooth <- indices_smooth$data_summary %>% 
+  filter(Region == "Continental")
+  
+```
+Then we overlap the original plot with a new line and uncertainty ribbon.
+
+```{r GM5b}
+
+overlay_plot <- tp2[[1]] +
+  geom_ribbon(data = continental_smooth,inherit.aes = FALSE,
+              aes(x = Year,ymax = Index_q_0.25,ymin = Index_q_0.975),
+              alpha = 0.2,
+              fill = "darkgreen")+
+  geom_line(data = continental_smooth, inherit.aes = FALSE,
+            aes(x = Year,y = Index),
+            colour = "darkgreen")
+print(overlay_plot)
+```
+
 
 
 ## Mapping the trends

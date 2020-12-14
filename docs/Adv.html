@@ -186,8 +186,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="7" data-path="GraphMap.html"><a href="GraphMap.html"><i class="fa fa-check"></i><b>7</b> Trajectory graphs and trend maps</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="GraphMap.html"><a href="GraphMap.html#graphing-the-trajectories-annual-indices"><i class="fa fa-check"></i><b>7.1</b> Graphing the trajectories (annual indices)</a></li>
-<li class="chapter" data-level="7.2" data-path="GraphMap.html"><a href="GraphMap.html#mapping-the-trends"><i class="fa fa-check"></i><b>7.2</b> Mapping the trends</a></li>
-<li class="chapter" data-level="7.3" data-path="GraphMap.html"><a href="GraphMap.html#geofacet-trajectories"><i class="fa fa-check"></i><b>7.3</b> Geofacet Trajectories</a></li>
+<li class="chapter" data-level="7.2" data-path="GraphMap.html"><a href="GraphMap.html#adding-elements-to-indices-plots"><i class="fa fa-check"></i><b>7.2</b> Adding elements to indices plots</a></li>
+<li class="chapter" data-level="7.3" data-path="GraphMap.html"><a href="GraphMap.html#mapping-the-trends"><i class="fa fa-check"></i><b>7.3</b> Mapping the trends</a></li>
+<li class="chapter" data-level="7.4" data-path="GraphMap.html"><a href="GraphMap.html#geofacet-trajectories"><i class="fa fa-check"></i><b>7.4</b> Geofacet Trajectories</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="Adv.html"><a href="Adv.html"><i class="fa fa-check"></i><b>8</b> Advanced options</a>
 <ul>
@@ -223,12 +224,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="custom-regional-summaries" class="section level2" number="8.1">
 <h2><span class="header-section-number">8.1</span> Custom regional summaries</h2>
 <p>Yes, you can calculate the trend and trajectories for custom combinations of strata, such as a formal trend estimate for populations of Scarlet Tanager in the North East (BCRs 7, 8, 12, 13, and 14).</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="Adv.html#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;jags_mod_full.RData&quot;</span>) <span class="co">#saved Scarlet Tanager model output and data</span></span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="Adv.html#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;jags_mod_full.RData&quot;</span>) <span class="co">#saved Scarlet Tanager model output and data</span></span></code></pre></div>
 <div id="define-the-custom-regions-as-a-collection-of-the-existing-strata." class="section level3" number="8.1.1">
 <h3><span class="header-section-number">8.1.1</span> Define the custom regions as a collection of the existing strata.</h3>
 <p>First extract a dataframe that defines the original strata used in the analysis.</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="Adv.html#cb42-1" aria-hidden="true" tabindex="-1"></a>st_comp_regions <span class="ot">&lt;-</span> <span class="fu">get_composite_regions</span>(<span class="at">strata_type =</span> <span class="st">&quot;bbs_cws&quot;</span>)</span>
-<span id="cb42-2"><a href="Adv.html#cb42-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">head</span>(st_comp_regions))</span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="Adv.html#cb44-1" aria-hidden="true" tabindex="-1"></a>st_comp_regions <span class="ot">&lt;-</span> <span class="fu">get_composite_regions</span>(<span class="at">strata_type =</span> <span class="st">&quot;bbs_cws&quot;</span>)</span>
+<span id="cb44-2"><a href="Adv.html#cb44-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">head</span>(st_comp_regions))</span></code></pre></div>
 <table>
 <colgroup>
 <col width="9%" />
@@ -316,37 +317,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tbody>
 </table>
 <p>Then add a column to the dataframe that groups the original strata into the desired custom regions.</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="Adv.html#cb43-1" aria-hidden="true" tabindex="-1"></a>st_comp_regions<span class="sc">$</span>NorthEast <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(st_comp_regions<span class="sc">$</span>bcr <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">7</span>,<span class="dv">8</span>,<span class="dv">12</span><span class="sc">:</span><span class="dv">14</span>),<span class="st">&quot;NorthEast&quot;</span>,<span class="st">&quot;Other&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="Adv.html#cb45-1" aria-hidden="true" tabindex="-1"></a>st_comp_regions<span class="sc">$</span>NorthEast <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(st_comp_regions<span class="sc">$</span>bcr <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">7</span>,<span class="dv">8</span>,<span class="dv">12</span><span class="sc">:</span><span class="dv">14</span>),<span class="st">&quot;NorthEast&quot;</span>,<span class="st">&quot;Other&quot;</span>)</span></code></pre></div>
 </div>
 <div id="use-defined-regions-to-estimate-indices-and-trends" class="section level3" number="8.1.2">
 <h3><span class="header-section-number">8.1.2</span> Use defined regions to estimate indices and trends</h3>
 <p>st_comp_regions can now be used as the dataframe input to the argument alt_region_names in <code>generate_indices()</code>, with “NorthEast” as the value for the argument regions. The relevant trends can be calculated using just the <code>generate_trends()</code> function.</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="Adv.html#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
-<span id="cb44-2"><a href="Adv.html#cb44-2" aria-hidden="true" tabindex="-1"></a>custom_indices <span class="ot">&lt;-</span> <span class="fu">generate_indices</span>(<span class="at">jags_mod =</span> jags_mod,</span>
-<span id="cb44-3"><a href="Adv.html#cb44-3" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">jags_data =</span> jags_data,</span>
-<span id="cb44-4"><a href="Adv.html#cb44-4" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">alt_region_names =</span> st_comp_regions,</span>
-<span id="cb44-5"><a href="Adv.html#cb44-5" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">regions =</span> <span class="st">&quot;NorthEast&quot;</span>)</span>
-<span id="cb44-6"><a href="Adv.html#cb44-6" aria-hidden="true" tabindex="-1"></a>tp <span class="ot">=</span> <span class="fu">plot_indices</span>(<span class="at">indices =</span> custom_indices,</span>
-<span id="cb44-7"><a href="Adv.html#cb44-7" aria-hidden="true" tabindex="-1"></a>                         <span class="at">species =</span> <span class="st">&quot;Scarlet Tanager&quot;</span>,</span>
-<span id="cb44-8"><a href="Adv.html#cb44-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">add_observed_means =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb44-9"><a href="Adv.html#cb44-9" aria-hidden="true" tabindex="-1"></a>                  <span class="at">add_number_routes =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="Adv.html#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(tp[[<span class="dv">1</span>]])</span>
-<span id="cb45-2"><a href="Adv.html#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(tp[[<span class="dv">2</span>]])</span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="Adv.html#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb46-2"><a href="Adv.html#cb46-2" aria-hidden="true" tabindex="-1"></a>custom_indices <span class="ot">&lt;-</span> <span class="fu">generate_indices</span>(<span class="at">jags_mod =</span> jags_mod,</span>
+<span id="cb46-3"><a href="Adv.html#cb46-3" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">jags_data =</span> jags_data,</span>
+<span id="cb46-4"><a href="Adv.html#cb46-4" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">alt_region_names =</span> st_comp_regions,</span>
+<span id="cb46-5"><a href="Adv.html#cb46-5" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">regions =</span> <span class="st">&quot;NorthEast&quot;</span>)</span>
+<span id="cb46-6"><a href="Adv.html#cb46-6" aria-hidden="true" tabindex="-1"></a>tp <span class="ot">=</span> <span class="fu">plot_indices</span>(<span class="at">indices =</span> custom_indices,</span>
+<span id="cb46-7"><a href="Adv.html#cb46-7" aria-hidden="true" tabindex="-1"></a>                         <span class="at">species =</span> <span class="st">&quot;Scarlet Tanager&quot;</span>,</span>
+<span id="cb46-8"><a href="Adv.html#cb46-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">add_observed_means =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb46-9"><a href="Adv.html#cb46-9" aria-hidden="true" tabindex="-1"></a>                  <span class="at">add_number_routes =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="Adv.html#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(tp[[<span class="dv">1</span>]])</span>
+<span id="cb47-2"><a href="Adv.html#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(tp[[<span class="dv">2</span>]])</span></code></pre></div>
 <p><img src="bbsBayes_Workshop_files/figure-html/A5plot-1.png" width="\textwidth" style="display: block; margin: auto;" /><img src="bbsBayes_Workshop_files/figure-html/A5plot-2.png" width="\textwidth" style="display: block; margin: auto;" /></p>
 <p>Calculate trends</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="Adv.html#cb46-1" aria-hidden="true" tabindex="-1"></a>custom_trends <span class="ot">&lt;-</span> <span class="fu">generate_trends</span>(<span class="at">indices =</span> custom_indices)</span>
-<span id="cb46-2"><a href="Adv.html#cb46-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(custom_trends[,<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">8</span>,<span class="dv">9</span>,<span class="dv">14</span>)])</span></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="Adv.html#cb48-1" aria-hidden="true" tabindex="-1"></a>custom_trends <span class="ot">&lt;-</span> <span class="fu">generate_trends</span>(<span class="at">indices =</span> custom_indices)</span>
+<span id="cb48-2"><a href="Adv.html#cb48-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(custom_trends[,<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">8</span>,<span class="dv">9</span>,<span class="dv">14</span>)])</span></code></pre></div>
 </div>
 </div>
 <div id="exporting-the-jags-model" class="section level2" number="8.2">
 <h2><span class="header-section-number">8.2</span> Exporting the JAGS model</h2>
 <p>You can easily export any of the bbsBayes models to a text file.</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="Adv.html#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">model_to_file</span>(<span class="at">model =</span> <span class="st">&quot;slope&quot;</span>,</span>
-<span id="cb47-2"><a href="Adv.html#cb47-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">filename =</span> <span class="st">&quot;my_slope_model.txt&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="Adv.html#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">model_to_file</span>(<span class="at">model =</span> <span class="st">&quot;slope&quot;</span>,</span>
+<span id="cb49-2"><a href="Adv.html#cb49-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">filename =</span> <span class="st">&quot;my_slope_model.txt&quot;</span>)</span></code></pre></div>
 <p>Then, you can modify the model text (e.g., try a different prior) and run the modified model</p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="Adv.html#cb48-1" aria-hidden="true" tabindex="-1"></a>run_model <span class="ot">&lt;-</span> <span class="cf">function</span>(... ,</span>
-<span id="cb48-2"><a href="Adv.html#cb48-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">model_file_path =</span> <span class="st">&quot;my_modified_slope_model.txt&quot;</span>,</span>
-<span id="cb48-3"><a href="Adv.html#cb48-3" aria-hidden="true" tabindex="-1"></a>                      ... )</span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="Adv.html#cb50-1" aria-hidden="true" tabindex="-1"></a>run_model <span class="ot">&lt;-</span> <span class="cf">function</span>(... ,</span>
+<span id="cb50-2"><a href="Adv.html#cb50-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">model_file_path =</span> <span class="st">&quot;my_modified_slope_model.txt&quot;</span>,</span>
+<span id="cb50-3"><a href="Adv.html#cb50-3" aria-hidden="true" tabindex="-1"></a>                      ... )</span></code></pre></div>
 <p>Details coming soon…</p>
 </div>
 <div id="customizing-the-jags-model-and-data" class="section level2" number="8.3">
