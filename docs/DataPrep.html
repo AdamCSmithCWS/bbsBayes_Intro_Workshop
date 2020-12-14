@@ -24,7 +24,7 @@
 <meta name="author" content="Adam C. Smith, and Brandon P.M. Edwards" />
 
 
-<meta name="date" content="2020-12-11" />
+<meta name="date" content="2020-12-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -226,15 +226,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The critical arguments are:</p>
 <ul>
 <li>strat_data: the list of stratified data returned by <code>stratify()</code></li>
-<li>species_to_run: the English name for the species. this is currently case sensitive, and must exactly match one of the names in the english column of the species_strat object of strat_data i.e., <code>strat_data$species_strat$english</code>
+<li>species_to_run: the English name for the species. This is currently case sensitive, and must exactly match one of the names in the english column of the species_strat object of strat_data i.e., <code>strat_data$species_strat$english</code>
 If you’d like to export a full list of the available species, this code will work:</li>
 </ul>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="DataPrep.html#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(strat_data<span class="sc">$</span>species_strat,<span class="st">&quot;Full_BBS_speciesList.csv&quot;</span>)</span></code></pre></div>
-<pre><code>Also, if you&#39;d like to select a species using the French name, you can try this approach:</code></pre>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="DataPrep.html#cb11-1" aria-hidden="true" tabindex="-1"></a>espece <span class="ot">=</span> <span class="st">&quot;Colibri à gorge rubis&quot;</span></span>
-<span id="cb11-2"><a href="DataPrep.html#cb11-2" aria-hidden="true" tabindex="-1"></a>species <span class="ot">=</span> strat_data<span class="sc">$</span>species_strat<span class="sc">$</span>english[<span class="fu">which</span>(strat_data<span class="sc">$</span>species_strat<span class="sc">$</span>french <span class="sc">==</span> espece)]</span>
-<span id="cb11-3"><a href="DataPrep.html#cb11-3" aria-hidden="true" tabindex="-1"></a>species</span>
-<span id="cb11-4"><a href="DataPrep.html#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Ruby-throated Hummingbird&quot;</span></span></code></pre></div>
+<p>Also, if you’d like to select a species using the French name, you can try this approach:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="DataPrep.html#cb10-1" aria-hidden="true" tabindex="-1"></a>espece <span class="ot">=</span> <span class="st">&quot;Colibri à gorge rubis&quot;</span></span>
+<span id="cb10-2"><a href="DataPrep.html#cb10-2" aria-hidden="true" tabindex="-1"></a>species <span class="ot">=</span> strat_data<span class="sc">$</span>species_strat<span class="sc">$</span>english[<span class="fu">which</span>(strat_data<span class="sc">$</span>species_strat<span class="sc">$</span>french <span class="sc">==</span> espece)]</span>
+<span id="cb10-3"><a href="DataPrep.html#cb10-3" aria-hidden="true" tabindex="-1"></a>species</span>
+<span id="cb10-4"><a href="DataPrep.html#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Ruby-throated Hummingbird&quot;</span></span></code></pre></div>
 <ul>
 <li>model: the model to use, options are “slope,” “firstdiff,” “gam,” or “gamye”</li>
 </ul>
@@ -254,7 +254,7 @@ If you’d like to export a full list of the available species, this code will w
 <p>The package has (currently) four status and trend models that differ in the way they model the time-series of observations. The four model options are slope, gam, gamye, and firstdiff. <img src="images/AMKE_all.png"/></p>
 <div id="slope" class="section level3" number="4.2.1">
 <h3><span class="header-section-number">4.2.1</span> slope</h3>
-<p>The slope option estimates the time series as a log-linear regression with random year-effect terms that allow the trajectory to depart from the smooth regression line. It is the model used by the USGS and CWS to estimate bbs trends between 2011 and 2018. The basic model was first described in 2002 (<span class="citation">(<a href="Ref.html#ref-link2002" role="doc-biblioref">Link and Sauer 2002a</a>)</span>) and its application to the annual status and trend estimates is documented in <span class="citation">(<a href="Ref.html#ref-sauer2011" role="doc-biblioref">Sauer and Link 2011</a>)</span> and <span class="citation">(<a href="Ref.html#ref-smith2014" role="doc-biblioref">Smith et al. 2014</a>)</span>.</p>
+<p>The slope option estimates the time series as a log-linear regression with random year-effect terms that allow the trajectory to depart from the smooth regression line. It is the model used by the USGS and CWS to estimate BBS trends between 2011 and 2018. The basic model was first described in 2002 <span class="citation">(<a href="Ref.html#ref-link2002" role="doc-biblioref">Link and Sauer 2002a</a>)</span> and its application to the annual status and trend estimates is documented in <span class="citation">(<a href="Ref.html#ref-sauer2011" role="doc-biblioref">Sauer and Link 2011</a>)</span> and <span class="citation">(<a href="Ref.html#ref-smith2014" role="doc-biblioref">Smith et al. 2014</a>)</span>.</p>
 <p><img src="images/AMKE_slope.png"/></p>
 </div>
 <div id="gam" class="section level3" number="4.2.2">
@@ -276,11 +276,11 @@ If you’d like to export a full list of the available species, this code will w
 <div id="cws-analysis-example" class="section level2" number="4.3">
 <h2><span class="header-section-number">4.3</span> CWS analysis example</h2>
 <p>The annual CWS analysis uses the heavy-tailed version of the GAMYE model. Here’s the data function call that is used in the 2019 analysis for Scarlet Tanager:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="DataPrep.html#cb12-1" aria-hidden="true" tabindex="-1"></a>jags_data <span class="ot">&lt;-</span> <span class="fu">prepare_jags_data</span>(<span class="at">strat_data =</span> strat_data,</span>
-<span id="cb12-2"><a href="DataPrep.html#cb12-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">species_to_run =</span> <span class="st">&quot;Scarlet Tanager&quot;</span>,</span>
-<span id="cb12-3"><a href="DataPrep.html#cb12-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">model =</span> <span class="st">&quot;gamye&quot;</span>,</span>
-<span id="cb12-4"><a href="DataPrep.html#cb12-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">min_max_route_years =</span> <span class="dv">2</span>,</span>
-<span id="cb12-5"><a href="DataPrep.html#cb12-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">heavy_tailed =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="DataPrep.html#cb11-1" aria-hidden="true" tabindex="-1"></a>jags_data <span class="ot">&lt;-</span> <span class="fu">prepare_jags_data</span>(<span class="at">strat_data =</span> strat_data,</span>
+<span id="cb11-2"><a href="DataPrep.html#cb11-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">species_to_run =</span> <span class="st">&quot;Scarlet Tanager&quot;</span>,</span>
+<span id="cb11-3"><a href="DataPrep.html#cb11-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">model =</span> <span class="st">&quot;gamye&quot;</span>,</span>
+<span id="cb11-4"><a href="DataPrep.html#cb11-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">min_max_route_years =</span> <span class="dv">2</span>,</span>
+<span id="cb11-5"><a href="DataPrep.html#cb11-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">heavy_tailed =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 
 </div>
 </div>

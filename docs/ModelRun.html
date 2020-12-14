@@ -24,7 +24,7 @@
 <meta name="author" content="Adam C. Smith, and Brandon P.M. Edwards" />
 
 
-<meta name="date" content="2020-12-11" />
+<meta name="date" content="2020-12-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -220,25 +220,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="ModelRun" class="section level1" number="5">
 <h1><span class="header-section-number">Chapter 5</span> Running the model</h1>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="ModelRun.html#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set up for the annual CWS status and trend analysis</span></span>
-<span id="cb13-2"><a href="ModelRun.html#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co"># strat_data &lt;- stratify(by = &quot;bbs_cws&quot;)</span></span>
-<span id="cb13-3"><a href="ModelRun.html#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># jags_data &lt;- prepare_jags_data(strat_data = strat_data,</span></span>
-<span id="cb13-4"><a href="ModelRun.html#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co">#                   species_to_run = &quot;Scarlet Tanager&quot;,</span></span>
-<span id="cb13-5"><a href="ModelRun.html#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co">#                   model = &quot;gamye&quot;,</span></span>
-<span id="cb13-6"><a href="ModelRun.html#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co">#                   min_max_route_years = 2,</span></span>
-<span id="cb13-7"><a href="ModelRun.html#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co">#                   heavy_tailed = TRUE)</span></span></code></pre></div>
-<p>After stratifying and preparing the data for a particular species and model, the <code>run_model()</code> function calls the JAGS program to fit the selected model to the species’ data.
-Depending on the model and the size of the dataset (number of counts, number of strata, number of years, etc.), this process can take a long time (hours - days). The following code would shows the settings used for most species in the annual CWS analysis.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="ModelRun.html#cb14-1" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Not Run</span></span>
-<span id="cb14-2"><a href="ModelRun.html#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># jags_mod &lt;- run_model(jags_data = jags_data,</span></span>
-<span id="cb14-3"><a href="ModelRun.html#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">#                            n_iter = 24000, #higher than the default 10,000</span></span>
-<span id="cb14-4"><a href="ModelRun.html#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">#                            n_burnin = 20000,</span></span>
-<span id="cb14-5"><a href="ModelRun.html#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">#                            n_chains = 3,</span></span>
-<span id="cb14-6"><a href="ModelRun.html#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">#                            n_thin = 20, #saves memory by retaining only 1/20 posterior samples</span></span>
-<span id="cb14-7"><a href="ModelRun.html#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">#                            parallel = TRUE,</span></span>
-<span id="cb14-8"><a href="ModelRun.html#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">#                       inits = NULL,</span></span>
-<span id="cb14-9"><a href="ModelRun.html#cb14-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">#                       parameters_to_save = c(&quot;n&quot;,&quot;n3&quot;,&quot;nu&quot;,&quot;B.X&quot;,&quot;beta.X&quot;,&quot;strata&quot;,&quot;sdbeta&quot;,&quot;sdX&quot;,&quot;alpha&quot;))</span></span>
-<span id="cb14-10"><a href="ModelRun.html#cb14-10" aria-hidden="true" tabindex="-1"></a> </span></code></pre></div>
+<p>After stratifying and preparing the data for a particular species and model, the <code>run_model()</code> function calls the JAGS program to fit the selected model to the species’ data.</p>
+<p>Depending on the model and the size of the dataset (number of counts, number of strata, number of years, etc.), this process can take a long time (hours - days). The following code shows the settings used for most species in the annual CWS analysis.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="ModelRun.html#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Not Run</span></span>
+<span id="cb12-2"><a href="ModelRun.html#cb12-2" aria-hidden="true" tabindex="-1"></a>jags_mod <span class="ot">&lt;-</span> <span class="fu">run_model</span>(<span class="at">jags_data =</span> jags_data,</span>
+<span id="cb12-3"><a href="ModelRun.html#cb12-3" aria-hidden="true" tabindex="-1"></a>                      <span class="at">n_iter =</span> <span class="dv">24000</span>, <span class="co">#higher than the default 10,000</span></span>
+<span id="cb12-4"><a href="ModelRun.html#cb12-4" aria-hidden="true" tabindex="-1"></a>                      <span class="at">n_burnin =</span> <span class="dv">20000</span>,</span>
+<span id="cb12-5"><a href="ModelRun.html#cb12-5" aria-hidden="true" tabindex="-1"></a>                      <span class="at">n_chains =</span> <span class="dv">3</span>,</span>
+<span id="cb12-6"><a href="ModelRun.html#cb12-6" aria-hidden="true" tabindex="-1"></a>                      <span class="at">n_thin =</span> <span class="dv">20</span>, <span class="co">#saves memory by retaining only 1/20 posterior samples</span></span>
+<span id="cb12-7"><a href="ModelRun.html#cb12-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">parallel =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb12-8"><a href="ModelRun.html#cb12-8" aria-hidden="true" tabindex="-1"></a>                      <span class="at">inits =</span> <span class="cn">NULL</span>,</span>
+<span id="cb12-9"><a href="ModelRun.html#cb12-9" aria-hidden="true" tabindex="-1"></a>                      <span class="at">parameters_to_save =</span> <span class="fu">c</span>(<span class="st">&quot;n&quot;</span>,<span class="st">&quot;n3&quot;</span>,<span class="st">&quot;nu&quot;</span>,</span>
+<span id="cb12-10"><a href="ModelRun.html#cb12-10" aria-hidden="true" tabindex="-1"></a>                                             <span class="st">&quot;B.X&quot;</span>,<span class="st">&quot;beta.X&quot;</span>,<span class="st">&quot;strata&quot;</span>,</span>
+<span id="cb12-11"><a href="ModelRun.html#cb12-11" aria-hidden="true" tabindex="-1"></a>                                             <span class="st">&quot;sdbeta&quot;</span>,<span class="st">&quot;sdX&quot;</span>,<span class="st">&quot;alpha&quot;</span>))</span>
+<span id="cb12-12"><a href="ModelRun.html#cb12-12" aria-hidden="true" tabindex="-1"></a> </span></code></pre></div>
 <p>There is only one critical argument in the <code>run_model()</code> function.</p>
 <ul>
 <li>jags_data - List output from the <code>prepare_jags_data()</code> function.</li>
@@ -255,44 +250,44 @@ Depending on the model and the size of the dataset (number of counts, number of 
 <div id="pacfic-wren-example" class="section level2" number="5.1">
 <h2><span class="header-section-number">5.1</span> Pacfic Wren example</h2>
 <p>Here’s a toy example using data for the Pacific Wren and the slope model for a shortened time-series:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="ModelRun.html#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">#strat_data &lt;- stratify(by = &quot;bbs_cws&quot;)</span></span>
-<span id="cb15-2"><a href="ModelRun.html#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-3"><a href="ModelRun.html#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare the stratified data for use in a JAGS model.</span></span>
-<span id="cb15-4"><a href="ModelRun.html#cb15-4" aria-hidden="true" tabindex="-1"></a>jags_data <span class="ot">&lt;-</span> <span class="fu">prepare_jags_data</span>(<span class="at">strat_data =</span> strat_data,</span>
-<span id="cb15-5"><a href="ModelRun.html#cb15-5" aria-hidden="true" tabindex="-1"></a>                               <span class="at">species_to_run =</span> <span class="st">&quot;Pacific Wren&quot;</span>,</span>
-<span id="cb15-6"><a href="ModelRun.html#cb15-6" aria-hidden="true" tabindex="-1"></a>                               <span class="at">model =</span> <span class="st">&quot;slope&quot;</span>,</span>
-<span id="cb15-7"><a href="ModelRun.html#cb15-7" aria-hidden="true" tabindex="-1"></a>                               <span class="at">min_year =</span> <span class="dv">2009</span>,</span>
-<span id="cb15-8"><a href="ModelRun.html#cb15-8" aria-hidden="true" tabindex="-1"></a>                               <span class="at">max_year =</span> <span class="dv">2018</span>)</span>
-<span id="cb15-9"><a href="ModelRun.html#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-10"><a href="ModelRun.html#cb15-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-11"><a href="ModelRun.html#cb15-11" aria-hidden="true" tabindex="-1"></a>jags_mod <span class="ot">&lt;-</span> <span class="fu">run_model</span>(<span class="at">jags_data =</span> jags_data,</span>
-<span id="cb15-12"><a href="ModelRun.html#cb15-12" aria-hidden="true" tabindex="-1"></a>                      <span class="at">n_adapt =</span> <span class="dv">100</span>,</span>
-<span id="cb15-13"><a href="ModelRun.html#cb15-13" aria-hidden="true" tabindex="-1"></a>                      <span class="at">n_burnin =</span> <span class="dv">200</span>,</span>
-<span id="cb15-14"><a href="ModelRun.html#cb15-14" aria-hidden="true" tabindex="-1"></a>                      <span class="at">n_iter =</span> <span class="dv">200</span>,</span>
-<span id="cb15-15"><a href="ModelRun.html#cb15-15" aria-hidden="true" tabindex="-1"></a>                      <span class="at">n_thin =</span> <span class="dv">1</span>,</span>
-<span id="cb15-16"><a href="ModelRun.html#cb15-16" aria-hidden="true" tabindex="-1"></a>                      <span class="at">parameters_to_save =</span> <span class="fu">c</span>(<span class="st">&quot;n&quot;</span>,<span class="st">&quot;beta&quot;</span>,<span class="st">&quot;strata&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="ModelRun.html#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#strat_data &lt;- stratify(by = &quot;bbs_cws&quot;)</span></span>
+<span id="cb13-2"><a href="ModelRun.html#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="ModelRun.html#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare the stratified data for use in a JAGS model (see Chapter 4).</span></span>
+<span id="cb13-4"><a href="ModelRun.html#cb13-4" aria-hidden="true" tabindex="-1"></a>jags_data <span class="ot">&lt;-</span> <span class="fu">prepare_jags_data</span>(<span class="at">strat_data =</span> strat_data,</span>
+<span id="cb13-5"><a href="ModelRun.html#cb13-5" aria-hidden="true" tabindex="-1"></a>                               <span class="at">species_to_run =</span> <span class="st">&quot;Pacific Wren&quot;</span>,</span>
+<span id="cb13-6"><a href="ModelRun.html#cb13-6" aria-hidden="true" tabindex="-1"></a>                               <span class="at">model =</span> <span class="st">&quot;slope&quot;</span>,</span>
+<span id="cb13-7"><a href="ModelRun.html#cb13-7" aria-hidden="true" tabindex="-1"></a>                               <span class="at">min_year =</span> <span class="dv">2009</span>,</span>
+<span id="cb13-8"><a href="ModelRun.html#cb13-8" aria-hidden="true" tabindex="-1"></a>                               <span class="at">max_year =</span> <span class="dv">2018</span>)</span>
+<span id="cb13-9"><a href="ModelRun.html#cb13-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-10"><a href="ModelRun.html#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Now run the model</span></span>
+<span id="cb13-11"><a href="ModelRun.html#cb13-11" aria-hidden="true" tabindex="-1"></a>jags_mod <span class="ot">&lt;-</span> <span class="fu">run_model</span>(<span class="at">jags_data =</span> jags_data,</span>
+<span id="cb13-12"><a href="ModelRun.html#cb13-12" aria-hidden="true" tabindex="-1"></a>                      <span class="at">n_adapt =</span> <span class="dv">100</span>,</span>
+<span id="cb13-13"><a href="ModelRun.html#cb13-13" aria-hidden="true" tabindex="-1"></a>                      <span class="at">n_burnin =</span> <span class="dv">200</span>,</span>
+<span id="cb13-14"><a href="ModelRun.html#cb13-14" aria-hidden="true" tabindex="-1"></a>                      <span class="at">n_iter =</span> <span class="dv">200</span>,</span>
+<span id="cb13-15"><a href="ModelRun.html#cb13-15" aria-hidden="true" tabindex="-1"></a>                      <span class="at">n_thin =</span> <span class="dv">1</span>,</span>
+<span id="cb13-16"><a href="ModelRun.html#cb13-16" aria-hidden="true" tabindex="-1"></a>                      <span class="at">parameters_to_save =</span> <span class="fu">c</span>(<span class="st">&quot;n&quot;</span>,<span class="st">&quot;beta&quot;</span>,<span class="st">&quot;strata&quot;</span>))</span></code></pre></div>
 </div>
 <div id="convergence-of-the-mcmc" class="section level2" number="5.2">
 <h2><span class="header-section-number">5.2</span> Convergence of the MCMC</h2>
-<p>The <code>run_model()</code> function will send a warning if Gelman-Rubin Rhat cross-chain convergence criterion is &gt; 1.1 for any of the monitored parameters. Re-running the model with a longer burn-in and/or more posterior iterations or greater thinning rates may improve convergence.
-The seriousness of these convergence failures is something the user must interpret for themselves. In some cases some parameters of the model may not be separately estimable, but if there is no direct inference drawn from those separate parameters, their convergence may not be necessary. If all or the vast majority of the n parameters have converged (e.g., you’re receiving this warning message for other monitored parameters), then inference on population trajectories and trends from the model are reliable.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="ModelRun.html#cb16-1" aria-hidden="true" tabindex="-1"></a>jags_mod<span class="sc">$</span>n.eff <span class="co">#shows the effective sample size for each monitored parameter</span></span>
-<span id="cb16-2"><a href="ModelRun.html#cb16-2" aria-hidden="true" tabindex="-1"></a>jags_mod<span class="sc">$</span>Rhat <span class="co"># shows the Rhat values for each monitored parameter</span></span></code></pre></div>
+<p>The <code>run_model()</code> function will send a warning if Gelman-Rubin Rhat cross-chain convergence criterion is &gt; 1.1 for any of the monitored parameters. Re-running the model with a longer burn-in and/or more posterior iterations or greater thinning rates may improve convergence. We can check for ourselves the effective sample size for each monitored parameter, as well as the Rhat values for each monitored parameter:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="ModelRun.html#cb14-1" aria-hidden="true" tabindex="-1"></a>jags_mod<span class="sc">$</span>n.eff <span class="co">#shows the effective sample size for each monitored parameter</span></span>
+<span id="cb14-2"><a href="ModelRun.html#cb14-2" aria-hidden="true" tabindex="-1"></a>jags_mod<span class="sc">$</span>Rhat <span class="co"># shows the Rhat values for each monitored parameter</span></span></code></pre></div>
+<p>The seriousness of these convergence failures is something the user must interpret for themselves. In some cases some parameters of the model may not be separately estimable, but if there is no direct inference drawn from those separate parameters, their convergence may not be necessary. If all or the vast majority of the n parameters have converged (e.g., you’re receiving this warning message for other monitored parameters), then inference on population trajectories and trends from the model are reliable.</p>
 <p>If important monitored parameters have not converged, the shinystan package has some wonderful interactive tools for better understanding convergence issues with MCMC output.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="ModelRun.html#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages(&quot;shinystan&quot;)</span></span>
-<span id="cb17-2"><a href="ModelRun.html#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(shinystan)</span>
-<span id="cb17-3"><a href="ModelRun.html#cb17-3" aria-hidden="true" tabindex="-1"></a>my_sso <span class="ot">&lt;-</span> shinystan<span class="sc">::</span><span class="fu">launch_shinystan</span>(shinystan<span class="sc">::</span><span class="fu">as.shinystan</span>(jags_mod<span class="sc">$</span>samples, <span class="at">model_name =</span> <span class="st">&quot;my_toy_example&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="ModelRun.html#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages(&quot;shinystan&quot;)</span></span>
+<span id="cb15-2"><a href="ModelRun.html#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(shinystan)</span>
+<span id="cb15-3"><a href="ModelRun.html#cb15-3" aria-hidden="true" tabindex="-1"></a>my_sso <span class="ot">&lt;-</span> shinystan<span class="sc">::</span><span class="fu">launch_shinystan</span>(shinystan<span class="sc">::</span><span class="fu">as.shinystan</span>(jags_mod<span class="sc">$</span>samples, <span class="at">model_name =</span> <span class="st">&quot;my_toy_example&quot;</span>))</span></code></pre></div>
 <p>bbsBayes also includes a function to help re-start an MCMC chain, so that you avoid having to wait for an additional burn-in period.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="ModelRun.html#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="do">### if jags_mod has failed to converge...</span></span>
-<span id="cb18-2"><a href="ModelRun.html#cb18-2" aria-hidden="true" tabindex="-1"></a>new_initials <span class="ot">&lt;-</span> <span class="fu">get_final_values</span>(jags_mod)</span>
-<span id="cb18-3"><a href="ModelRun.html#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-4"><a href="ModelRun.html#cb18-4" aria-hidden="true" tabindex="-1"></a>jags_mod2 <span class="ot">&lt;-</span> <span class="fu">run_model</span>(<span class="at">jags_data =</span> jags_data,</span>
-<span id="cb18-5"><a href="ModelRun.html#cb18-5" aria-hidden="true" tabindex="-1"></a>                      <span class="at">n_adapt =</span> <span class="dv">0</span>,</span>
-<span id="cb18-6"><a href="ModelRun.html#cb18-6" aria-hidden="true" tabindex="-1"></a>                      <span class="at">n_burnin =</span> <span class="dv">0</span>,</span>
-<span id="cb18-7"><a href="ModelRun.html#cb18-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">n_iter =</span> <span class="dv">200</span>,</span>
-<span id="cb18-8"><a href="ModelRun.html#cb18-8" aria-hidden="true" tabindex="-1"></a>                      <span class="at">n_thin =</span> <span class="dv">1</span>,</span>
-<span id="cb18-9"><a href="ModelRun.html#cb18-9" aria-hidden="true" tabindex="-1"></a>                      <span class="at">inits =</span> new_initials,</span>
-<span id="cb18-10"><a href="ModelRun.html#cb18-10" aria-hidden="true" tabindex="-1"></a>                      <span class="at">parameters_to_save =</span> <span class="fu">c</span>(<span class="st">&quot;n&quot;</span>,<span class="st">&quot;beta&quot;</span>,<span class="st">&quot;strata&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="ModelRun.html#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="do">### if jags_mod has failed to converge...</span></span>
+<span id="cb16-2"><a href="ModelRun.html#cb16-2" aria-hidden="true" tabindex="-1"></a>new_initials <span class="ot">&lt;-</span> <span class="fu">get_final_values</span>(jags_mod)</span>
+<span id="cb16-3"><a href="ModelRun.html#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="ModelRun.html#cb16-4" aria-hidden="true" tabindex="-1"></a>jags_mod2 <span class="ot">&lt;-</span> <span class="fu">run_model</span>(<span class="at">jags_data =</span> jags_data,</span>
+<span id="cb16-5"><a href="ModelRun.html#cb16-5" aria-hidden="true" tabindex="-1"></a>                      <span class="at">n_adapt =</span> <span class="dv">0</span>,</span>
+<span id="cb16-6"><a href="ModelRun.html#cb16-6" aria-hidden="true" tabindex="-1"></a>                      <span class="at">n_burnin =</span> <span class="dv">0</span>,</span>
+<span id="cb16-7"><a href="ModelRun.html#cb16-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">n_iter =</span> <span class="dv">200</span>,</span>
+<span id="cb16-8"><a href="ModelRun.html#cb16-8" aria-hidden="true" tabindex="-1"></a>                      <span class="at">n_thin =</span> <span class="dv">1</span>,</span>
+<span id="cb16-9"><a href="ModelRun.html#cb16-9" aria-hidden="true" tabindex="-1"></a>                      <span class="at">inits =</span> new_initials,</span>
+<span id="cb16-10"><a href="ModelRun.html#cb16-10" aria-hidden="true" tabindex="-1"></a>                      <span class="at">parameters_to_save =</span> <span class="fu">c</span>(<span class="st">&quot;n&quot;</span>,<span class="st">&quot;beta&quot;</span>,<span class="st">&quot;strata&quot;</span>))</span></code></pre></div>
 
 </div>
 </div>

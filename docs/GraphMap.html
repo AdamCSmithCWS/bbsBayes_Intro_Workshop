@@ -24,7 +24,7 @@
 <meta name="author" content="Adam C. Smith, and Brandon P.M. Edwards" />
 
 
-<meta name="date" content="2020-12-11" />
+<meta name="date" content="2020-12-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -221,62 +221,59 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="GraphMap" class="section level1" number="7">
 <h1><span class="header-section-number">Chapter 7</span> Trajectory graphs and trend maps</h1>
 <p>Now that we have calculated values for the trends and trajectories, bbsBayes also includes functions to plot and map the values.</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="GraphMap.html#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load the trend and indices objects for Scarlet Tanager</span></span>
-<span id="cb35-2"><a href="GraphMap.html#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;Scarlet_Tanager_trends_indices.RData&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="GraphMap.html#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load the trend and indices objects for Scarlet Tanager</span></span>
+<span id="cb33-2"><a href="GraphMap.html#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;Scarlet_Tanager_trends_indices.RData&quot;</span>)</span></code></pre></div>
 <div id="graphing-the-trajectories-annual-indices" class="section level2" number="7.1">
 <h2><span class="header-section-number">7.1</span> Graphing the trajectories (annual indices)</h2>
-<p>The <code>plot_indices()</code> function produces a list of ggplot figures that can be combined into a single pdf file, or printed to individual devices.</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="GraphMap.html#cb36-1" aria-hidden="true" tabindex="-1"></a>tp <span class="ot">=</span> <span class="fu">plot_indices</span>(<span class="at">indices =</span> indices,</span>
-<span id="cb36-2"><a href="GraphMap.html#cb36-2" aria-hidden="true" tabindex="-1"></a>                         <span class="at">species =</span> <span class="st">&quot;Scarlet Tanager&quot;</span>)</span>
-<span id="cb36-3"><a href="GraphMap.html#cb36-3" aria-hidden="true" tabindex="-1"></a> <span class="co"># pdf(file = &quot;Scarlet Tanager Trajectories.pdf&quot;)</span></span>
-<span id="cb36-4"><a href="GraphMap.html#cb36-4" aria-hidden="true" tabindex="-1"></a> <span class="co"># print(tp)</span></span>
-<span id="cb36-5"><a href="GraphMap.html#cb36-5" aria-hidden="true" tabindex="-1"></a> <span class="co"># dev.off()</span></span>
-<span id="cb36-6"><a href="GraphMap.html#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(tp[[<span class="dv">1</span>]])</span></code></pre></div>
-<p><img src="bbsBayes_Workshop_files/figure-html/GM2-1.png" width="\textwidth" style="display: block; margin: auto;" /></p>
+<p>The <code>plot_indices()</code> function produces a list of ggplot figures that can be combined into a single pdf file:</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="GraphMap.html#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Not run</span></span>
+<span id="cb34-2"><a href="GraphMap.html#cb34-2" aria-hidden="true" tabindex="-1"></a>tp <span class="ot">=</span> <span class="fu">plot_indices</span>(<span class="at">indices =</span> indices,</span>
+<span id="cb34-3"><a href="GraphMap.html#cb34-3" aria-hidden="true" tabindex="-1"></a>                         <span class="at">species =</span> <span class="st">&quot;Scarlet Tanager&quot;</span>)</span>
+<span id="cb34-4"><a href="GraphMap.html#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="fu">pdf</span>(<span class="at">file =</span> <span class="st">&quot;Scarlet Tanager Trajectories.pdf&quot;</span>)</span>
+<span id="cb34-5"><a href="GraphMap.html#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(tp)</span>
+<span id="cb34-6"><a href="GraphMap.html#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div>
+<p>Or, we can print plots to individual devices:</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="GraphMap.html#cb35-1" aria-hidden="true" tabindex="-1"></a>tp <span class="ot">=</span> <span class="fu">plot_indices</span>(<span class="at">indices =</span> indices,</span>
+<span id="cb35-2"><a href="GraphMap.html#cb35-2" aria-hidden="true" tabindex="-1"></a>                         <span class="at">species =</span> <span class="st">&quot;Scarlet Tanager&quot;</span>)</span>
+<span id="cb35-3"><a href="GraphMap.html#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(tp[[<span class="dv">1</span>]])</span></code></pre></div>
+<p><img src="bbsBayes_Workshop_files/figure-html/GM2_b-1.png" width="\textwidth" style="display: block; margin: auto;" /></p>
 <p><code>plot_indices()</code> also allows the user to add points to show the observed mean counts as well as stacked dots to indicate the number of observations in each year.</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="GraphMap.html#cb37-1" aria-hidden="true" tabindex="-1"></a>tp2 <span class="ot">=</span> <span class="fu">plot_indices</span>(<span class="at">indices =</span> indices,</span>
-<span id="cb37-2"><a href="GraphMap.html#cb37-2" aria-hidden="true" tabindex="-1"></a>                         <span class="at">species =</span> <span class="fu">paste</span>(<span class="st">&quot;Scarlet Tanager&quot;</span>,<span class="st">&quot;Full&quot;</span>),</span>
-<span id="cb37-3"><a href="GraphMap.html#cb37-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">add_observed_means =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb37-4"><a href="GraphMap.html#cb37-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">add_number_routes =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb37-5"><a href="GraphMap.html#cb37-5" aria-hidden="true" tabindex="-1"></a> <span class="co"># pdf(file = &quot;Scarlet Tanager Trajectories plus.pdf&quot;)</span></span>
-<span id="cb37-6"><a href="GraphMap.html#cb37-6" aria-hidden="true" tabindex="-1"></a> <span class="co"># print(tp)</span></span>
-<span id="cb37-7"><a href="GraphMap.html#cb37-7" aria-hidden="true" tabindex="-1"></a> <span class="co"># dev.off()</span></span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="GraphMap.html#cb36-1" aria-hidden="true" tabindex="-1"></a>tp2 <span class="ot">=</span> <span class="fu">plot_indices</span>(<span class="at">indices =</span> indices,</span>
+<span id="cb36-2"><a href="GraphMap.html#cb36-2" aria-hidden="true" tabindex="-1"></a>                         <span class="at">species =</span> <span class="fu">paste</span>(<span class="st">&quot;Scarlet Tanager&quot;</span>,<span class="st">&quot;Full&quot;</span>),</span>
+<span id="cb36-3"><a href="GraphMap.html#cb36-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">add_observed_means =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb36-4"><a href="GraphMap.html#cb36-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">add_number_routes =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <p>And we can compare these indices plots with those generated using only the smooths.</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="GraphMap.html#cb38-1" aria-hidden="true" tabindex="-1"></a>tp3 <span class="ot">=</span> <span class="fu">plot_indices</span>(<span class="at">indices =</span> indices_smooth,</span>
-<span id="cb38-2"><a href="GraphMap.html#cb38-2" aria-hidden="true" tabindex="-1"></a>                         <span class="at">species =</span> <span class="fu">paste</span>(<span class="st">&quot;Scarlet Tanager&quot;</span>,<span class="st">&quot;Smooth&quot;</span>),</span>
-<span id="cb38-3"><a href="GraphMap.html#cb38-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">add_observed_means =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb38-4"><a href="GraphMap.html#cb38-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">add_number_routes =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb38-5"><a href="GraphMap.html#cb38-5" aria-hidden="true" tabindex="-1"></a> <span class="co"># pdf(file = &quot;Scarlet Tanager Trajectories smooth plus.pdf&quot;)</span></span>
-<span id="cb38-6"><a href="GraphMap.html#cb38-6" aria-hidden="true" tabindex="-1"></a> <span class="co"># print(tp)</span></span>
-<span id="cb38-7"><a href="GraphMap.html#cb38-7" aria-hidden="true" tabindex="-1"></a> <span class="co"># dev.off()</span></span></code></pre></div>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="GraphMap.html#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
-<span id="cb39-2"><a href="GraphMap.html#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(tp2[[<span class="dv">1</span>]]<span class="sc">+</span>tp3[[<span class="dv">1</span>]])</span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="GraphMap.html#cb37-1" aria-hidden="true" tabindex="-1"></a>tp3 <span class="ot">=</span> <span class="fu">plot_indices</span>(<span class="at">indices =</span> indices_smooth,</span>
+<span id="cb37-2"><a href="GraphMap.html#cb37-2" aria-hidden="true" tabindex="-1"></a>                         <span class="at">species =</span> <span class="fu">paste</span>(<span class="st">&quot;Scarlet Tanager&quot;</span>,<span class="st">&quot;Smooth&quot;</span>),</span>
+<span id="cb37-3"><a href="GraphMap.html#cb37-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">add_observed_means =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb37-4"><a href="GraphMap.html#cb37-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">add_number_routes =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p>Using the patchwork library, we can show these plots side-by-side:</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="GraphMap.html#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb38-2"><a href="GraphMap.html#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(tp2[[<span class="dv">1</span>]]<span class="sc">+</span>tp3[[<span class="dv">1</span>]])</span></code></pre></div>
 <p><img src="bbsBayes_Workshop_files/figure-html/GM5-1.png" width="\textwidth" style="display: block; margin: auto;" /></p>
 </div>
 <div id="mapping-the-trends" class="section level2" number="7.2">
 <h2><span class="header-section-number">7.2</span> Mapping the trends</h2>
 <p>The trends can be mapped to produce strata maps coloured by species population trends.</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="GraphMap.html#cb40-1" aria-hidden="true" tabindex="-1"></a>mp <span class="ot">=</span> <span class="fu">generate_map</span>(trends_smooth,</span>
-<span id="cb40-2"><a href="GraphMap.html#cb40-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">select =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb40-3"><a href="GraphMap.html#cb40-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">stratify_by =</span> <span class="st">&quot;bbs_cws&quot;</span>,</span>
-<span id="cb40-4"><a href="GraphMap.html#cb40-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">species =</span> <span class="st">&quot;Scarlet Tanager Smooth&quot;</span>)</span>
-<span id="cb40-5"><a href="GraphMap.html#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(mp)</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="GraphMap.html#cb39-1" aria-hidden="true" tabindex="-1"></a>mp <span class="ot">=</span> <span class="fu">generate_map</span>(trends_smooth,</span>
+<span id="cb39-2"><a href="GraphMap.html#cb39-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">select =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb39-3"><a href="GraphMap.html#cb39-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">stratify_by =</span> <span class="st">&quot;bbs_cws&quot;</span>,</span>
+<span id="cb39-4"><a href="GraphMap.html#cb39-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">species =</span> <span class="st">&quot;Scarlet Tanager Smooth&quot;</span>)</span>
+<span id="cb39-5"><a href="GraphMap.html#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(mp)</span></code></pre></div>
 <p><img src="bbsBayes_Workshop_files/figure-html/GM6-1.png" width="\textwidth" style="display: block; margin: auto;" /></p>
 </div>
 <div id="geofacet-trajectories" class="section level2" number="7.3">
 <h2><span class="header-section-number">7.3</span> Geofacet Trajectories</h2>
 <p>For stratifications that can be compiled by political regions (i.e., <code>bbs_cws</code>, <code>bbs_usgs</code>, or <code>state</code>), the function <code>geofacet_plot</code> will generate a ggplot object that plots the state and province level population trajectories in facets arranged in an approximately geographic arrangement. These plots offer a concise, range-wide summary of a species’ population trajectory.</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="GraphMap.html#cb41-1" aria-hidden="true" tabindex="-1"></a>  gf <span class="ot">&lt;-</span> <span class="fu">geofacet_plot</span>(<span class="at">indices_list =</span> indices_smooth,</span>
-<span id="cb41-2"><a href="GraphMap.html#cb41-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">select =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb41-3"><a href="GraphMap.html#cb41-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">stratify_by =</span> <span class="st">&quot;bbs_cws&quot;</span>,</span>
-<span id="cb41-4"><a href="GraphMap.html#cb41-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">multiple =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb41-5"><a href="GraphMap.html#cb41-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">trends =</span> trends_smooth,</span>
-<span id="cb41-6"><a href="GraphMap.html#cb41-6" aria-hidden="true" tabindex="-1"></a>                     <span class="at">slope =</span> F,</span>
-<span id="cb41-7"><a href="GraphMap.html#cb41-7" aria-hidden="true" tabindex="-1"></a>                     <span class="at">species =</span> <span class="st">&quot;Scarlet Tanager Smooth&quot;</span>)</span>
-<span id="cb41-8"><a href="GraphMap.html#cb41-8" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb41-9"><a href="GraphMap.html#cb41-9" aria-hidden="true" tabindex="-1"></a>  <span class="co">#png(&quot;SCTA_geofacet.png&quot;,width = 1500, height = 750,res = 150)</span></span>
-<span id="cb41-10"><a href="GraphMap.html#cb41-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(gf)</span>
-<span id="cb41-11"><a href="GraphMap.html#cb41-11" aria-hidden="true" tabindex="-1"></a>  <span class="co">#dev.off()</span></span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="GraphMap.html#cb40-1" aria-hidden="true" tabindex="-1"></a>  gf <span class="ot">&lt;-</span> <span class="fu">geofacet_plot</span>(<span class="at">indices_list =</span> indices_smooth,</span>
+<span id="cb40-2"><a href="GraphMap.html#cb40-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">select =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb40-3"><a href="GraphMap.html#cb40-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">stratify_by =</span> <span class="st">&quot;bbs_cws&quot;</span>,</span>
+<span id="cb40-4"><a href="GraphMap.html#cb40-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">multiple =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb40-5"><a href="GraphMap.html#cb40-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">trends =</span> trends_smooth,</span>
+<span id="cb40-6"><a href="GraphMap.html#cb40-6" aria-hidden="true" tabindex="-1"></a>                     <span class="at">slope =</span> F,</span>
+<span id="cb40-7"><a href="GraphMap.html#cb40-7" aria-hidden="true" tabindex="-1"></a>                     <span class="at">species =</span> <span class="st">&quot;Scarlet Tanager Smooth&quot;</span>)</span>
+<span id="cb40-8"><a href="GraphMap.html#cb40-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb40-9"><a href="GraphMap.html#cb40-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(gf)</span></code></pre></div>
 <p><img src="bbsBayes_Workshop_files/figure-html/GM7-1.png" width="\textwidth" style="display: block; margin: auto;" /></p>
 
 </div>

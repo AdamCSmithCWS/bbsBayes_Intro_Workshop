@@ -134,7 +134,7 @@
 
 \title{A Quick Introduction to bbsBayes}
 \author{Adam C. Smith, and Brandon P.M. Edwards}
-\date{2020-12-11}
+\date{2020-12-14}
 
 \begin{document}
 \maketitle
@@ -212,9 +212,9 @@ who might particularly be interested in attending include:
 
 We will present this initial workshop primarily as a demonstration. So you do not need to run any actual code, in order to get a good sense of what the package can do.
 
-If you are reasonably familiar with using R, and you do want to follow along with the coding during the workshop, please ensure you have installed the most recent version of R (4.0.3) and Rstudio.
+If you are reasonably familiar with using R, and you do want to follow along with the coding during the workshop, please ensure you have installed the most recent version of R (4.0.3) and RStudio.
 
-I addition, please install the bbsBayes package and download the data.
+In addition, please install the bbsBayes package and download the data.
 
 Finally, if you haven't used JAGS before, you'll also need to install this stand-alone program (the Bayesian MCMC software that the package relies on). Follow the link below to download the installer.
 
@@ -277,17 +277,36 @@ All of the models supported by bbsBayes expect the BBS route-level data to be gr
 Use the \texttt{stratify()} function to group the BBS data into one of the included stratifications. Select the stratification using the argument \texttt{by} to stratify by the following options:
 
 \begin{itemize}
+\tightlist
 \item
   bbs\_cws -- \texttt{stratify(by\ =\ "bbs\_cws")} Political region X Bird Conservation region intersection (Canadian Wildlife Service {[}CWS{]} method). Identical to bbs\_usgs, except all routes in BCR 7 are combined into a single stratum, and all routes in PEI and Nova Scotia are combined into a single stratum.
+\end{itemize}
+
+\begin{itemize}
+\tightlist
 \item
   bbs\_usgs -- \texttt{stratify(by\ =\ "bbs\_usgs")} Political region X Bird Conservation region intersection (United Status Geological Survey {[}USGS{]} method)
+\end{itemize}
+
+\begin{itemize}
+\tightlist
 \item
   bcr -- \texttt{stratify(by\ =\ "bcr")} Bird Conservation Region only
+\end{itemize}
+
+\begin{itemize}
+\tightlist
 \item
   state -- \texttt{stratify(by\ =\ "state")} Political Region only
+\end{itemize}
+
+\begin{itemize}
+\tightlist
 \item
   latlong -- \texttt{stratify(by\ =\ "latlong")} Degree blocks (1 degree of latitude X 1 degree of longitude)
 \end{itemize}
+
+Now that we know the built-in stratification options, let's stratify our copy of the BBS data. Here, we will choose to stratify our data using the ``bbs\_cws'' method:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -331,7 +350,7 @@ Ross's Goose & Oie de Ross & Anser rossii & Anser & rossii & 1700\\
 \begin{itemize}
 \tightlist
 \item
-  \texttt{strat\_data\$bird\_strat} is a very large table of each observed count for a given species * route * year combination. This is the table that includes all of the non-zero observations in the BBS database.
+  \texttt{strat\_data\$bird\_strat} is a very large table of each observed count for a given species X route X year combination. This is the table that includes all of the non-zero observations in the BBS database.
 \end{itemize}
 
 \begin{Shaded}
@@ -361,7 +380,7 @@ statenum & Route & Year & AOU & SpeciesTotal & rt.uni & rt.uni.y\\
 \begin{itemize}
 \tightlist
 \item
-  \texttt{strat\_data\$route\_strat} is a large table of each BBS survey conducted. It includes a single row for each survey-event (i.e., a route * year * observer combination). It also includes the information on the weather conditions, timing, date, etc.
+  \texttt{strat\_data\$route\_strat} is a large table of each BBS survey conducted. It includes a single row for each survey-event (i.e., a route X year X observer combination). It also includes the information on the weather conditions, timing, date, etc.
 \end{itemize}
 
 \begin{Shaded}
@@ -445,7 +464,7 @@ The critical arguments are:
 \item
   strat\_data: the list of stratified data returned by \texttt{stratify()}
 \item
-  species\_to\_run: the English name for the species. this is currently case sensitive, and must exactly match one of the names in the english column of the species\_strat object of strat\_data i.e., \texttt{strat\_data\$species\_strat\$english}
+  species\_to\_run: the English name for the species. This is currently case sensitive, and must exactly match one of the names in the english column of the species\_strat object of strat\_data i.e., \texttt{strat\_data\$species\_strat\$english}
   If you'd like to export a full list of the available species, this code will work:
 \end{itemize}
 
@@ -455,9 +474,7 @@ The critical arguments are:
 \end{Highlighting}
 \end{Shaded}
 
-\begin{verbatim}
 Also, if you'd like to select a species using the French name, you can try this approach:
-\end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -501,7 +518,7 @@ The package has (currently) four status and trend models that differ in the way 
 \hypertarget{slope}{%
 \subsection{slope}\label{slope}}
 
-The slope option estimates the time series as a log-linear regression with random year-effect terms that allow the trajectory to depart from the smooth regression line. It is the model used by the USGS and CWS to estimate bbs trends between 2011 and 2018. The basic model was first described in 2002 ((\protect\hyperlink{ref-link2002}{Link and Sauer 2002a})) and its application to the annual status and trend estimates is documented in (\protect\hyperlink{ref-sauer2011}{Sauer and Link 2011}) and (\protect\hyperlink{ref-smith2014}{Smith et al. 2014}).
+The slope option estimates the time series as a log-linear regression with random year-effect terms that allow the trajectory to depart from the smooth regression line. It is the model used by the USGS and CWS to estimate BBS trends between 2011 and 2018. The basic model was first described in 2002 (\protect\hyperlink{ref-link2002}{Link and Sauer 2002a}) and its application to the annual status and trend estimates is documented in (\protect\hyperlink{ref-sauer2011}{Sauer and Link 2011}) and (\protect\hyperlink{ref-smith2014}{Smith et al. 2014}).
 
 \hypertarget{gam}{%
 \subsection{gam}\label{gam}}
@@ -536,32 +553,23 @@ The annual CWS analysis uses the heavy-tailed version of the GAMYE model. Here's
 \hypertarget{ModelRun}{%
 \chapter{Running the model}\label{ModelRun}}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\# set up for the annual CWS status and trend analysis}
-\CommentTok{\# strat\_data \textless{}{-} stratify(by = "bbs\_cws")}
-\CommentTok{\# jags\_data \textless{}{-} prepare\_jags\_data(strat\_data = strat\_data,}
-\CommentTok{\#                   species\_to\_run = "Scarlet Tanager",}
-\CommentTok{\#                   model = "gamye",}
-\CommentTok{\#                   min\_max\_route\_years = 2,}
-\CommentTok{\#                   heavy\_tailed = TRUE)}
-\end{Highlighting}
-\end{Shaded}
-
 After stratifying and preparing the data for a particular species and model, the \texttt{run\_model()} function calls the JAGS program to fit the selected model to the species' data.
-Depending on the model and the size of the dataset (number of counts, number of strata, number of years, etc.), this process can take a long time (hours - days). The following code would shows the settings used for most species in the annual CWS analysis.
+
+Depending on the model and the size of the dataset (number of counts, number of strata, number of years, etc.), this process can take a long time (hours - days). The following code shows the settings used for most species in the annual CWS analysis.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-    \CommentTok{\# Not Run}
-    \CommentTok{\# jags\_mod \textless{}{-} run\_model(jags\_data = jags\_data,}
-    \CommentTok{\#                            n\_iter = 24000, \#higher than the default 10,000}
-    \CommentTok{\#                            n\_burnin = 20000,}
-    \CommentTok{\#                            n\_chains = 3,}
-    \CommentTok{\#                            n\_thin = 20, \#saves memory by retaining only 1/20 posterior samples}
-    \CommentTok{\#                            parallel = TRUE,}
-    \CommentTok{\#                       inits = NULL,}
-    \CommentTok{\#                       parameters\_to\_save = c("n","n3","nu","B.X","beta.X","strata","sdbeta","sdX","alpha"))}
+\CommentTok{\# Not Run}
+\NormalTok{jags\_mod }\OtherTok{\textless{}{-}} \FunctionTok{run\_model}\NormalTok{(}\AttributeTok{jags\_data =}\NormalTok{ jags\_data,}
+                      \AttributeTok{n\_iter =} \DecValTok{24000}\NormalTok{, }\CommentTok{\#higher than the default 10,000}
+                      \AttributeTok{n\_burnin =} \DecValTok{20000}\NormalTok{,}
+                      \AttributeTok{n\_chains =} \DecValTok{3}\NormalTok{,}
+                      \AttributeTok{n\_thin =} \DecValTok{20}\NormalTok{, }\CommentTok{\#saves memory by retaining only 1/20 posterior samples}
+                      \AttributeTok{parallel =} \ConstantTok{TRUE}\NormalTok{,}
+                      \AttributeTok{inits =} \ConstantTok{NULL}\NormalTok{,}
+                      \AttributeTok{parameters\_to\_save =} \FunctionTok{c}\NormalTok{(}\StringTok{"n"}\NormalTok{,}\StringTok{"n3"}\NormalTok{,}\StringTok{"nu"}\NormalTok{,}
+                                             \StringTok{"B.X"}\NormalTok{,}\StringTok{"beta.X"}\NormalTok{,}\StringTok{"strata"}\NormalTok{,}
+                                             \StringTok{"sdbeta"}\NormalTok{,}\StringTok{"sdX"}\NormalTok{,}\StringTok{"alpha"}\NormalTok{))}
  
 \end{Highlighting}
 \end{Shaded}
@@ -600,14 +608,14 @@ Here's a toy example using data for the Pacific Wren and the slope model for a s
 \begin{Highlighting}[]
 \CommentTok{\#strat\_data \textless{}{-} stratify(by = "bbs\_cws")}
 
-\CommentTok{\# Prepare the stratified data for use in a JAGS model.}
+\CommentTok{\# Prepare the stratified data for use in a JAGS model (see Chapter 4).}
 \NormalTok{jags\_data }\OtherTok{\textless{}{-}} \FunctionTok{prepare\_jags\_data}\NormalTok{(}\AttributeTok{strat\_data =}\NormalTok{ strat\_data,}
                                \AttributeTok{species\_to\_run =} \StringTok{"Pacific Wren"}\NormalTok{,}
                                \AttributeTok{model =} \StringTok{"slope"}\NormalTok{,}
                                \AttributeTok{min\_year =} \DecValTok{2009}\NormalTok{,}
                                \AttributeTok{max\_year =} \DecValTok{2018}\NormalTok{)}
 
-
+\CommentTok{\# Now run the model}
 \NormalTok{jags\_mod }\OtherTok{\textless{}{-}} \FunctionTok{run\_model}\NormalTok{(}\AttributeTok{jags\_data =}\NormalTok{ jags\_data,}
                       \AttributeTok{n\_adapt =} \DecValTok{100}\NormalTok{,}
                       \AttributeTok{n\_burnin =} \DecValTok{200}\NormalTok{,}
@@ -620,8 +628,7 @@ Here's a toy example using data for the Pacific Wren and the slope model for a s
 \hypertarget{convergence-of-the-mcmc}{%
 \section{Convergence of the MCMC}\label{convergence-of-the-mcmc}}
 
-The \texttt{run\_model()} function will send a warning if Gelman-Rubin Rhat cross-chain convergence criterion is \textgreater{} 1.1 for any of the monitored parameters. Re-running the model with a longer burn-in and/or more posterior iterations or greater thinning rates may improve convergence.
-The seriousness of these convergence failures is something the user must interpret for themselves. In some cases some parameters of the model may not be separately estimable, but if there is no direct inference drawn from those separate parameters, their convergence may not be necessary. If all or the vast majority of the n parameters have converged (e.g., you're receiving this warning message for other monitored parameters), then inference on population trajectories and trends from the model are reliable.
+The \texttt{run\_model()} function will send a warning if Gelman-Rubin Rhat cross-chain convergence criterion is \textgreater{} 1.1 for any of the monitored parameters. Re-running the model with a longer burn-in and/or more posterior iterations or greater thinning rates may improve convergence. We can check for ourselves the effective sample size for each monitored parameter, as well as the Rhat values for each monitored parameter:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -629,6 +636,8 @@ The seriousness of these convergence failures is something the user must interpr
 \NormalTok{jags\_mod}\SpecialCharTok{$}\NormalTok{Rhat }\CommentTok{\# shows the Rhat values for each monitored parameter}
 \end{Highlighting}
 \end{Shaded}
+
+The seriousness of these convergence failures is something the user must interpret for themselves. In some cases some parameters of the model may not be separately estimable, but if there is no direct inference drawn from those separate parameters, their convergence may not be necessary. If all or the vast majority of the n parameters have converged (e.g., you're receiving this warning message for other monitored parameters), then inference on population trajectories and trends from the model are reliable.
 
 If important monitored parameters have not converged, the shinystan package has some wonderful interactive tools for better understanding convergence issues with MCMC output.
 
@@ -732,15 +741,15 @@ Year & Region & Region\_type & Index & Index\_q\_0.025 & Index\_q\_0.975 & obs\_
 \hline
 \end{tabular}
 
-For example, one may wish to export the annual indices to a text file that can be read using excel.
+For example, one may wish to export the annual indices to a text file that can be read using Microsoft Excel.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{write.csv}\NormalTok{(indices}\SpecialCharTok{$}\NormalTok{data\_summary,}\StringTok{"Scarlet\_Tanager\_trajectories.csv"}\NormalTok{)}
+\FunctionTok{write.csv}\NormalTok{(indices}\SpecialCharTok{$}\NormalTok{data\_summary, }\StringTok{"Scarlet\_Tanager\_trajectories.csv"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
-The list also includes a number of other objects that retain the stratification information, strata area\_weights, and the full posterior samples for every estimated annual index. Generally these other objects are only used by subsequent functions and the user won't access them directly.
+The list also includes a number of other objects that retain the stratification information, strata area weights, and the full posterior samples for every estimated annual index. Generally these other objects are only used by subsequent functions and the user won't access them directly.
 
 The function also accepts the alternative annual indices, such as the smooth-only indices from the gamye model.
 
@@ -964,20 +973,30 @@ Now that we have calculated values for the trends and trajectories, bbsBayes als
 \hypertarget{graphing-the-trajectories-annual-indices}{%
 \section{Graphing the trajectories (annual indices)}\label{graphing-the-trajectories-annual-indices}}
 
-The \texttt{plot\_indices()} function produces a list of ggplot figures that can be combined into a single pdf file, or printed to individual devices.
+The \texttt{plot\_indices()} function produces a list of ggplot figures that can be combined into a single pdf file:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Not run}
+\NormalTok{tp }\OtherTok{=} \FunctionTok{plot\_indices}\NormalTok{(}\AttributeTok{indices =}\NormalTok{ indices,}
+                         \AttributeTok{species =} \StringTok{"Scarlet Tanager"}\NormalTok{)}
+\FunctionTok{pdf}\NormalTok{(}\AttributeTok{file =} \StringTok{"Scarlet Tanager Trajectories.pdf"}\NormalTok{)}
+\FunctionTok{print}\NormalTok{(tp)}
+\FunctionTok{dev.off}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+Or, we can print plots to individual devices:
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{tp }\OtherTok{=} \FunctionTok{plot\_indices}\NormalTok{(}\AttributeTok{indices =}\NormalTok{ indices,}
                          \AttributeTok{species =} \StringTok{"Scarlet Tanager"}\NormalTok{)}
- \CommentTok{\# pdf(file = "Scarlet Tanager Trajectories.pdf")}
- \CommentTok{\# print(tp)}
- \CommentTok{\# dev.off()}
 \FunctionTok{print}\NormalTok{(tp[[}\DecValTok{1}\NormalTok{]])}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics[width=\textwidth]{bbsBayes_Workshop_files/figure-latex/GM2-1} \end{center}
+\begin{center}\includegraphics[width=\textwidth]{bbsBayes_Workshop_files/figure-latex/GM2_b-1} \end{center}
 
 \texttt{plot\_indices()} also allows the user to add points to show the observed mean counts as well as stacked dots to indicate the number of observations in each year.
 
@@ -987,9 +1006,6 @@ The \texttt{plot\_indices()} function produces a list of ggplot figures that can
                          \AttributeTok{species =} \FunctionTok{paste}\NormalTok{(}\StringTok{"Scarlet Tanager"}\NormalTok{,}\StringTok{"Full"}\NormalTok{),}
                   \AttributeTok{add\_observed\_means =} \ConstantTok{TRUE}\NormalTok{,}
                   \AttributeTok{add\_number\_routes =} \ConstantTok{TRUE}\NormalTok{)}
- \CommentTok{\# pdf(file = "Scarlet Tanager Trajectories plus.pdf")}
- \CommentTok{\# print(tp)}
- \CommentTok{\# dev.off()}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1001,11 +1017,10 @@ And we can compare these indices plots with those generated using only the smoot
                          \AttributeTok{species =} \FunctionTok{paste}\NormalTok{(}\StringTok{"Scarlet Tanager"}\NormalTok{,}\StringTok{"Smooth"}\NormalTok{),}
                   \AttributeTok{add\_observed\_means =} \ConstantTok{TRUE}\NormalTok{,}
                   \AttributeTok{add\_number\_routes =} \ConstantTok{TRUE}\NormalTok{)}
- \CommentTok{\# pdf(file = "Scarlet Tanager Trajectories smooth plus.pdf")}
- \CommentTok{\# print(tp)}
- \CommentTok{\# dev.off()}
 \end{Highlighting}
 \end{Shaded}
+
+Using the patchwork library, we can show these plots side-by-side:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1048,9 +1063,7 @@ For stratifications that can be compiled by political regions (i.e., \texttt{bbs
                      \AttributeTok{slope =}\NormalTok{ F,}
                      \AttributeTok{species =} \StringTok{"Scarlet Tanager Smooth"}\NormalTok{)}
   
-  \CommentTok{\#png("SCTA\_geofacet.png",width = 1500, height = 750,res = 150)}
   \FunctionTok{print}\NormalTok{(gf)}
-  \CommentTok{\#dev.off()}
 \end{Highlighting}
 \end{Shaded}
 

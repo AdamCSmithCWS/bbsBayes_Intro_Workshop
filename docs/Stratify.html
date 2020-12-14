@@ -24,7 +24,7 @@
 <meta name="author" content="Adam C. Smith, and Brandon P.M. Edwards" />
 
 
-<meta name="date" content="2020-12-11" />
+<meta name="date" content="2020-12-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -225,12 +225,26 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>All of the models supported by bbsBayes expect the BBS route-level data to be grouped into geographic strata. These strata are subregions of the survey area, and allow the parameters that model abundance and trend to vary across a species’ range.</p>
 <p>Use the <code>stratify()</code> function to group the BBS data into one of the included stratifications. Select the stratification using the argument <code>by</code> to stratify by the following options:</p>
 <ul>
-<li><p>bbs_cws – <code>stratify(by = "bbs_cws")</code> Political region X Bird Conservation region intersection (Canadian Wildlife Service [CWS] method). Identical to bbs_usgs, except all routes in BCR 7 are combined into a single stratum, and all routes in PEI and Nova Scotia are combined into a single stratum. <img src="images/map_bbs_cws.png"/></p></li>
-<li><p>bbs_usgs – <code>stratify(by = "bbs_usgs")</code> Political region X Bird Conservation region intersection (United Status Geological Survey [USGS] method) <img src="images/map_bbs_usgs.png"/></p></li>
-<li><p>bcr – <code>stratify(by = "bcr")</code> Bird Conservation Region only <img src="images/map_bcr.png"/></p></li>
-<li><p>state – <code>stratify(by = "state")</code> Political Region only <img src="images/map_state.png"/></p></li>
-<li><p>latlong – <code>stratify(by = "latlong")</code> Degree blocks (1 degree of latitude X 1 degree of longitude) <img src="images/map_latlong.png"/></p></li>
+<li>bbs_cws – <code>stratify(by = "bbs_cws")</code> Political region X Bird Conservation region intersection (Canadian Wildlife Service [CWS] method). Identical to bbs_usgs, except all routes in BCR 7 are combined into a single stratum, and all routes in PEI and Nova Scotia are combined into a single stratum.</li>
 </ul>
+<p><img src="images/map_bbs_cws.png"/></p>
+<ul>
+<li>bbs_usgs – <code>stratify(by = "bbs_usgs")</code> Political region X Bird Conservation region intersection (United Status Geological Survey [USGS] method)</li>
+</ul>
+<p><img src="images/map_bbs_usgs.png"/></p>
+<ul>
+<li>bcr – <code>stratify(by = "bcr")</code> Bird Conservation Region only</li>
+</ul>
+<p><img src="images/map_bcr.png"/></p>
+<ul>
+<li>state – <code>stratify(by = "state")</code> Political Region only</li>
+</ul>
+<p><img src="images/map_state.png"/></p>
+<ul>
+<li>latlong – <code>stratify(by = "latlong")</code> Degree blocks (1 degree of latitude X 1 degree of longitude)</li>
+</ul>
+<p><img src="images/map_latlong.png"/></p>
+<p>Now that we know the built-in stratification options, let’s stratify our copy of the BBS data. Here, we will choose to stratify our data using the “bbs_cws” method:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="Stratify.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set up for the annual CWS status and trend analysis</span></span>
 <span id="cb4-2"><a href="Stratify.html#cb4-2" aria-hidden="true" tabindex="-1"></a>strat_data <span class="ot">&lt;-</span> <span class="fu">stratify</span>(<span class="at">by =</span> <span class="st">&quot;bbs_cws&quot;</span>)</span></code></pre></div>
 <p>The stratified_data object includes 3 dataframes.</p>
@@ -309,7 +323,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tbody>
 </table>
 <ul>
-<li><code>strat_data$bird_strat</code> is a very large table of each observed count for a given species * route * year combination. This is the table that includes all of the non-zero observations in the BBS database.</li>
+<li><code>strat_data$bird_strat</code> is a very large table of each observed count for a given species X route X year combination. This is the table that includes all of the non-zero observations in the BBS database.</li>
 </ul>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="Stratify.html#cb6-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">head</span>(strat_data<span class="sc">$</span>bird_strat[,<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">6</span>,<span class="dv">7</span>,<span class="dv">14</span>,<span class="dv">16</span>,<span class="dv">17</span>)]))</span></code></pre></div>
 <table>
@@ -382,7 +396,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tbody>
 </table>
 <ul>
-<li><code>strat_data$route_strat</code> is a large table of each BBS survey conducted. It includes a single row for each survey-event (i.e., a route * year * observer combination). It also includes the information on the weather conditions, timing, date, etc.</li>
+<li><code>strat_data$route_strat</code> is a large table of each BBS survey conducted. It includes a single row for each survey-event (i.e., a route X year X observer combination). It also includes the information on the weather conditions, timing, date, etc.</li>
 </ul>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="Stratify.html#cb7-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">head</span>(strat_data<span class="sc">$</span>route_strat[,<span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">8</span>,<span class="dv">13</span>,<span class="dv">33</span><span class="sc">:</span><span class="dv">35</span>)]))</span></code></pre></div>
 <table>
