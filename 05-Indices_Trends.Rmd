@@ -42,13 +42,13 @@ The `generate_indices()` function creates a list that includes an object called 
 knitr::kable(head(indices$data_summary[,c(1,2,4,7,8,13,14,15,16)]))
 ```
 
-For example, one may wish to export the annual indices to a text file that can be read using excel.
+For example, one may wish to export the annual indices to a text file that can be read using Microsoft Excel.
 
 ```{r IT5, eval = FALSE}
-write.csv(indices$data_summary,"Scarlet_Tanager_trajectories.csv")
+write.csv(indices$data_summary, "Scarlet_Tanager_trajectories.csv")
 ```
 
-The list also includes a number of other objects that retain the stratification information, strata area_weights, and the full posterior samples for every estimated annual index. Generally these other objects are only used by subsequent functions and the user won't access them directly.
+The list also includes a number of other objects that retain the stratification information, strata area weights, and the full posterior samples for every estimated annual index. Generally these other objects are only used by subsequent functions and the user won't access them directly.
 
 The function also accepts the alternative annual indices, such as the smooth-only indices from the gamye model.
 

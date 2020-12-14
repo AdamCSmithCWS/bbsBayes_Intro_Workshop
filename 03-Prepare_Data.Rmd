@@ -16,12 +16,15 @@ The `prepare_jags_data()` function is used to select a species, a model, the tim
 The critical arguments are:
 
 -  strat_data: the list of stratified data returned by `stratify()`
--  species_to_run: the English name for the species. this is currently case sensitive, and must exactly match one of the names in the english column of the species_strat object of strat_data i.e., `strat_data$species_strat$english`
+-  species_to_run: the English name for the species. This is currently case sensitive, and must exactly match one of the names in the english column of the species_strat object of strat_data i.e., `strat_data$species_strat$english`
     If you'd like to export a full list of the available species, this code will work:
+    
 ```{r,eval=FALSE}
 write.csv(strat_data$species_strat,"Full_BBS_speciesList.csv")
 ```
-    Also, if you'd like to select a species using the French name, you can try this approach:
+
+Also, if you'd like to select a species using the French name, you can try this approach:
+
 ```{r}
 espece = "Colibri à gorge rubis"
 species = strat_data$species_strat$english[which(strat_data$species_strat$french == espece)]
@@ -53,7 +56,7 @@ The package has (currently) four status and trend models that differ in the way 
 
 ### slope
 
-The slope option estimates the time series as a log-linear regression with random year-effect terms that allow the trajectory to depart from the smooth regression line. It is the model used by the USGS and CWS to estimate bbs trends between 2011 and 2018. The basic model was first described in 2002 ([@link2002]) and its application to the annual status and trend estimates is documented in [@sauer2011] and [@smith2014].
+The slope option estimates the time series as a log-linear regression with random year-effect terms that allow the trajectory to depart from the smooth regression line. It is the model used by the USGS and CWS to estimate BBS trends between 2011 and 2018. The basic model was first described in 2002 [@link2002] and its application to the annual status and trend estimates is documented in [@sauer2011] and [@smith2014].
 
 <img src="images/AMKE_slope.png"/>
 

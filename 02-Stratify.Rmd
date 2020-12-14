@@ -6,16 +6,27 @@ All of the models supported by bbsBayes expect the BBS route-level data to be gr
 
 Use the `stratify()` function to group the BBS data into one of the included stratifications. Select the stratification using the argument `by` to stratify by the following options:
 
--   bbs_cws -- `stratify(by = "bbs_cws")` Political region X Bird Conservation region intersection (Canadian Wildlife Service [CWS] method). Identical to bbs_usgs, except all routes in BCR 7 are combined into a single stratum, and all routes in PEI and Nova Scotia are combined into a single stratum. <img src="images/map_bbs_cws.png"/>
+-   bbs_cws -- `stratify(by = "bbs_cws")` Political region X Bird Conservation region intersection (Canadian Wildlife Service [CWS] method). Identical to bbs_usgs, except all routes in BCR 7 are combined into a single stratum, and all routes in PEI and Nova Scotia are combined into a single stratum.
 
--   bbs_usgs -- `stratify(by = "bbs_usgs")` Political region X Bird Conservation region intersection (United Status Geological Survey [USGS] method) <img src="images/map_bbs_usgs.png"/>
+<img src="images/map_bbs_cws.png"/>
 
--   bcr -- `stratify(by = "bcr")` Bird Conservation Region only <img src="images/map_bcr.png"/>
+-   bbs_usgs -- `stratify(by = "bbs_usgs")` Political region X Bird Conservation region intersection (United Status Geological Survey [USGS] method)
 
--   state -- `stratify(by = "state")` Political Region only <img src="images/map_state.png"/>
+<img src="images/map_bbs_usgs.png"/>
 
--   latlong -- `stratify(by = "latlong")` Degree blocks (1 degree of latitude X 1 degree of longitude) <img src="images/map_latlong.png"/>
+-   bcr -- `stratify(by = "bcr")` Bird Conservation Region only
 
+<img src="images/map_bcr.png"/>
+
+-   state -- `stratify(by = "state")` Political Region only
+
+<img src="images/map_state.png"/>
+
+-   latlong -- `stratify(by = "latlong")` Degree blocks (1 degree of latitude X 1 degree of longitude)
+
+<img src="images/map_latlong.png"/>
+
+Now that we know the built-in stratification options, let's stratify our copy of the BBS data. Here, we will choose to stratify our data using the "bbs_cws" method:
 ```{r, cache=TRUE}
 # set up for the annual CWS status and trend analysis
 strat_data <- stratify(by = "bbs_cws")
@@ -34,13 +45,13 @@ knitr::kable(head(strat_data$species_strat[,c(3,4,5,8,9,10)]))
 ```
 
 
--   `strat_data$bird_strat` is a very large table of each observed count for a given species \* route \* year combination. This is the table that includes all of the non-zero observations in the BBS database.
+-   `strat_data$bird_strat` is a very large table of each observed count for a given species X route X year combination. This is the table that includes all of the non-zero observations in the BBS database.
 ```{r}
 knitr::kable(head(strat_data$bird_strat[,c(1,2,6,7,14,16,17)]))
 ```
 
 
--   `strat_data$route_strat` is a large table of each BBS survey conducted. It includes a single row for each survey-event (i.e., a route \* year \* observer combination). It also includes the information on the weather conditions, timing, date, etc.
+-   `strat_data$route_strat` is a large table of each BBS survey conducted. It includes a single row for each survey-event (i.e., a route X year X observer combination). It also includes the information on the weather conditions, timing, date, etc.
 ```{r}
 knitr::kable(head(strat_data$route_strat[,c(2,3,8,13,33:35)]))
 ```

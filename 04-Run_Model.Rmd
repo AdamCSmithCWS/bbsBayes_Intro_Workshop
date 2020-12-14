@@ -1,30 +1,33 @@
 # Running the model {#ModelRun}
 
-```{r RM1, cache=TRUE,echo=TRUE}
+```{r RM1, cache=TRUE,echo=FALSE, eval=FALSE}
 # set up for the annual CWS status and trend analysis
-# strat_data <- stratify(by = "bbs_cws")
-# jags_data <- prepare_jags_data(strat_data = strat_data,
-#                   species_to_run = "Scarlet Tanager",
-#                   model = "gamye",
-#                   min_max_route_years = 2,
-#                   heavy_tailed = TRUE)
 
+strat_data <- stratify(by = "bbs_cws")
+jags_data <- prepare_jags_data(strat_data = strat_data,
+                               species_to_run = "Scarlet Tanager",
+                               model = "gamye",
+                               min_max_route_years = 2,
+                               heavy_tailed = TRUE)
 
 ```
 
 After stratifying and preparing the data for a particular species and model, the `run_model()` function calls the JAGS program to fit the selected model to the species' data. 
-Depending on the model and the size of the dataset (number of counts, number of strata, number of years, etc.), this process can take a long time (hours - days). The following code would shows the settings used for most species in the annual CWS analysis.
+
+Depending on the model and the size of the dataset (number of counts, number of strata, number of years, etc.), this process can take a long time (hours - days). The following code shows the settings used for most species in the annual CWS analysis.
 
 ```{r RM2, eval=FALSE}
-    # Not Run
-    # jags_mod <- run_model(jags_data = jags_data,
-    #                            n_iter = 24000, #higher than the default 10,000
-    #                            n_burnin = 20000,
-    #                            n_chains = 3,
-    #                            n_thin = 20, #saves memory by retaining only 1/20 posterior samples
-    #                            parallel = TRUE,
-    #                       inits = NULL,
-    #                       parameters_to_save = c("n","n3","nu","B.X","beta.X","strata","sdbeta","sdX","alpha"))
+# Not Run
+jags_mod <- run_model(jags_data = jags_data,
+                      n_iter = 24000, #higher than the default 10,000
+                      n_burnin = 20000,
+                      n_chains = 3,
+                      n_thin = 20, #saves memory by retaining only 1/20 posterior samples
+                      parallel = TRUE,
+                      inits = NULL,
+                      parameters_to_save = c("n","n3","nu",
+                                             "B.X","beta.X","strata",
+                                             "sdbeta","sdX","alpha"))
  
 ```
 
@@ -55,14 +58,14 @@ Here's a toy example using data for the Pacific Wren and the slope model for a s
 ```{r PAWR,warning=FALSE,eval=FALSE}
 #strat_data <- stratify(by = "bbs_cws")
 
-# Prepare the stratified data for use in a JAGS model.
+# Prepare the stratified data for use in a JAGS model (see Chapter 4).
 jags_data <- prepare_jags_data(strat_data = strat_data,
                                species_to_run = "Pacific Wren",
                                model = "slope",
                                min_year = 2009,
                                max_year = 2018)
 
-
+# Now run the model
 jags_mod <- run_model(jags_data = jags_data,
                       n_adapt = 100,
                       n_burnin = 200,
@@ -76,13 +79,14 @@ jags_mod <- run_model(jags_data = jags_data,
 
 ## Convergence of the MCMC
 
-The `run_model()` function will send a warning if Gelman-Rubin Rhat cross-chain convergence criterion is \> 1.1 for any of the monitored parameters. Re-running the model with a longer burn-in and/or more posterior iterations or greater thinning rates may improve convergence. 
-The seriousness of these convergence failures is something the user must interpret for themselves. In some cases some parameters of the model may not be separately estimable, but if there is no direct inference drawn from those separate parameters, their convergence may not be necessary. If all or the vast majority of the n parameters have converged (e.g., you're receiving this warning message for other monitored parameters), then inference on population trajectories and trends from the model are reliable.
+The `run_model()` function will send a warning if Gelman-Rubin Rhat cross-chain convergence criterion is \> 1.1 for any of the monitored parameters. Re-running the model with a longer burn-in and/or more posterior iterations or greater thinning rates may improve convergence. We can check for ourselves the effective sample size for each monitored parameter, as well as the Rhat values for each monitored parameter:
 
 ``` {r RM4,eval = FALSE}
 jags_mod$n.eff #shows the effective sample size for each monitored parameter
 jags_mod$Rhat # shows the Rhat values for each monitored parameter
 ```
+
+The seriousness of these convergence failures is something the user must interpret for themselves. In some cases some parameters of the model may not be separately estimable, but if there is no direct inference drawn from those separate parameters, their convergence may not be necessary. If all or the vast majority of the n parameters have converged (e.g., you're receiving this warning message for other monitored parameters), then inference on population trajectories and trends from the model are reliable.
 
 If important monitored parameters have not converged, the shinystan package has some wonderful interactive tools for better understanding convergence issues with MCMC output.
 
@@ -107,6 +111,4 @@ jags_mod2 <- run_model(jags_data = jags_data,
                       parameters_to_save = c("n","beta","strata"))
 
 ```
-
-
 
