@@ -24,7 +24,7 @@
 <meta name="author" content="Adam C. Smith, and Brandon P.M. Edwards" />
 
 
-<meta name="date" content="2020-12-14" />
+<meta name="date" content="2020-12-16" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -182,6 +182,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="6.4.1" data-path="IndicesTrends.html"><a href="IndicesTrends.html#percent-change-and-probability-of-change"><i class="fa fa-check"></i><b>6.4.1</b> Percent Change and probability of change</a></li>
 </ul></li>
+<li class="chapter" data-level="6.5" data-path="IndicesTrends.html"><a href="IndicesTrends.html#changing-trends-through-time"><i class="fa fa-check"></i><b>6.5</b> Changing trends through time</a></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="GraphMap.html"><a href="GraphMap.html"><i class="fa fa-check"></i><b>7</b> Trajectory graphs and trend maps</a>
 <ul>
@@ -610,8 +611,160 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tr>
 </tbody>
 </table>
-
 </div>
+</div>
+<div id="changing-trends-through-time" class="section level2" number="6.5">
+<h2><span class="header-section-number">6.5</span> Changing trends through time</h2>
+<p>Changes in populations, both annual rates of change (trends) and overall changes in populations (percent change), are often used to prioritize species in conservation assessments. For example, the International Union for the Conservation of Nature (IUCN) or the Committee on the Status of Endangered Wildlife in Canada (COSEWIC) use estimates of population change over three generations to classify species as Endangered or Threatened. Of course the estimate of population trend used to classify a species is at least partly dependent on the year in which the species is assessed. Populations rarely follow constant rates of log-linear change through time, and so estimates of change also change through time. To quantify and visualize these changes in trends, one can estimate a series of trends for a rolling window of time-intervals. As an example, the annual CWS analysis includes an estimate of all possible 10-year trends for each species, which we refer to as the rolling trends analysis. Conceptually, it is relatively simple, and just involves estimating the annual indices for the full time-series of the survey, and then embedding the <code>generate_trends()</code> function within a loop.</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="IndicesTrends.html#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb33-2"><a href="IndicesTrends.html#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-3"><a href="IndicesTrends.html#cb33-3" aria-hidden="true" tabindex="-1"></a>indices_smooth_national <span class="ot">&lt;-</span> <span class="fu">generate_indices</span>(<span class="at">jags_mod =</span> jags_mod,</span>
+<span id="cb33-4"><a href="IndicesTrends.html#cb33-4" aria-hidden="true" tabindex="-1"></a>                            <span class="at">jags_data =</span> jags_data,</span>
+<span id="cb33-5"><a href="IndicesTrends.html#cb33-5" aria-hidden="true" tabindex="-1"></a>                            <span class="at">alternate_n =</span> <span class="st">&quot;n3&quot;</span>, <span class="co"># the smooth only component of the gamye model</span></span>
+<span id="cb33-6"><a href="IndicesTrends.html#cb33-6" aria-hidden="true" tabindex="-1"></a>                            <span class="at">regions =</span> <span class="fu">c</span>(<span class="st">&quot;continental&quot;</span>,</span>
+<span id="cb33-7"><a href="IndicesTrends.html#cb33-7" aria-hidden="true" tabindex="-1"></a>                            <span class="st">&quot;national&quot;</span>)) <span class="co">#only continental and national estimates</span></span>
+<span id="cb33-8"><a href="IndicesTrends.html#cb33-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-9"><a href="IndicesTrends.html#cb33-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-10"><a href="IndicesTrends.html#cb33-10" aria-hidden="true" tabindex="-1"></a>first_year <span class="ot">&lt;-</span> <span class="fu">min</span>(indices_smooth_national<span class="sc">$</span>data_summary<span class="sc">$</span>Year) <span class="co">#First year in the time-series</span></span>
+<span id="cb33-11"><a href="IndicesTrends.html#cb33-11" aria-hidden="true" tabindex="-1"></a>last_year <span class="ot">&lt;-</span> <span class="fu">max</span>(indices_smooth_national<span class="sc">$</span>data_summary<span class="sc">$</span>Year) <span class="co">#Last year in the time-series</span></span>
+<span id="cb33-12"><a href="IndicesTrends.html#cb33-12" aria-hidden="true" tabindex="-1"></a>trend_time <span class="ot">&lt;-</span> <span class="dv">10</span> <span class="co">#use 10-year trends</span></span>
+<span id="cb33-13"><a href="IndicesTrends.html#cb33-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-14"><a href="IndicesTrends.html#cb33-14" aria-hidden="true" tabindex="-1"></a>trends_out <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb33-15"><a href="IndicesTrends.html#cb33-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-16"><a href="IndicesTrends.html#cb33-16" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(Y <span class="cf">in</span> first_year<span class="sc">:</span>(last_year<span class="sc">-</span>trend_time)){</span>
+<span id="cb33-17"><a href="IndicesTrends.html#cb33-17" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb33-18"><a href="IndicesTrends.html#cb33-18" aria-hidden="true" tabindex="-1"></a>trends_temp <span class="ot">&lt;-</span> <span class="fu">generate_trends</span>(<span class="at">indices =</span> indices_smooth_national,</span>
+<span id="cb33-19"><a href="IndicesTrends.html#cb33-19" aria-hidden="true" tabindex="-1"></a>                          <span class="at">Min_year =</span> Y,</span>
+<span id="cb33-20"><a href="IndicesTrends.html#cb33-20" aria-hidden="true" tabindex="-1"></a>                          <span class="at">Max_year =</span> Y<span class="sc">+</span>trend_time,</span>
+<span id="cb33-21"><a href="IndicesTrends.html#cb33-21" aria-hidden="true" tabindex="-1"></a>                          <span class="at">prob_decrease =</span> <span class="fu">c</span>(<span class="dv">30</span>,<span class="dv">50</span>),</span>
+<span id="cb33-22"><a href="IndicesTrends.html#cb33-22" aria-hidden="true" tabindex="-1"></a>                          <span class="at">prob_increase =</span> <span class="fu">c</span>(<span class="dv">0</span>))</span>
+<span id="cb33-23"><a href="IndicesTrends.html#cb33-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-24"><a href="IndicesTrends.html#cb33-24" aria-hidden="true" tabindex="-1"></a>    trends_out <span class="ot">=</span> <span class="fu">rbind</span>(trends_out,trends_temp)</span>
+<span id="cb33-25"><a href="IndicesTrends.html#cb33-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-26"><a href="IndicesTrends.html#cb33-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-27"><a href="IndicesTrends.html#cb33-27" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb33-28"><a href="IndicesTrends.html#cb33-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-29"><a href="IndicesTrends.html#cb33-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-30"><a href="IndicesTrends.html#cb33-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-31"><a href="IndicesTrends.html#cb33-31" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">head</span>(trends_out[,<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">8</span>,<span class="dv">22</span>)]))</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Start_year</th>
+<th align="right">End_year</th>
+<th align="left">Region_alt</th>
+<th align="right">Trend</th>
+<th align="right">prob_decrease_30_percent</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1966</td>
+<td align="right">1976</td>
+<td align="left">Continental</td>
+<td align="right">1.287</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td align="right">1966</td>
+<td align="right">1976</td>
+<td align="left">Canada</td>
+<td align="right">-1.071</td>
+<td align="right">0.061</td>
+</tr>
+<tr class="odd">
+<td align="right">1966</td>
+<td align="right">1976</td>
+<td align="left">United States of America</td>
+<td align="right">1.611</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td align="right">1967</td>
+<td align="right">1977</td>
+<td align="left">Continental</td>
+<td align="right">1.875</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="odd">
+<td align="right">1967</td>
+<td align="right">1977</td>
+<td align="left">Canada</td>
+<td align="right">-0.451</td>
+<td align="right">0.015</td>
+</tr>
+<tr class="even">
+<td align="right">1967</td>
+<td align="right">1977</td>
+<td align="left">United States of America</td>
+<td align="right">2.172</td>
+<td align="right">0.000</td>
+</tr>
+</tbody>
+</table>
+<p>Now the <code>trends_out</code> object is a dataframe with all of the trend estimates, which we could export to a file or use to plot the estimated trends through time.</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="IndicesTrends.html#cb34-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-2"><a href="IndicesTrends.html#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggrepel) <span class="co">#handy ggplot labeling extension</span></span>
+<span id="cb34-3"><a href="IndicesTrends.html#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer) <span class="co">#handy colour palettes</span></span>
+<span id="cb34-4"><a href="IndicesTrends.html#cb34-4" aria-hidden="true" tabindex="-1"></a>c_orng <span class="ot">=</span> RColorBrewer<span class="sc">::</span><span class="fu">brewer.pal</span>(<span class="dv">9</span>,<span class="st">&quot;Set1&quot;</span>)[<span class="dv">5</span>]</span>
+<span id="cb34-5"><a href="IndicesTrends.html#cb34-5" aria-hidden="true" tabindex="-1"></a>c_red <span class="ot">=</span> RColorBrewer<span class="sc">::</span><span class="fu">brewer.pal</span>(<span class="dv">9</span>,<span class="st">&quot;Set1&quot;</span>)[<span class="dv">1</span>]</span>
+<span id="cb34-6"><a href="IndicesTrends.html#cb34-6" aria-hidden="true" tabindex="-1"></a>c_blue <span class="ot">=</span> RColorBrewer<span class="sc">::</span><span class="fu">brewer.pal</span>(<span class="dv">9</span>,<span class="st">&quot;Set1&quot;</span>)[<span class="dv">2</span>]</span>
+<span id="cb34-7"><a href="IndicesTrends.html#cb34-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-8"><a href="IndicesTrends.html#cb34-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-9"><a href="IndicesTrends.html#cb34-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-10"><a href="IndicesTrends.html#cb34-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># selecting just the trends for Canada</span></span>
+<span id="cb34-11"><a href="IndicesTrends.html#cb34-11" aria-hidden="true" tabindex="-1"></a>    trends_canada <span class="ot">=</span> trends_out[<span class="fu">which</span>(trends_out<span class="sc">$</span>Region_alt <span class="sc">==</span> <span class="st">&quot;Canada&quot;</span>),]</span>
+<span id="cb34-12"><a href="IndicesTrends.html#cb34-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># adding column names to identify which credible intervals to plot below</span></span>
+<span id="cb34-13"><a href="IndicesTrends.html#cb34-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># also adding labels that are ggplot friendly (they do not include &quot;.&quot;)</span></span>
+<span id="cb34-14"><a href="IndicesTrends.html#cb34-14" aria-hidden="true" tabindex="-1"></a>    trends_canada<span class="sc">$</span>lci <span class="ot">=</span> trends_canada<span class="sc">$</span>Trend_Q0<span class="fl">.025</span></span>
+<span id="cb34-15"><a href="IndicesTrends.html#cb34-15" aria-hidden="true" tabindex="-1"></a>    trends_canada<span class="sc">$</span>uci <span class="ot">=</span> trends_canada<span class="sc">$</span>Trend_Q0<span class="fl">.975</span></span>
+<span id="cb34-16"><a href="IndicesTrends.html#cb34-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb34-17"><a href="IndicesTrends.html#cb34-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-18"><a href="IndicesTrends.html#cb34-18" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb34-19"><a href="IndicesTrends.html#cb34-19" aria-hidden="true" tabindex="-1"></a>   <span class="co"># pulling out one row of the data frame to help annotate the plot </span></span>
+<span id="cb34-20"><a href="IndicesTrends.html#cb34-20" aria-hidden="true" tabindex="-1"></a>    trends_canadaend4 <span class="ot">=</span> trends_canada[<span class="fu">nrow</span>(trends_canada)<span class="sc">-</span><span class="dv">4</span>,]</span>
+<span id="cb34-21"><a href="IndicesTrends.html#cb34-21" aria-hidden="true" tabindex="-1"></a>    trends_canadaend4<span class="sc">$</span>lab50 <span class="ot">=</span> <span class="st">&quot;50% CI&quot;</span></span>
+<span id="cb34-22"><a href="IndicesTrends.html#cb34-22" aria-hidden="true" tabindex="-1"></a>    trends_canadaend4<span class="sc">$</span>lab95 <span class="ot">=</span> <span class="st">&quot;95% CI&quot;</span></span>
+<span id="cb34-23"><a href="IndicesTrends.html#cb34-23" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb34-24"><a href="IndicesTrends.html#cb34-24" aria-hidden="true" tabindex="-1"></a>    trends_canadaend <span class="ot">=</span> trends_canada[<span class="fu">nrow</span>(trends_canada),]</span>
+<span id="cb34-25"><a href="IndicesTrends.html#cb34-25" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb34-26"><a href="IndicesTrends.html#cb34-26" aria-hidden="true" tabindex="-1"></a>    pth_30_labs <span class="ot">=</span> <span class="fu">paste0</span>(<span class="fu">signif</span>(<span class="dv">100</span><span class="sc">*</span>trends_canadaend[,<span class="st">&quot;prob_decrease_30_percent&quot;</span>],<span class="dv">2</span>),<span class="st">&quot;% probability of 30% decrease&quot;</span>) </span>
+<span id="cb34-27"><a href="IndicesTrends.html#cb34-27" aria-hidden="true" tabindex="-1"></a>    pth_50_labs <span class="ot">=</span> <span class="fu">paste0</span>(<span class="fu">signif</span>(<span class="dv">100</span><span class="sc">*</span>trends_canadaend[,<span class="st">&quot;prob_decrease_50_percent&quot;</span>],<span class="dv">2</span>),<span class="st">&quot;% probability of 50% decrease&quot;</span>) </span>
+<span id="cb34-28"><a href="IndicesTrends.html#cb34-28" aria-hidden="true" tabindex="-1"></a>    trends_canadaend<span class="sc">$</span>pdec <span class="ot">=</span> <span class="fu">paste</span>(<span class="fu">signif</span>(trends_canadaend[,<span class="st">&quot;Percent_Change&quot;</span>],<span class="dv">2</span>),<span class="st">&quot;% Change over&quot;</span>,trend_time,<span class="st">&quot;years&quot;</span>) </span>
+<span id="cb34-29"><a href="IndicesTrends.html#cb34-29" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb34-30"><a href="IndicesTrends.html#cb34-30" aria-hidden="true" tabindex="-1"></a>  <span class="co"># a few extra objects to further annotate the plot</span></span>
+<span id="cb34-31"><a href="IndicesTrends.html#cb34-31" aria-hidden="true" tabindex="-1"></a>  thresh30 <span class="ot">=</span> (<span class="fl">0.7</span><span class="sc">^</span>(<span class="dv">1</span><span class="sc">/</span>trend_time)<span class="sc">-</span><span class="dv">1</span>)<span class="sc">*</span><span class="dv">100</span> <span class="co"># threshold trend value for a 30% decline over 10-years</span></span>
+<span id="cb34-32"><a href="IndicesTrends.html#cb34-32" aria-hidden="true" tabindex="-1"></a>  thresh50 <span class="ot">=</span> (<span class="fl">0.5</span><span class="sc">^</span>(<span class="dv">1</span><span class="sc">/</span>trend_time)<span class="sc">-</span><span class="dv">1</span>)<span class="sc">*</span><span class="dv">100</span> <span class="co"># threshold trend value for a 50% decline over 10-years</span></span>
+<span id="cb34-33"><a href="IndicesTrends.html#cb34-33" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb34-34"><a href="IndicesTrends.html#cb34-34" aria-hidden="true" tabindex="-1"></a>  threshs <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">thresh =</span> <span class="fu">c</span>(thresh30,thresh50),</span>
+<span id="cb34-35"><a href="IndicesTrends.html#cb34-35" aria-hidden="true" tabindex="-1"></a>                       <span class="at">p_thresh =</span> <span class="fu">c</span>(<span class="fu">paste</span>(<span class="st">&quot;-30% over&quot;</span>,trend_time,<span class="st">&quot;years&quot;</span>),</span>
+<span id="cb34-36"><a href="IndicesTrends.html#cb34-36" aria-hidden="true" tabindex="-1"></a>                                          <span class="fu">paste</span>(<span class="st">&quot;-50% over&quot;</span>,trend_time,<span class="st">&quot;years&quot;</span>)),</span>
+<span id="cb34-37"><a href="IndicesTrends.html#cb34-37" aria-hidden="true" tabindex="-1"></a>                       <span class="at">Year =</span> <span class="fu">rep</span>(<span class="fu">min</span>(trends_canada<span class="sc">$</span>End_year),<span class="dv">2</span>))</span>
+<span id="cb34-38"><a href="IndicesTrends.html#cb34-38" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb34-39"><a href="IndicesTrends.html#cb34-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-40"><a href="IndicesTrends.html#cb34-40" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb34-41"><a href="IndicesTrends.html#cb34-41" aria-hidden="true" tabindex="-1"></a>    cpt <span class="ot">=</span> <span class="fu">ggplot</span>(<span class="at">data =</span> trends_canada,<span class="fu">aes</span>(<span class="at">x =</span> End_year,<span class="at">y =</span> Trend))<span class="sc">+</span></span>
+<span id="cb34-42"><a href="IndicesTrends.html#cb34-42" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
+<span id="cb34-43"><a href="IndicesTrends.html#cb34-43" aria-hidden="true" tabindex="-1"></a>      <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste</span>(<span class="st">&quot;Scarlet Tanager rolling&quot;</span>,trend_time,<span class="st">&quot;year trends for Canada&quot;</span>),</span>
+<span id="cb34-44"><a href="IndicesTrends.html#cb34-44" aria-hidden="true" tabindex="-1"></a>           <span class="at">subtitle =</span> <span class="fu">paste</span>(<span class="st">&quot;Based on Trend in&quot;</span>,last_year,<span class="st">&quot;:&quot;</span>,pth_30_labs,<span class="st">&quot;and&quot;</span>,pth_50_labs))<span class="sc">+</span></span>
+<span id="cb34-45"><a href="IndicesTrends.html#cb34-45" aria-hidden="true" tabindex="-1"></a>           <span class="fu">xlab</span>(<span class="fu">paste</span>(<span class="st">&quot;Ending year of&quot;</span>,trend_time,<span class="st">&quot;trend&quot;</span>))<span class="sc">+</span></span>
+<span id="cb34-46"><a href="IndicesTrends.html#cb34-46" aria-hidden="true" tabindex="-1"></a>           <span class="fu">ylab</span>(<span class="fu">paste</span>(trend_time,<span class="st">&quot;year trends&quot;</span>))<span class="sc">+</span></span>
+<span id="cb34-47"><a href="IndicesTrends.html#cb34-47" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> thresh30,<span class="at">colour =</span> c_orng)<span class="sc">+</span></span>
+<span id="cb34-48"><a href="IndicesTrends.html#cb34-48" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> thresh50,<span class="at">colour =</span> c_red)<span class="sc">+</span></span>
+<span id="cb34-49"><a href="IndicesTrends.html#cb34-49" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>,<span class="at">colour =</span> <span class="fu">grey</span>(<span class="fl">0.5</span>))<span class="sc">+</span></span>
+<span id="cb34-50"><a href="IndicesTrends.html#cb34-50" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_label_repel</span>(<span class="at">data =</span> threshs,<span class="fu">aes</span>(<span class="at">x =</span> Year,<span class="at">y =</span> thresh,<span class="at">label =</span> p_thresh),<span class="at">position =</span> <span class="st">&quot;nudge&quot;</span>)<span class="sc">+</span></span>
+<span id="cb34-51"><a href="IndicesTrends.html#cb34-51" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_pointrange</span>(<span class="fu">aes</span>(<span class="at">x =</span> End_year,<span class="at">y =</span> Trend,<span class="at">ymin =</span> lci,<span class="at">ymax =</span> uci),<span class="at">colour =</span> c_blue)<span class="sc">+</span></span>
+<span id="cb34-52"><a href="IndicesTrends.html#cb34-52" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_text_repel</span>(<span class="at">data =</span> trends_canadaend,<span class="fu">aes</span>(<span class="at">x =</span> End_year,<span class="at">y =</span> Trend,<span class="at">label =</span> pdec),<span class="at">min.segment.length =</span> <span class="fl">0.1</span>,<span class="at">nudge_y =</span> <span class="fl">0.95</span>)</span>
+<span id="cb34-53"><a href="IndicesTrends.html#cb34-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-54"><a href="IndicesTrends.html#cb34-54" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb34-55"><a href="IndicesTrends.html#cb34-55" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb34-56"><a href="IndicesTrends.html#cb34-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-57"><a href="IndicesTrends.html#cb34-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(cpt)</span>
+<span id="cb34-58"><a href="IndicesTrends.html#cb34-58" aria-hidden="true" tabindex="-1"></a> </span></code></pre></div>
+<p><img src="bbsBayes_Workshop_files/figure-html/IT%2019-1.png" width="\textwidth" style="display: block; margin: auto;" /></p>
+<p>And here’s the population trajectory for comparison. Note: the <code>plot_indices()</code> function that generated this plot is demonstrated in the next section <a href="GraphMap.html#GraphMap">7</a>.</p>
+<p><img src="bbsBayes_Workshop_files/figure-html/IT20-1.png" width="\textwidth" style="display: block; margin: auto;" /></p>
+
 </div>
 </div>
             </section>

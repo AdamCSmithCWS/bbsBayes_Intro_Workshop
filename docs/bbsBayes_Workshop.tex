@@ -134,7 +134,7 @@
 
 \title{A Quick Introduction to bbsBayes}
 \author{Adam C. Smith, and Brandon P.M. Edwards}
-\date{2020-12-14}
+\date{2020-12-16}
 
 \begin{document}
 \maketitle
@@ -957,6 +957,136 @@ Start\_year & Region\_alt & Trend & Percent\_Change & prob\_decrease\_30\_percen
 2004 & CONNECTICUT & -1.774 & -23.54 & 0.344\\
 \hline
 \end{tabular}
+
+\hypertarget{changing-trends-through-time}{%
+\section{Changing trends through time}\label{changing-trends-through-time}}
+
+Changes in populations, both annual rates of change (trends) and overall changes in populations (percent change), are often used to prioritize species in conservation assessments. For example, the International Union for the Conservation of Nature (IUCN) or the Committee on the Status of Endangered Wildlife in Canada (COSEWIC) use estimates of population change over three generations to classify species as Endangered or Threatened. Of course the estimate of population trend used to classify a species is at least partly dependent on the year in which the species is assessed. Populations rarely follow constant rates of log-linear change through time, and so estimates of change also change through time. To quantify and visualize these changes in trends, one can estimate a series of trends for a rolling window of time-intervals. As an example, the annual CWS analysis includes an estimate of all possible 10-year trends for each species, which we refer to as the rolling trends analysis. Conceptually, it is relatively simple, and just involves estimating the annual indices for the full time-series of the survey, and then embedding the \texttt{generate\_trends()} function within a loop.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tidyverse)}
+
+\NormalTok{indices\_smooth\_national }\OtherTok{\textless{}{-}} \FunctionTok{generate\_indices}\NormalTok{(}\AttributeTok{jags\_mod =}\NormalTok{ jags\_mod,}
+                            \AttributeTok{jags\_data =}\NormalTok{ jags\_data,}
+                            \AttributeTok{alternate\_n =} \StringTok{"n3"}\NormalTok{, }\CommentTok{\# the smooth only component of the gamye model}
+                            \AttributeTok{regions =} \FunctionTok{c}\NormalTok{(}\StringTok{"continental"}\NormalTok{,}
+                            \StringTok{"national"}\NormalTok{)) }\CommentTok{\#only continental and national estimates}
+
+
+\NormalTok{first\_year }\OtherTok{\textless{}{-}} \FunctionTok{min}\NormalTok{(indices\_smooth\_national}\SpecialCharTok{$}\NormalTok{data\_summary}\SpecialCharTok{$}\NormalTok{Year) }\CommentTok{\#First year in the time{-}series}
+\NormalTok{last\_year }\OtherTok{\textless{}{-}} \FunctionTok{max}\NormalTok{(indices\_smooth\_national}\SpecialCharTok{$}\NormalTok{data\_summary}\SpecialCharTok{$}\NormalTok{Year) }\CommentTok{\#Last year in the time{-}series}
+\NormalTok{trend\_time }\OtherTok{\textless{}{-}} \DecValTok{10} \CommentTok{\#use 10{-}year trends}
+
+\NormalTok{trends\_out }\OtherTok{\textless{}{-}} \ConstantTok{NULL}
+
+\ControlFlowTok{for}\NormalTok{(Y }\ControlFlowTok{in}\NormalTok{ first\_year}\SpecialCharTok{:}\NormalTok{(last\_year}\SpecialCharTok{{-}}\NormalTok{trend\_time))\{}
+  
+\NormalTok{trends\_temp }\OtherTok{\textless{}{-}} \FunctionTok{generate\_trends}\NormalTok{(}\AttributeTok{indices =}\NormalTok{ indices\_smooth\_national,}
+                          \AttributeTok{Min\_year =}\NormalTok{ Y,}
+                          \AttributeTok{Max\_year =}\NormalTok{ Y}\SpecialCharTok{+}\NormalTok{trend\_time,}
+                          \AttributeTok{prob\_decrease =} \FunctionTok{c}\NormalTok{(}\DecValTok{30}\NormalTok{,}\DecValTok{50}\NormalTok{),}
+                          \AttributeTok{prob\_increase =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{))}
+
+\NormalTok{    trends\_out }\OtherTok{=} \FunctionTok{rbind}\NormalTok{(trends\_out,trends\_temp)}
+
+
+\NormalTok{\}}
+
+
+
+\NormalTok{knitr}\SpecialCharTok{::}\FunctionTok{kable}\NormalTok{(}\FunctionTok{head}\NormalTok{(trends\_out[,}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{8}\NormalTok{,}\DecValTok{22}\NormalTok{)]))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{tabular}{r|r|l|r|r}
+\hline
+Start\_year & End\_year & Region\_alt & Trend & prob\_decrease\_30\_percent\\
+\hline
+1966 & 1976 & Continental & 1.287 & 0.000\\
+\hline
+1966 & 1976 & Canada & -1.071 & 0.061\\
+\hline
+1966 & 1976 & United States of America & 1.611 & 0.000\\
+\hline
+1967 & 1977 & Continental & 1.875 & 0.000\\
+\hline
+1967 & 1977 & Canada & -0.451 & 0.015\\
+\hline
+1967 & 1977 & United States of America & 2.172 & 0.000\\
+\hline
+\end{tabular}
+
+Now the \texttt{trends\_out} object is a dataframe with all of the trend estimates, which we could export to a file or use to plot the estimated trends through time.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+
+\FunctionTok{library}\NormalTok{(ggrepel) }\CommentTok{\#handy ggplot labeling extension}
+\FunctionTok{library}\NormalTok{(RColorBrewer) }\CommentTok{\#handy colour palettes}
+\NormalTok{c\_orng }\OtherTok{=}\NormalTok{ RColorBrewer}\SpecialCharTok{::}\FunctionTok{brewer.pal}\NormalTok{(}\DecValTok{9}\NormalTok{,}\StringTok{"Set1"}\NormalTok{)[}\DecValTok{5}\NormalTok{]}
+\NormalTok{c\_red }\OtherTok{=}\NormalTok{ RColorBrewer}\SpecialCharTok{::}\FunctionTok{brewer.pal}\NormalTok{(}\DecValTok{9}\NormalTok{,}\StringTok{"Set1"}\NormalTok{)[}\DecValTok{1}\NormalTok{]}
+\NormalTok{c\_blue }\OtherTok{=}\NormalTok{ RColorBrewer}\SpecialCharTok{::}\FunctionTok{brewer.pal}\NormalTok{(}\DecValTok{9}\NormalTok{,}\StringTok{"Set1"}\NormalTok{)[}\DecValTok{2}\NormalTok{]}
+
+
+
+  \CommentTok{\# selecting just the trends for Canada}
+\NormalTok{    trends\_canada }\OtherTok{=}\NormalTok{ trends\_out[}\FunctionTok{which}\NormalTok{(trends\_out}\SpecialCharTok{$}\NormalTok{Region\_alt }\SpecialCharTok{==} \StringTok{"Canada"}\NormalTok{),]}
+  \CommentTok{\# adding column names to identify which credible intervals to plot below}
+  \CommentTok{\# also adding labels that are ggplot friendly (they do not include ".")}
+\NormalTok{    trends\_canada}\SpecialCharTok{$}\NormalTok{lci }\OtherTok{=}\NormalTok{ trends\_canada}\SpecialCharTok{$}\NormalTok{Trend\_Q0}\FloatTok{.025}
+\NormalTok{    trends\_canada}\SpecialCharTok{$}\NormalTok{uci }\OtherTok{=}\NormalTok{ trends\_canada}\SpecialCharTok{$}\NormalTok{Trend\_Q0}\FloatTok{.975}
+    
+
+    
+   \CommentTok{\# pulling out one row of the data frame to help annotate the plot }
+\NormalTok{    trends\_canadaend4 }\OtherTok{=}\NormalTok{ trends\_canada[}\FunctionTok{nrow}\NormalTok{(trends\_canada)}\SpecialCharTok{{-}}\DecValTok{4}\NormalTok{,]}
+\NormalTok{    trends\_canadaend4}\SpecialCharTok{$}\NormalTok{lab50 }\OtherTok{=} \StringTok{"50\% CI"}
+\NormalTok{    trends\_canadaend4}\SpecialCharTok{$}\NormalTok{lab95 }\OtherTok{=} \StringTok{"95\% CI"}
+    
+\NormalTok{    trends\_canadaend }\OtherTok{=}\NormalTok{ trends\_canada[}\FunctionTok{nrow}\NormalTok{(trends\_canada),]}
+    
+\NormalTok{    pth\_30\_labs }\OtherTok{=} \FunctionTok{paste0}\NormalTok{(}\FunctionTok{signif}\NormalTok{(}\DecValTok{100}\SpecialCharTok{*}\NormalTok{trends\_canadaend[,}\StringTok{"prob\_decrease\_30\_percent"}\NormalTok{],}\DecValTok{2}\NormalTok{),}\StringTok{"\% probability of 30\% decrease"}\NormalTok{) }
+\NormalTok{    pth\_50\_labs }\OtherTok{=} \FunctionTok{paste0}\NormalTok{(}\FunctionTok{signif}\NormalTok{(}\DecValTok{100}\SpecialCharTok{*}\NormalTok{trends\_canadaend[,}\StringTok{"prob\_decrease\_50\_percent"}\NormalTok{],}\DecValTok{2}\NormalTok{),}\StringTok{"\% probability of 50\% decrease"}\NormalTok{) }
+\NormalTok{    trends\_canadaend}\SpecialCharTok{$}\NormalTok{pdec }\OtherTok{=} \FunctionTok{paste}\NormalTok{(}\FunctionTok{signif}\NormalTok{(trends\_canadaend[,}\StringTok{"Percent\_Change"}\NormalTok{],}\DecValTok{2}\NormalTok{),}\StringTok{"\% Change over"}\NormalTok{,trend\_time,}\StringTok{"years"}\NormalTok{) }
+    
+  \CommentTok{\# a few extra objects to further annotate the plot}
+\NormalTok{  thresh30 }\OtherTok{=}\NormalTok{ (}\FloatTok{0.7}\SpecialCharTok{\^{}}\NormalTok{(}\DecValTok{1}\SpecialCharTok{/}\NormalTok{trend\_time)}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{)}\SpecialCharTok{*}\DecValTok{100} \CommentTok{\# threshold trend value for a 30\% decline over 10{-}years}
+\NormalTok{  thresh50 }\OtherTok{=}\NormalTok{ (}\FloatTok{0.5}\SpecialCharTok{\^{}}\NormalTok{(}\DecValTok{1}\SpecialCharTok{/}\NormalTok{trend\_time)}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{)}\SpecialCharTok{*}\DecValTok{100} \CommentTok{\# threshold trend value for a 50\% decline over 10{-}years}
+  
+\NormalTok{  threshs }\OtherTok{=} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{thresh =} \FunctionTok{c}\NormalTok{(thresh30,thresh50),}
+                       \AttributeTok{p\_thresh =} \FunctionTok{c}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"{-}30\% over"}\NormalTok{,trend\_time,}\StringTok{"years"}\NormalTok{),}
+                                          \FunctionTok{paste}\NormalTok{(}\StringTok{"{-}50\% over"}\NormalTok{,trend\_time,}\StringTok{"years"}\NormalTok{)),}
+                       \AttributeTok{Year =} \FunctionTok{rep}\NormalTok{(}\FunctionTok{min}\NormalTok{(trends\_canada}\SpecialCharTok{$}\NormalTok{End\_year),}\DecValTok{2}\NormalTok{))}
+  
+
+      
+\NormalTok{    cpt }\OtherTok{=} \FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data =}\NormalTok{ trends\_canada,}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ End\_year,}\AttributeTok{y =}\NormalTok{ Trend))}\SpecialCharTok{+}
+      \FunctionTok{theme\_minimal}\NormalTok{()}\SpecialCharTok{+}
+      \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \FunctionTok{paste}\NormalTok{(}\StringTok{"Scarlet Tanager rolling"}\NormalTok{,trend\_time,}\StringTok{"year trends for Canada"}\NormalTok{),}
+           \AttributeTok{subtitle =} \FunctionTok{paste}\NormalTok{(}\StringTok{"Based on Trend in"}\NormalTok{,last\_year,}\StringTok{":"}\NormalTok{,pth\_30\_labs,}\StringTok{"and"}\NormalTok{,pth\_50\_labs))}\SpecialCharTok{+}
+           \FunctionTok{xlab}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"Ending year of"}\NormalTok{,trend\_time,}\StringTok{"trend"}\NormalTok{))}\SpecialCharTok{+}
+           \FunctionTok{ylab}\NormalTok{(}\FunctionTok{paste}\NormalTok{(trend\_time,}\StringTok{"year trends"}\NormalTok{))}\SpecialCharTok{+}
+      \FunctionTok{geom\_hline}\NormalTok{(}\AttributeTok{yintercept =}\NormalTok{ thresh30,}\AttributeTok{colour =}\NormalTok{ c\_orng)}\SpecialCharTok{+}
+      \FunctionTok{geom\_hline}\NormalTok{(}\AttributeTok{yintercept =}\NormalTok{ thresh50,}\AttributeTok{colour =}\NormalTok{ c\_red)}\SpecialCharTok{+}
+      \FunctionTok{geom\_hline}\NormalTok{(}\AttributeTok{yintercept =} \DecValTok{0}\NormalTok{,}\AttributeTok{colour =} \FunctionTok{grey}\NormalTok{(}\FloatTok{0.5}\NormalTok{))}\SpecialCharTok{+}
+      \FunctionTok{geom\_label\_repel}\NormalTok{(}\AttributeTok{data =}\NormalTok{ threshs,}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Year,}\AttributeTok{y =}\NormalTok{ thresh,}\AttributeTok{label =}\NormalTok{ p\_thresh),}\AttributeTok{position =} \StringTok{"nudge"}\NormalTok{)}\SpecialCharTok{+}
+      \FunctionTok{geom\_pointrange}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ End\_year,}\AttributeTok{y =}\NormalTok{ Trend,}\AttributeTok{ymin =}\NormalTok{ lci,}\AttributeTok{ymax =}\NormalTok{ uci),}\AttributeTok{colour =}\NormalTok{ c\_blue)}\SpecialCharTok{+}
+      \FunctionTok{geom\_text\_repel}\NormalTok{(}\AttributeTok{data =}\NormalTok{ trends\_canadaend,}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ End\_year,}\AttributeTok{y =}\NormalTok{ Trend,}\AttributeTok{label =}\NormalTok{ pdec),}\AttributeTok{min.segment.length =} \FloatTok{0.1}\NormalTok{,}\AttributeTok{nudge\_y =} \FloatTok{0.95}\NormalTok{)}
+
+      
+      
+
+  \FunctionTok{print}\NormalTok{(cpt)}
+ 
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics[width=\textwidth]{bbsBayes_Workshop_files/figure-latex/IT 19-1} \end{center}
+
+And here's the population trajectory for comparison. Note: the \texttt{plot\_indices()} function that generated this plot is demonstrated in the next section \ref{GraphMap}.
+
+\begin{center}\includegraphics[width=\textwidth]{bbsBayes_Workshop_files/figure-latex/IT20-1} \end{center}
 
 \hypertarget{GraphMap}{%
 \chapter{Trajectory graphs and trend maps}\label{GraphMap}}

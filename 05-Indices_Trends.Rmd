@@ -8,7 +8,7 @@ This saved workspace includes two objects:
 
 2.  jags_mod - the model output created with the `run_model()` function.
 
-```{r IT1}
+```{r IT1,cache=FALSE}
 load("jags_mod_full.RData")
 
 ```
@@ -166,4 +166,127 @@ In addition, the function can optionally calculate the posterior conditional pro
 
 ```{r IT17}
 knitr::kable(head(trends_smooth_15[,c(1,4,8,15,22)]))
+```
+
+## Changing trends through time
+
+Changes in populations, both annual rates of change (trends) and overall changes in populations (percent change), are often used to prioritize species in conservation assessments. For example, the International Union for the Conservation of Nature (IUCN) or the Committee on the Status of Endangered Wildlife in Canada (COSEWIC) use estimates of population change over three generations to classify species as Endangered or Threatened. Of course the estimate of population trend used to classify a species is at least partly dependent on the year in which the species is assessed. Populations rarely follow constant rates of log-linear change through time, and so estimates of change also change through time. To quantify and visualize these changes in trends, one can estimate a series of trends for a rolling window of time-intervals. As an example, the annual CWS analysis includes an estimate of all possible 10-year trends for each species, which we refer to as the rolling trends analysis. Conceptually, it is relatively simple, and just involves estimating the annual indices for the full time-series of the survey, and then embedding the `generate_trends()` function within a loop.
+
+```{r IT 18}
+library(tidyverse)
+
+indices_smooth_national <- generate_indices(jags_mod = jags_mod,
+                            jags_data = jags_data,
+                            alternate_n = "n3", # the smooth only component of the gamye model
+                            regions = c("continental",
+                            "national")) #only continental and national estimates
+
+
+first_year <- min(indices_smooth_national$data_summary$Year) #First year in the time-series
+last_year <- max(indices_smooth_national$data_summary$Year) #Last year in the time-series
+trend_time <- 10 #use 10-year trends
+
+trends_out <- NULL
+
+for(Y in first_year:(last_year-trend_time)){
+  
+trends_temp <- generate_trends(indices = indices_smooth_national,
+                          Min_year = Y,
+                          Max_year = Y+trend_time,
+                          prob_decrease = c(30,50),
+                          prob_increase = c(0))
+
+
+    trends_out = rbind(trends_out,trends_temp)
+
+
+}
+
+
+
+knitr::kable(head(trends_out[,c(1,2,4,8,22)]))
+
+```
+
+Now the `trends_out` object is a dataframe with all of the trend estimates, which we could export to a file or use to plot the estimated trends through time.
+
+```{r IT 19}
+
+library(ggrepel) #handy ggplot labeling extension
+library(RColorBrewer) #handy colour palettes
+c_orng = RColorBrewer::brewer.pal(9,"Set1")[5]
+c_red = RColorBrewer::brewer.pal(9,"Set1")[1]
+c_blue = RColorBrewer::brewer.pal(9,"Set1")[2]
+
+
+
+  # selecting just the trends for Canada
+    trends_canada = trends_out[which(trends_out$Region_alt == "Canada"),]
+  # adding column names to identify which credible intervals to plot below
+  # also adding labels that are ggplot friendly (they do not include ".")
+    trends_canada$lci = trends_canada$Trend_Q0.025
+    trends_canada$uci = trends_canada$Trend_Q0.975
+    
+
+    
+   # pulling out one row of the data frame to help annotate the plot 
+    trends_canadaend4 = trends_canada[nrow(trends_canada)-4,]
+    trends_canadaend4$lab50 = "50% CI"
+    trends_canadaend4$lab95 = "95% CI"
+    
+    trends_canadaend = trends_canada[nrow(trends_canada),]
+    
+    pth_30_labs = paste0(signif(100*trends_canadaend[,"prob_decrease_30_percent"],2),"% probability of 30% decrease") 
+    pth_50_labs = paste0(signif(100*trends_canadaend[,"prob_decrease_50_percent"],2),"% probability of 50% decrease") 
+    trends_canadaend$pdec = paste(signif(trends_canadaend[,"Percent_Change"],2),"% Change over",trend_time,"years") 
+    
+  # a few extra objects to further annotate the plot
+  thresh30 = (0.7^(1/trend_time)-1)*100 # threshold trend value for a 30% decline over 10-years
+  thresh50 = (0.5^(1/trend_time)-1)*100 # threshold trend value for a 50% decline over 10-years
+  
+  threshs = data.frame(thresh = c(thresh30,thresh50),
+                       p_thresh = c(paste("-30% over",trend_time,"years"),
+                                          paste("-50% over",trend_time,"years")),
+                       Year = rep(min(trends_canada$End_year),2))
+  
+
+      
+    cpt = ggplot(data = trends_canada,aes(x = End_year,y = Trend))+
+      theme_minimal()+
+      labs(title = paste("Scarlet Tanager rolling",trend_time,"year trends for Canada"),
+           subtitle = paste("Based on Trend in",last_year,":",pth_30_labs,"and",pth_50_labs))+
+           xlab(paste("Ending year of",trend_time,"trend"))+
+           ylab(paste(trend_time,"year trends"))+
+      geom_hline(yintercept = thresh30,colour = c_orng)+
+      geom_hline(yintercept = thresh50,colour = c_red)+
+      geom_hline(yintercept = 0,colour = grey(0.5))+
+      geom_label_repel(data = threshs,aes(x = Year,y = thresh,label = p_thresh),position = "nudge")+
+      geom_pointrange(aes(x = End_year,y = Trend,ymin = lci,ymax = uci),colour = c_blue)+
+      geom_text_repel(data = trends_canadaend,aes(x = End_year,y = Trend,label = pdec),min.segment.length = 0.1,nudge_y = 0.95)
+
+      
+      
+
+  print(cpt)
+ 
+
+
+```
+
+And here's the population trajectory for comparison. Note: the `plot_indices()` function that generated this plot is demonstrated in the next section \@ref(GraphMap).
+
+```{r IT20, echo=FALSE}
+
+
+indices_smooth_national <- generate_indices(jags_mod = jags_mod,
+                            jags_data = jags_data,
+                            alternate_n = "n3", # the smooth only component of the gamye model
+                            regions = c("continental",
+                            "national")) #only continental and national estimates
+
+tp = plot_indices(indices = indices_smooth_national,
+                         species = "Scarlet Tanager")
+
+plot(tp[[2]])
+
 ```
