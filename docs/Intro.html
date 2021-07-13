@@ -24,7 +24,7 @@
 <meta name="author" content="Adam C. Smith, and Brandon P.M. Edwards" />
 
 
-<meta name="date" content="2020-12-16" />
+<meta name="date" content="2021-07-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,7 +33,7 @@
   
 <link rel="prev" href="index.html"/>
 <link rel="next" href="Stratify.html"/>
-<script src="libs/header-attrs-2.4.4/header-attrs.js"></script>
+<script src="libs/header-attrs-2.6/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -51,8 +51,6 @@
 
 
 
-<link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-<script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
 
 
 <style type="text/css">
@@ -147,19 +145,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.2" data-path="Intro.html"><a href="Intro.html#installation"><i class="fa fa-check"></i><b>2.2</b> Installation</a></li>
 <li class="chapter" data-level="2.3" data-path="Intro.html"><a href="Intro.html#data-retrieval"><i class="fa fa-check"></i><b>2.3</b> Data Retrieval</a></li>
 <li class="chapter" data-level="2.4" data-path="Intro.html"><a href="Intro.html#install-jags"><i class="fa fa-check"></i><b>2.4</b> Install JAGS</a></li>
-<li class="chapter" data-level="2.5" data-path="Intro.html"><a href="Intro.html#example-data-for-scarlet-tanager"><i class="fa fa-check"></i><b>2.5</b> Example data for Scarlet Tanager</a></li>
+<li class="chapter" data-level="2.5" data-path="Intro.html"><a href="Intro.html#example-data-for-barns-swallow"><i class="fa fa-check"></i><b>2.5</b> Example data for Barns Swallow</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="Stratify.html"><a href="Stratify.html"><i class="fa fa-check"></i><b>3</b> Stratification</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="Stratify.html"><a href="Stratify.html#strata"><i class="fa fa-check"></i><b>3.1</b> Strata</a>
 <ul>
-<li class="chapter" data-level="3.1.1" data-path="Stratify.html"><a href="Stratify.html#useful-code-to-access-and-print-the-strata-maps-above"><i class="fa fa-check"></i><b>3.1.1</b> Useful code to access and print the strata maps above</a></li>
+<li class="chapter" data-level="3.1.1" data-path="Stratify.html"><a href="Stratify.html#accessing-the-strata-maps"><i class="fa fa-check"></i><b>3.1.1</b> Accessing the strata maps</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="DataPrep.html"><a href="DataPrep.html"><i class="fa fa-check"></i><b>4</b> Prepare the data for a model and species</a>
 <ul>
 <li class="chapter" data-level="4.1" data-path="DataPrep.html"><a href="DataPrep.html#prepare-data"><i class="fa fa-check"></i><b>4.1</b> Prepare data</a></li>
-<li class="chapter" data-level="4.2" data-path="DataPrep.html"><a href="DataPrep.html#models"><i class="fa fa-check"></i><b>4.2</b> Models</a>
+<li class="chapter" data-level="4.2" data-path="DataPrep.html"><a href="DataPrep.html#Model_list"><i class="fa fa-check"></i><b>4.2</b> Models</a>
 <ul>
 <li class="chapter" data-level="4.2.1" data-path="DataPrep.html"><a href="DataPrep.html#slope"><i class="fa fa-check"></i><b>4.2.1</b> slope</a></li>
 <li class="chapter" data-level="4.2.2" data-path="DataPrep.html"><a href="DataPrep.html#gam"><i class="fa fa-check"></i><b>4.2.2</b> gam</a></li>
@@ -251,9 +249,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">2.4</span> Install JAGS</h2>
 <p>The modeling functions of bbsBayes require an installation of JAGS. JAGS is installed from SourceForge, an open software distribution agent. Follow <a href="https://sourceforge.net/projects/mcmc-jags/">this link</a> to install [<a href="https://sourceforge.net/projects/mcmc-jags/" class="uri">https://sourceforge.net/projects/mcmc-jags/</a>].</p>
 </div>
-<div id="example-data-for-scarlet-tanager" class="section level2" number="2.5">
-<h2><span class="header-section-number">2.5</span> Example data for Scarlet Tanager</h2>
-<p>This <a href="https://drive.google.com/file/d/1LCZrl0W0AEbXj8_MyUP-CXX3a-j77rFN/view?usp=sharing">link allows you to download some example model results for Scarlet Tanager</a>. This model output can be used with many of the visualization and estimation functions for the package (without having to wait ~24 hours for the model to run). To use this saved results to run some of the functions in this book, save it into your working directory.</p>
+<div id="example-data-for-barns-swallow" class="section level2" number="2.5">
+<h2><span class="header-section-number">2.5</span> Example data for Barns Swallow</h2>
+<p>This <a href="https://drive.google.com/drive/folders/1ar7nUNI3GXm1A_Kcoc2cAUQQ7ZV37wC6?usp=sharing">link allows you to download some example model results for Barn Swallow</a>. This model output can be used with many of the visualization and estimation functions for the package (without having to wait hours-days for the models to run). To use these saved results, save these four folders to a relevant folder in your working directory. Each folder contains the input data object <code>jags_data</code> and the model output object <code>jags_mod</code>, stored as a saved R workspace. Each of the four folders contains the results from fitting one of the bbsBayes models to data for Barn Swallow. You can explore the differences among the four models in <a href="DataPrep.html#Model_list">section 4.2</a>.</p>
 
 </div>
 </div>

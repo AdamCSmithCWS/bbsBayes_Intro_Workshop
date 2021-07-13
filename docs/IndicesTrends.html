@@ -24,7 +24,7 @@
 <meta name="author" content="Adam C. Smith, and Brandon P.M. Edwards" />
 
 
-<meta name="date" content="2020-12-16" />
+<meta name="date" content="2021-07-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,7 +33,7 @@
   
 <link rel="prev" href="ModelRun.html"/>
 <link rel="next" href="GraphMap.html"/>
-<script src="libs/header-attrs-2.4.4/header-attrs.js"></script>
+<script src="libs/header-attrs-2.6/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -51,8 +51,6 @@
 
 
 
-<link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-<script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
 
 
 <style type="text/css">
@@ -147,19 +145,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.2" data-path="Intro.html"><a href="Intro.html#installation"><i class="fa fa-check"></i><b>2.2</b> Installation</a></li>
 <li class="chapter" data-level="2.3" data-path="Intro.html"><a href="Intro.html#data-retrieval"><i class="fa fa-check"></i><b>2.3</b> Data Retrieval</a></li>
 <li class="chapter" data-level="2.4" data-path="Intro.html"><a href="Intro.html#install-jags"><i class="fa fa-check"></i><b>2.4</b> Install JAGS</a></li>
-<li class="chapter" data-level="2.5" data-path="Intro.html"><a href="Intro.html#example-data-for-scarlet-tanager"><i class="fa fa-check"></i><b>2.5</b> Example data for Scarlet Tanager</a></li>
+<li class="chapter" data-level="2.5" data-path="Intro.html"><a href="Intro.html#example-data-for-barns-swallow"><i class="fa fa-check"></i><b>2.5</b> Example data for Barns Swallow</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="Stratify.html"><a href="Stratify.html"><i class="fa fa-check"></i><b>3</b> Stratification</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="Stratify.html"><a href="Stratify.html#strata"><i class="fa fa-check"></i><b>3.1</b> Strata</a>
 <ul>
-<li class="chapter" data-level="3.1.1" data-path="Stratify.html"><a href="Stratify.html#useful-code-to-access-and-print-the-strata-maps-above"><i class="fa fa-check"></i><b>3.1.1</b> Useful code to access and print the strata maps above</a></li>
+<li class="chapter" data-level="3.1.1" data-path="Stratify.html"><a href="Stratify.html#accessing-the-strata-maps"><i class="fa fa-check"></i><b>3.1.1</b> Accessing the strata maps</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="DataPrep.html"><a href="DataPrep.html"><i class="fa fa-check"></i><b>4</b> Prepare the data for a model and species</a>
 <ul>
 <li class="chapter" data-level="4.1" data-path="DataPrep.html"><a href="DataPrep.html#prepare-data"><i class="fa fa-check"></i><b>4.1</b> Prepare data</a></li>
-<li class="chapter" data-level="4.2" data-path="DataPrep.html"><a href="DataPrep.html#models"><i class="fa fa-check"></i><b>4.2</b> Models</a>
+<li class="chapter" data-level="4.2" data-path="DataPrep.html"><a href="DataPrep.html#Model_list"><i class="fa fa-check"></i><b>4.2</b> Models</a>
 <ul>
 <li class="chapter" data-level="4.2.1" data-path="DataPrep.html"><a href="DataPrep.html#slope"><i class="fa fa-check"></i><b>4.2.1</b> slope</a></li>
 <li class="chapter" data-level="4.2.2" data-path="DataPrep.html"><a href="DataPrep.html#gam"><i class="fa fa-check"></i><b>4.2.2</b> gam</a></li>
@@ -222,13 +220,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="IndicesTrends" class="section level1" number="6">
 <h1><span class="header-section-number">Chapter 6</span> Estimating Annual Indices and Trends</h1>
-<p>Once the model has finished running, we can use the saved output to calculate the population trajectories and trends. As an example, we’ll load some saved model output for Scarlet Tanager, from the gamye model. If you haven’t already, you can download the model output file <a href="https://drive.google.com/file/d/1LCZrl0W0AEbXj8_MyUP-CXX3a-j77rFN/view?usp=sharing">here</a>, then save it into your working directory.</p>
+<p>Once the model has finished running, we can use the saved output to calculate the population trajectories and trends. As an example, we’ll load some saved model output for Barn Swallow, from the gamye model. If you haven’t already, you can download the model output file <a href="https://drive.google.com/drive/folders/1ar7nUNI3GXm1A_Kcoc2cAUQQ7ZV37wC6?usp=sharing">here</a>, then save it into your working directory.</p>
 <p>This saved workspace includes two objects:</p>
 <ol style="list-style-type: decimal">
 <li><p>jags_data - the data object created with the <code>prepare_jags_data()</code> function.</p></li>
 <li><p>jags_mod - the model output created with the <code>run_model()</code> function.</p></li>
 </ol>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="IndicesTrends.html#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;jags_mod_full.RData&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="IndicesTrends.html#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;data/gamye_Barn_Swallow/jags_mod_full.RData&quot;</span>)</span></code></pre></div>
 <div id="annual-indices" class="section level2" number="6.1">
 <h2><span class="header-section-number">6.1</span> Annual Indices</h2>
 <p>The annual indices of relative abundance (“annual indices”) from all of the bbsBayes models represent the expected mean count on the BBS routes in a given region and year. The time-series of these annual indices in a given region make up the estimated population trajectory.</p>
@@ -265,72 +263,72 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td align="right">1966</td>
 <td align="left">Continental</td>
 <td align="left">continental</td>
-<td align="right">1.06</td>
-<td align="right">0.957</td>
-<td align="right">1.19</td>
-<td align="right">0.675</td>
-<td align="right">325</td>
-<td align="right">173</td>
+<td align="right">9.48</td>
+<td align="right">8.64</td>
+<td align="right">10.8</td>
+<td align="right">2.36</td>
+<td align="right">396</td>
+<td align="right">338</td>
 </tr>
 <tr class="even">
 <td align="right">1967</td>
 <td align="left">Continental</td>
 <td align="left">continental</td>
-<td align="right">1.02</td>
-<td align="right">0.930</td>
-<td align="right">1.12</td>
-<td align="right">0.677</td>
-<td align="right">546</td>
-<td align="right">277</td>
+<td align="right">9.78</td>
+<td align="right">9.05</td>
+<td align="right">10.8</td>
+<td align="right">4.87</td>
+<td align="right">814</td>
+<td align="right">670</td>
 </tr>
 <tr class="odd">
 <td align="right">1968</td>
 <td align="left">Continental</td>
 <td align="left">continental</td>
-<td align="right">1.04</td>
-<td align="right">0.964</td>
-<td align="right">1.13</td>
-<td align="right">0.797</td>
-<td align="right">516</td>
-<td align="right">270</td>
+<td align="right">10.23</td>
+<td align="right">9.59</td>
+<td align="right">11.1</td>
+<td align="right">7.64</td>
+<td align="right">869</td>
+<td align="right">711</td>
 </tr>
 <tr class="even">
 <td align="right">1969</td>
 <td align="left">Continental</td>
 <td align="left">continental</td>
-<td align="right">1.04</td>
-<td align="right">0.972</td>
-<td align="right">1.12</td>
-<td align="right">0.877</td>
-<td align="right">692</td>
-<td align="right">352</td>
+<td align="right">10.66</td>
+<td align="right">10.10</td>
+<td align="right">11.4</td>
+<td align="right">8.75</td>
+<td align="right">1187</td>
+<td align="right">963</td>
 </tr>
 <tr class="odd">
 <td align="right">1970</td>
 <td align="left">Continental</td>
 <td align="left">continental</td>
-<td align="right">1.03</td>
-<td align="right">0.966</td>
-<td align="right">1.10</td>
-<td align="right">0.826</td>
-<td align="right">733</td>
-<td align="right">387</td>
+<td align="right">11.09</td>
+<td align="right">10.57</td>
+<td align="right">11.7</td>
+<td align="right">9.45</td>
+<td align="right">1276</td>
+<td align="right">1047</td>
 </tr>
 <tr class="even">
 <td align="right">1971</td>
 <td align="left">Continental</td>
 <td align="left">continental</td>
-<td align="right">1.06</td>
-<td align="right">1.007</td>
-<td align="right">1.14</td>
-<td align="right">0.974</td>
-<td align="right">779</td>
-<td align="right">404</td>
+<td align="right">11.36</td>
+<td align="right">10.89</td>
+<td align="right">11.9</td>
+<td align="right">9.84</td>
+<td align="right">1368</td>
+<td align="right">1158</td>
 </tr>
 </tbody>
 </table>
 <p>For example, one may wish to export the annual indices to a text file that can be read using Microsoft Excel.</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="IndicesTrends.html#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(indices<span class="sc">$</span>data_summary, <span class="st">&quot;Scarlet_Tanager_trajectories.csv&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="IndicesTrends.html#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(indices<span class="sc">$</span>data_summary, <span class="st">&quot;Barn_Swallow_trajectories.csv&quot;</span>)</span></code></pre></div>
 <p>The list also includes a number of other objects that retain the stratification information, strata area weights, and the full posterior samples for every estimated annual index. Generally these other objects are only used by subsequent functions and the user won’t access them directly.</p>
 <p>The function also accepts the alternative annual indices, such as the smooth-only indices from the gamye model.</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="IndicesTrends.html#cb22-1" aria-hidden="true" tabindex="-1"></a>indices_smooth <span class="ot">&lt;-</span> <span class="fu">generate_indices</span>(<span class="at">jags_mod =</span> jags_mod,</span>
@@ -365,49 +363,49 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tr class="odd">
 <td align="right">1970</td>
 <td align="left">Continental</td>
-<td align="right">0.041</td>
-<td align="right">-0.141</td>
-<td align="right">0.222</td>
+<td align="right">-0.816</td>
+<td align="right">-0.941</td>
+<td align="right">-0.699</td>
 </tr>
 <tr class="even">
 <td align="right">1970</td>
 <td align="left">CA</td>
-<td align="right">-0.439</td>
-<td align="right">-1.090</td>
-<td align="right">0.171</td>
+<td align="right">-2.419</td>
+<td align="right">-2.736</td>
+<td align="right">-2.115</td>
 </tr>
 <tr class="odd">
 <td align="right">1970</td>
 <td align="left">US</td>
-<td align="right">0.097</td>
-<td align="right">-0.090</td>
-<td align="right">0.288</td>
+<td align="right">-0.314</td>
+<td align="right">-0.427</td>
+<td align="right">-0.213</td>
+</tr>
+<tr class="even">
+<td align="right">1970</td>
+<td align="left">AB</td>
+<td align="right">-1.961</td>
+<td align="right">-2.723</td>
+<td align="right">-1.257</td>
+</tr>
+<tr class="odd">
+<td align="right">1970</td>
+<td align="left">AK</td>
+<td align="right">-5.451</td>
+<td align="right">-8.247</td>
+<td align="right">-2.611</td>
 </tr>
 <tr class="even">
 <td align="right">1970</td>
 <td align="left">AL</td>
-<td align="right">1.956</td>
-<td align="right">0.797</td>
-<td align="right">3.102</td>
-</tr>
-<tr class="odd">
-<td align="right">1970</td>
-<td align="left">AR</td>
-<td align="right">0.306</td>
-<td align="right">-0.684</td>
-<td align="right">1.335</td>
-</tr>
-<tr class="even">
-<td align="right">1970</td>
-<td align="left">CT</td>
-<td align="right">-0.580</td>
-<td align="right">-1.633</td>
-<td align="right">0.432</td>
+<td align="right">2.439</td>
+<td align="right">1.805</td>
+<td align="right">3.053</td>
 </tr>
 </tbody>
 </table>
 <p>The <code>generate_trends</code> function includes some other arguments that allow the user to adjust the quantiles used to summarize uncertainty (e.g., interquartile range of the trend estiamtes, or the 67% CIs), as well as include additional calculations, such as the probability a population has declined (or increased) by &gt; X%.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="IndicesTrends.html#cb25-1" aria-hidden="true" tabindex="-1"></a>trends <span class="ot">&lt;-</span> <span class="fu">generate_trends</span>(<span class="at">indices =</span> indices,</span>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="IndicesTrends.html#cb25-1" aria-hidden="true" tabindex="-1"></a>trends_10 <span class="ot">&lt;-</span> <span class="fu">generate_trends</span>(<span class="at">indices =</span> indices,</span>
 <span id="cb25-2"><a href="IndicesTrends.html#cb25-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">Min_year =</span> <span class="dv">2009</span>,</span>
 <span id="cb25-3"><a href="IndicesTrends.html#cb25-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">Max_year =</span> <span class="dv">2019</span>,</span>
 <span id="cb25-4"><a href="IndicesTrends.html#cb25-4" aria-hidden="true" tabindex="-1"></a>                          <span class="at">prob_decrease =</span> <span class="fu">c</span>(<span class="dv">30</span>,<span class="dv">50</span>),</span>
@@ -420,64 +418,70 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <th align="left">Region_alt</th>
 <th align="right">Trend</th>
 <th align="right">Percent_Change</th>
-<th align="right">prob_decrease_30_percent</th>
+<th align="right">Relative_Abundance</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">2009</td>
+<td align="right">1970</td>
 <td align="left">Continental</td>
 <td align="right">-0.816</td>
-<td align="right">-7.87</td>
-<td align="right">0.000</td>
+<td align="right">-33.1</td>
+<td align="right">10.95</td>
 </tr>
 <tr class="even">
-<td align="right">2009</td>
+<td align="right">1970</td>
 <td align="left">Canada</td>
-<td align="right">-0.114</td>
-<td align="right">-1.13</td>
-<td align="right">0.001</td>
+<td align="right">-2.419</td>
+<td align="right">-69.9</td>
+<td align="right">6.35</td>
 </tr>
 <tr class="odd">
-<td align="right">2009</td>
+<td align="right">1970</td>
 <td align="left">United States of America</td>
-<td align="right">-0.884</td>
-<td align="right">-8.49</td>
-<td align="right">0.000</td>
+<td align="right">-0.314</td>
+<td align="right">-14.3</td>
+<td align="right">13.85</td>
 </tr>
 <tr class="even">
-<td align="right">2009</td>
-<td align="left">ALABAMA</td>
-<td align="right">-1.121</td>
-<td align="right">-10.66</td>
-<td align="right">0.046</td>
+<td align="right">1970</td>
+<td align="left">Alberta</td>
+<td align="right">-1.961</td>
+<td align="right">-62.1</td>
+<td align="right">6.72</td>
 </tr>
 <tr class="odd">
-<td align="right">2009</td>
-<td align="left">ARKANSAS</td>
-<td align="right">0.631</td>
-<td align="right">6.49</td>
-<td align="right">0.010</td>
+<td align="right">1970</td>
+<td align="left">ALASKA</td>
+<td align="right">-5.451</td>
+<td align="right">-93.6</td>
+<td align="right">1.94</td>
 </tr>
 <tr class="even">
-<td align="right">2009</td>
-<td align="left">CONNECTICUT</td>
-<td align="right">-2.625</td>
-<td align="right">-23.35</td>
-<td align="right">0.335</td>
+<td align="right">1970</td>
+<td align="left">ALABAMA</td>
+<td align="right">2.439</td>
+<td align="right">225.7</td>
+<td align="right">18.58</td>
 </tr>
 </tbody>
 </table>
-<p>And trends calculated from the smooth component only can be derived from the related annual indices.</p>
+<p>And trends calculated from the smooth component can be derived from the related annual indices.</p>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="IndicesTrends.html#cb27-1" aria-hidden="true" tabindex="-1"></a>trends_smooth <span class="ot">&lt;-</span> <span class="fu">generate_trends</span>(<span class="at">indices =</span> indices_smooth,</span>
-<span id="cb27-2"><a href="IndicesTrends.html#cb27-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">Min_year =</span> <span class="dv">2009</span>,</span>
+<span id="cb27-2"><a href="IndicesTrends.html#cb27-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">Min_year =</span> <span class="dv">1970</span>,</span>
 <span id="cb27-3"><a href="IndicesTrends.html#cb27-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">Max_year =</span> <span class="dv">2019</span>,</span>
 <span id="cb27-4"><a href="IndicesTrends.html#cb27-4" aria-hidden="true" tabindex="-1"></a>                          <span class="at">prob_decrease =</span> <span class="fu">c</span>(<span class="dv">30</span>,<span class="dv">50</span>),</span>
-<span id="cb27-5"><a href="IndicesTrends.html#cb27-5" aria-hidden="true" tabindex="-1"></a>                          <span class="at">prob_increase =</span> <span class="fu">c</span>(<span class="dv">0</span>))</span></code></pre></div>
+<span id="cb27-5"><a href="IndicesTrends.html#cb27-5" aria-hidden="true" tabindex="-1"></a>                          <span class="at">prob_increase =</span> <span class="fu">c</span>(<span class="dv">0</span>))</span>
+<span id="cb27-6"><a href="IndicesTrends.html#cb27-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-7"><a href="IndicesTrends.html#cb27-7" aria-hidden="true" tabindex="-1"></a>trends_smooth_10 <span class="ot">&lt;-</span> <span class="fu">generate_trends</span>(<span class="at">indices =</span> indices_smooth,</span>
+<span id="cb27-8"><a href="IndicesTrends.html#cb27-8" aria-hidden="true" tabindex="-1"></a>                          <span class="at">Min_year =</span> <span class="dv">2009</span>,</span>
+<span id="cb27-9"><a href="IndicesTrends.html#cb27-9" aria-hidden="true" tabindex="-1"></a>                          <span class="at">Max_year =</span> <span class="dv">2019</span>,</span>
+<span id="cb27-10"><a href="IndicesTrends.html#cb27-10" aria-hidden="true" tabindex="-1"></a>                          <span class="at">prob_decrease =</span> <span class="fu">c</span>(<span class="dv">30</span>,<span class="dv">50</span>),</span>
+<span id="cb27-11"><a href="IndicesTrends.html#cb27-11" aria-hidden="true" tabindex="-1"></a>                          <span class="at">prob_increase =</span> <span class="fu">c</span>(<span class="dv">0</span>))</span></code></pre></div>
 </div>
 <div id="alternative-time-spans-for-trends" class="section level2" number="6.3">
 <h2><span class="header-section-number">6.3</span> Alternative time-spans for trends</h2>
-<p>It is simple to estimate trends for alternative intervals of time. For example, calculating a 15 year trend for Scarlet Tanager.</p>
+<p>It is simple to estimate trends for alternative intervals of time. For example, calculating a 15 year trend for Barn Swallow.</p>
 <div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="IndicesTrends.html#cb28-1" aria-hidden="true" tabindex="-1"></a>trends_smooth_15 <span class="ot">&lt;-</span> <span class="fu">generate_trends</span>(<span class="at">indices =</span> indices_smooth,</span>
 <span id="cb28-2"><a href="IndicesTrends.html#cb28-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">Min_year =</span> (<span class="dv">2019-15</span>),</span>
 <span id="cb28-3"><a href="IndicesTrends.html#cb28-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">Max_year =</span> <span class="dv">2019</span>,</span>
@@ -516,38 +520,38 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tr class="odd">
 <td align="right">2004</td>
 <td align="left">Continental</td>
-<td align="right">-0.793</td>
-<td align="right">-1.040</td>
+<td align="right">-1.262</td>
+<td align="right">-1.282</td>
 </tr>
 <tr class="even">
 <td align="right">2004</td>
 <td align="left">Canada</td>
-<td align="right">-0.004</td>
-<td align="right">-0.218</td>
+<td align="right">-0.524</td>
+<td align="right">-0.274</td>
 </tr>
 <tr class="odd">
 <td align="right">2004</td>
 <td align="left">United States of America</td>
-<td align="right">-0.866</td>
-<td align="right">-1.115</td>
+<td align="right">-1.386</td>
+<td align="right">-1.443</td>
+</tr>
+<tr class="even">
+<td align="right">2004</td>
+<td align="left">Alberta</td>
+<td align="right">-1.832</td>
+<td align="right">-1.750</td>
+</tr>
+<tr class="odd">
+<td align="right">2004</td>
+<td align="left">ALASKA</td>
+<td align="right">-4.449</td>
+<td align="right">-4.828</td>
 </tr>
 <tr class="even">
 <td align="right">2004</td>
 <td align="left">ALABAMA</td>
-<td align="right">-0.521</td>
-<td align="right">-0.728</td>
-</tr>
-<tr class="odd">
-<td align="right">2004</td>
-<td align="left">ARKANSAS</td>
-<td align="right">0.769</td>
-<td align="right">0.328</td>
-</tr>
-<tr class="even">
-<td align="right">2004</td>
-<td align="left">CONNECTICUT</td>
-<td align="right">-1.956</td>
-<td align="right">-2.186</td>
+<td align="right">-2.652</td>
+<td align="right">-2.414</td>
 </tr>
 </tbody>
 </table>
@@ -570,44 +574,44 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tr class="odd">
 <td align="right">2004</td>
 <td align="left">Continental</td>
-<td align="right">-0.798</td>
-<td align="right">-11.32</td>
+<td align="right">-1.119</td>
+<td align="right">-15.53</td>
 <td align="right">0.000</td>
 </tr>
 <tr class="even">
 <td align="right">2004</td>
 <td align="left">Canada</td>
-<td align="right">0.182</td>
-<td align="right">2.77</td>
+<td align="right">-0.315</td>
+<td align="right">-4.62</td>
 <td align="right">0.000</td>
 </tr>
 <tr class="odd">
 <td align="right">2004</td>
 <td align="left">United States of America</td>
-<td align="right">-0.888</td>
-<td align="right">-12.52</td>
+<td align="right">-1.255</td>
+<td align="right">-17.26</td>
 <td align="right">0.000</td>
 </tr>
 <tr class="even">
 <td align="right">2004</td>
-<td align="left">ALABAMA</td>
-<td align="right">-0.260</td>
-<td align="right">-3.83</td>
-<td align="right">0.008</td>
+<td align="left">Alberta</td>
+<td align="right">-1.854</td>
+<td align="right">-24.47</td>
+<td align="right">0.246</td>
 </tr>
 <tr class="odd">
 <td align="right">2004</td>
-<td align="left">ARKANSAS</td>
-<td align="right">0.404</td>
-<td align="right">6.23</td>
-<td align="right">0.009</td>
+<td align="left">ALASKA</td>
+<td align="right">-4.551</td>
+<td align="right">-50.28</td>
+<td align="right">0.806</td>
 </tr>
 <tr class="even">
 <td align="right">2004</td>
-<td align="left">CONNECTICUT</td>
-<td align="right">-1.774</td>
-<td align="right">-23.54</td>
-<td align="right">0.344</td>
+<td align="left">ALABAMA</td>
+<td align="right">-2.481</td>
+<td align="right">-31.40</td>
+<td align="right">0.597</td>
 </tr>
 </tbody>
 </table>
@@ -662,42 +666,42 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td align="right">1966</td>
 <td align="right">1976</td>
 <td align="left">Continental</td>
-<td align="right">1.287</td>
+<td align="right">3.54</td>
 <td align="right">0.000</td>
 </tr>
 <tr class="even">
 <td align="right">1966</td>
 <td align="right">1976</td>
 <td align="left">Canada</td>
-<td align="right">-1.071</td>
-<td align="right">0.061</td>
+<td align="right">1.36</td>
+<td align="right">0.002</td>
 </tr>
 <tr class="odd">
 <td align="right">1966</td>
 <td align="right">1976</td>
 <td align="left">United States of America</td>
-<td align="right">1.611</td>
+<td align="right">4.72</td>
 <td align="right">0.000</td>
 </tr>
 <tr class="even">
 <td align="right">1967</td>
 <td align="right">1977</td>
 <td align="left">Continental</td>
-<td align="right">1.875</td>
+<td align="right">3.42</td>
 <td align="right">0.000</td>
 </tr>
 <tr class="odd">
 <td align="right">1967</td>
 <td align="right">1977</td>
 <td align="left">Canada</td>
-<td align="right">-0.451</td>
-<td align="right">0.015</td>
+<td align="right">1.40</td>
+<td align="right">0.001</td>
 </tr>
 <tr class="even">
 <td align="right">1967</td>
 <td align="right">1977</td>
 <td align="left">United States of America</td>
-<td align="right">2.172</td>
+<td align="right">4.47</td>
 <td align="right">0.000</td>
 </tr>
 </tbody>
@@ -745,7 +749,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb34-40"><a href="IndicesTrends.html#cb34-40" aria-hidden="true" tabindex="-1"></a>      </span>
 <span id="cb34-41"><a href="IndicesTrends.html#cb34-41" aria-hidden="true" tabindex="-1"></a>    cpt <span class="ot">=</span> <span class="fu">ggplot</span>(<span class="at">data =</span> trends_canada,<span class="fu">aes</span>(<span class="at">x =</span> End_year,<span class="at">y =</span> Trend))<span class="sc">+</span></span>
 <span id="cb34-42"><a href="IndicesTrends.html#cb34-42" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
-<span id="cb34-43"><a href="IndicesTrends.html#cb34-43" aria-hidden="true" tabindex="-1"></a>      <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste</span>(<span class="st">&quot;Scarlet Tanager rolling&quot;</span>,trend_time,<span class="st">&quot;year trends for Canada&quot;</span>),</span>
+<span id="cb34-43"><a href="IndicesTrends.html#cb34-43" aria-hidden="true" tabindex="-1"></a>      <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste</span>(<span class="st">&quot;Barn Swallow rolling&quot;</span>,trend_time,<span class="st">&quot;year trends for Canada&quot;</span>),</span>
 <span id="cb34-44"><a href="IndicesTrends.html#cb34-44" aria-hidden="true" tabindex="-1"></a>           <span class="at">subtitle =</span> <span class="fu">paste</span>(<span class="st">&quot;Based on Trend in&quot;</span>,last_year,<span class="st">&quot;:&quot;</span>,pth_30_labs,<span class="st">&quot;and&quot;</span>,pth_50_labs))<span class="sc">+</span></span>
 <span id="cb34-45"><a href="IndicesTrends.html#cb34-45" aria-hidden="true" tabindex="-1"></a>           <span class="fu">xlab</span>(<span class="fu">paste</span>(<span class="st">&quot;Ending year of&quot;</span>,trend_time,<span class="st">&quot;trend&quot;</span>))<span class="sc">+</span></span>
 <span id="cb34-46"><a href="IndicesTrends.html#cb34-46" aria-hidden="true" tabindex="-1"></a>           <span class="fu">ylab</span>(<span class="fu">paste</span>(trend_time,<span class="st">&quot;year trends&quot;</span>))<span class="sc">+</span></span>

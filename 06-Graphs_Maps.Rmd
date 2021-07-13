@@ -3,8 +3,8 @@
 Now that we have calculated values for the trends and trajectories, bbsBayes also includes functions to plot and map the values.
 
 ```{r GM1, cache=FALSE,echo=TRUE}
-# load the trend and indices objects for Scarlet Tanager
-load("Scarlet_Tanager_trends_indices.RData")
+# load the trend and indices objects for Barn Swallow
+load("Barn_Swallow_trends_indices.RData")
 ```
 
 ## Graphing the trajectories (annual indices)
@@ -13,8 +13,11 @@ The `plot_indices()` function produces a list of ggplot figures that can be comb
 ``` {r GM2_a, eval = FALSE}
 # Not run
 tp = plot_indices(indices = indices,
-                         species = "Scarlet Tanager")
-pdf(file = "Scarlet Tanager Trajectories.pdf")
+                         species = "Barn Swallow",
+                  title_size = 20,
+                  axis_title_size = 12,
+                  axis_text_size = 12)
+pdf(file = "Barn Swallow Trajectories.pdf")
 print(tp)
 dev.off()
 ```
@@ -23,7 +26,10 @@ Or, we can print plots to individual devices:
 
 ``` {r GM2_b}
 tp = plot_indices(indices = indices,
-                         species = "Scarlet Tanager")
+                         species = "Barn Swallow",
+                  title_size = 20,
+                  axis_title_size = 12,
+                  axis_text_size = 12)
 print(tp[[1]])
 ```
 
@@ -31,9 +37,12 @@ print(tp[[1]])
 
 ``` {r GM3}
 tp2 = plot_indices(indices = indices,
-                         species = paste("Scarlet Tanager","Full"),
+                         species = paste("Barn Swallow","Full"),
                   add_observed_means = TRUE,
-                  add_number_routes = TRUE)
+                  add_number_routes = TRUE,
+                  title_size = 20,
+                  axis_title_size = 12,
+                  axis_text_size = 12)
 
 ```
 
@@ -41,9 +50,12 @@ And we can compare these indices plots with those generated using only the smoot
 
 ``` {r GM4}
 tp3 = plot_indices(indices = indices_smooth,
-                         species = paste("Scarlet Tanager","Smooth"),
+                         species = paste("Barn Swallow","Smooth"),
                   add_observed_means = TRUE,
-                  add_number_routes = TRUE)
+                  add_number_routes = TRUE,
+                  title_size = 20,
+                  axis_title_size = 12,
+                  axis_text_size = 12)
 
 ```
 
@@ -93,7 +105,7 @@ The trends can be mapped to produce strata maps coloured by species population t
 mp = generate_map(trends_smooth,
                   select = TRUE,
                   stratify_by = "bbs_cws",
-                  species = "Scarlet Tanager Smooth")
+                  species = "Barn Swallow Smooth")
 print(mp)
 ```
 
@@ -106,10 +118,10 @@ For stratifications that can be compiled by political regions (i.e., `bbs_cws`, 
   gf <- geofacet_plot(indices_list = indices_smooth,
                      select = TRUE,
                      stratify_by = "bbs_cws",
-                     multiple = TRUE,
+                     multiple = FALSE,
                      trends = trends_smooth,
                      slope = F,
-                     species = "Scarlet Tanager Smooth")
+                     species = "Barn Swallow Smooth")
   
   print(gf)
 ```

@@ -1,6 +1,6 @@
 # Estimating Annual Indices and Trends {#IndicesTrends}
 
-Once the model has finished running, we can use the saved output to calculate the population trajectories and trends. As an example, we'll load some saved model output for Scarlet Tanager, from the gamye model. If you haven't already, you can download the model output file [here](https://drive.google.com/file/d/1LCZrl0W0AEbXj8_MyUP-CXX3a-j77rFN/view?usp=sharing), then save it into your working directory.
+Once the model has finished running, we can use the saved output to calculate the population trajectories and trends. As an example, we'll load some saved model output for Barn Swallow, from the gamye model. If you haven't already, you can download the model output file [here](https://drive.google.com/drive/folders/1ar7nUNI3GXm1A_Kcoc2cAUQQ7ZV37wC6?usp=sharing), then save it into your working directory.
 
 This saved workspace includes two objects:
 
@@ -8,8 +8,8 @@ This saved workspace includes two objects:
 
 2.  jags_mod - the model output created with the `run_model()` function.
 
-```{r IT1,cache=FALSE}
-load("jags_mod_full.RData")
+```{r IT1,cache=TRUE}
+load("data/gamye_Barn_Swallow/jags_mod_full.RData")
 
 ```
 
@@ -44,8 +44,8 @@ knitr::kable(head(indices$data_summary[,c(1,2,4,7,8,13,14,15,16)]))
 
 For example, one may wish to export the annual indices to a text file that can be read using Microsoft Excel.
 
-```{r IT5, eval = FALSE}
-write.csv(indices$data_summary, "Scarlet_Tanager_trajectories.csv")
+```{r IT5, eval = TRUE}
+write.csv(indices$data_summary, "Barn_Swallow_trajectories.csv")
 ```
 
 The list also includes a number of other objects that retain the stratification information, strata area weights, and the full posterior samples for every estimated annual index. Generally these other objects are only used by subsequent functions and the user won't access them directly.
@@ -83,7 +83,7 @@ knitr::kable(head(trends[,c(1,3,8,9,14)]))
 The `generate_trends` function includes some other arguments that allow the user to adjust the quantiles used to summarize uncertainty (e.g., interquartile range of the trend estiamtes, or the 67% CIs), as well as include additional calculations, such as the probability a population has declined (or increased) by \> X%.
 
 ```{r IT9}
-trends <- generate_trends(indices = indices,
+trends_10 <- generate_trends(indices = indices,
                           Min_year = 2009,
                           Max_year = 2019,
                           prob_decrease = c(30,50),
@@ -94,10 +94,16 @@ trends <- generate_trends(indices = indices,
 knitr::kable(head(trends[,c(1,4,8,15,22)]))
 ```
 
-And trends calculated from the smooth component only can be derived from the related annual indices.
+And trends calculated from the smooth component can be derived from the related annual indices.
 
 ```{r IT11}
 trends_smooth <- generate_trends(indices = indices_smooth,
+                          Min_year = 1970,
+                          Max_year = 2019,
+                          prob_decrease = c(30,50),
+                          prob_increase = c(0))
+
+trends_smooth_10 <- generate_trends(indices = indices_smooth,
                           Min_year = 2009,
                           Max_year = 2019,
                           prob_decrease = c(30,50),
@@ -106,7 +112,7 @@ trends_smooth <- generate_trends(indices = indices_smooth,
 
 ## Alternative time-spans for trends
 
-It is simple to estimate trends for alternative intervals of time. For example, calculating a 15 year trend for Scarlet Tanager.
+It is simple to estimate trends for alternative intervals of time. For example, calculating a 15 year trend for Barn Swallow.
 
 ```{r IT12}
 trends_smooth_15 <- generate_trends(indices = indices_smooth,
@@ -130,7 +136,7 @@ trends_smooth_15alt <- generate_trends(indices = indices_smooth,
 
 ```{r IT14,echo=FALSE}
 save(list = c("indices","trends","indices_smooth","trends_smooth","trends_smooth_15","trends_smooth_15alt"),
-     file = "Scarlet_Tanager_trends_indices.RData")
+     file = "Barn_Swallow_trends_indices.RData")
 #saving for using later...
 
 ```
@@ -253,7 +259,7 @@ c_blue = RColorBrewer::brewer.pal(9,"Set1")[2]
       
     cpt = ggplot(data = trends_canada,aes(x = End_year,y = Trend))+
       theme_minimal()+
-      labs(title = paste("Scarlet Tanager rolling",trend_time,"year trends for Canada"),
+      labs(title = paste("Barn Swallow rolling",trend_time,"year trends for Canada"),
            subtitle = paste("Based on Trend in",last_year,":",pth_30_labs,"and",pth_50_labs))+
            xlab(paste("Ending year of",trend_time,"trend"))+
            ylab(paste(trend_time,"year trends"))+
@@ -285,7 +291,10 @@ indices_smooth_national <- generate_indices(jags_mod = jags_mod,
                             "national")) #only continental and national estimates
 
 tp = plot_indices(indices = indices_smooth_national,
-                         species = "Scarlet Tanager")
+                         species = "Barn Swallow",
+                  title_size = 20,
+                  axis_title_size = 12,
+                  axis_text_size = 12)
 
 plot(tp[[2]])
 

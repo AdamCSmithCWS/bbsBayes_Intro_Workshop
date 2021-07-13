@@ -5,7 +5,7 @@
 
 strat_data <- stratify(by = "bbs_cws")
 jags_data <- prepare_jags_data(strat_data = strat_data,
-                               species_to_run = "Scarlet Tanager",
+                               species_to_run = "Barn Swallow",
                                model = "gamye",
                                min_max_route_years = 2,
                                heavy_tailed = TRUE)
@@ -17,7 +17,7 @@ After stratifying and preparing the data for a particular species and model, the
 Depending on the model and the size of the dataset (number of counts, number of strata, number of years, etc.), this process can take a long time (hours - days). The following code shows the settings used for most species in the annual CWS analysis.
 
 ```{r RM2, eval=FALSE}
-# Not Run
+# Not Run - Note: for Barn Swallow, this may require ~ 6-days to run!
 jags_mod <- run_model(jags_data = jags_data,
                       n_iter = 24000, #higher than the default 10,000
                       n_burnin = 20000,
@@ -25,9 +25,7 @@ jags_mod <- run_model(jags_data = jags_data,
                       n_thin = 20, #saves memory by retaining only 1/20 posterior samples
                       parallel = TRUE,
                       inits = NULL,
-                      parameters_to_save = c("n","n3","nu",
-                                             "B.X","beta.X","strata",
-                                             "sdbeta","sdX","alpha"))
+                      parameters_to_save = c("n","n3"))
  
 ```
 

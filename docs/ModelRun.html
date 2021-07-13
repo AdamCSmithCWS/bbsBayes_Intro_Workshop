@@ -24,7 +24,7 @@
 <meta name="author" content="Adam C. Smith, and Brandon P.M. Edwards" />
 
 
-<meta name="date" content="2020-12-16" />
+<meta name="date" content="2021-07-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,7 +33,7 @@
   
 <link rel="prev" href="DataPrep.html"/>
 <link rel="next" href="IndicesTrends.html"/>
-<script src="libs/header-attrs-2.4.4/header-attrs.js"></script>
+<script src="libs/header-attrs-2.6/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -51,8 +51,6 @@
 
 
 
-<link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-<script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
 
 
 <style type="text/css">
@@ -147,19 +145,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.2" data-path="Intro.html"><a href="Intro.html#installation"><i class="fa fa-check"></i><b>2.2</b> Installation</a></li>
 <li class="chapter" data-level="2.3" data-path="Intro.html"><a href="Intro.html#data-retrieval"><i class="fa fa-check"></i><b>2.3</b> Data Retrieval</a></li>
 <li class="chapter" data-level="2.4" data-path="Intro.html"><a href="Intro.html#install-jags"><i class="fa fa-check"></i><b>2.4</b> Install JAGS</a></li>
-<li class="chapter" data-level="2.5" data-path="Intro.html"><a href="Intro.html#example-data-for-scarlet-tanager"><i class="fa fa-check"></i><b>2.5</b> Example data for Scarlet Tanager</a></li>
+<li class="chapter" data-level="2.5" data-path="Intro.html"><a href="Intro.html#example-data-for-barns-swallow"><i class="fa fa-check"></i><b>2.5</b> Example data for Barns Swallow</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="Stratify.html"><a href="Stratify.html"><i class="fa fa-check"></i><b>3</b> Stratification</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="Stratify.html"><a href="Stratify.html#strata"><i class="fa fa-check"></i><b>3.1</b> Strata</a>
 <ul>
-<li class="chapter" data-level="3.1.1" data-path="Stratify.html"><a href="Stratify.html#useful-code-to-access-and-print-the-strata-maps-above"><i class="fa fa-check"></i><b>3.1.1</b> Useful code to access and print the strata maps above</a></li>
+<li class="chapter" data-level="3.1.1" data-path="Stratify.html"><a href="Stratify.html#accessing-the-strata-maps"><i class="fa fa-check"></i><b>3.1.1</b> Accessing the strata maps</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="DataPrep.html"><a href="DataPrep.html"><i class="fa fa-check"></i><b>4</b> Prepare the data for a model and species</a>
 <ul>
 <li class="chapter" data-level="4.1" data-path="DataPrep.html"><a href="DataPrep.html#prepare-data"><i class="fa fa-check"></i><b>4.1</b> Prepare data</a></li>
-<li class="chapter" data-level="4.2" data-path="DataPrep.html"><a href="DataPrep.html#models"><i class="fa fa-check"></i><b>4.2</b> Models</a>
+<li class="chapter" data-level="4.2" data-path="DataPrep.html"><a href="DataPrep.html#Model_list"><i class="fa fa-check"></i><b>4.2</b> Models</a>
 <ul>
 <li class="chapter" data-level="4.2.1" data-path="DataPrep.html"><a href="DataPrep.html#slope"><i class="fa fa-check"></i><b>4.2.1</b> slope</a></li>
 <li class="chapter" data-level="4.2.2" data-path="DataPrep.html"><a href="DataPrep.html#gam"><i class="fa fa-check"></i><b>4.2.2</b> gam</a></li>
@@ -224,7 +222,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">Chapter 5</span> Running the model</h1>
 <p>After stratifying and preparing the data for a particular species and model, the <code>run_model()</code> function calls the JAGS program to fit the selected model to the species’ data.</p>
 <p>Depending on the model and the size of the dataset (number of counts, number of strata, number of years, etc.), this process can take a long time (hours - days). The following code shows the settings used for most species in the annual CWS analysis.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="ModelRun.html#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Not Run</span></span>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="ModelRun.html#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Not Run - Note: for Barn Swallow, this may require ~ 6-days to run!</span></span>
 <span id="cb12-2"><a href="ModelRun.html#cb12-2" aria-hidden="true" tabindex="-1"></a>jags_mod <span class="ot">&lt;-</span> <span class="fu">run_model</span>(<span class="at">jags_data =</span> jags_data,</span>
 <span id="cb12-3"><a href="ModelRun.html#cb12-3" aria-hidden="true" tabindex="-1"></a>                      <span class="at">n_iter =</span> <span class="dv">24000</span>, <span class="co">#higher than the default 10,000</span></span>
 <span id="cb12-4"><a href="ModelRun.html#cb12-4" aria-hidden="true" tabindex="-1"></a>                      <span class="at">n_burnin =</span> <span class="dv">20000</span>,</span>
@@ -232,10 +230,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb12-6"><a href="ModelRun.html#cb12-6" aria-hidden="true" tabindex="-1"></a>                      <span class="at">n_thin =</span> <span class="dv">20</span>, <span class="co">#saves memory by retaining only 1/20 posterior samples</span></span>
 <span id="cb12-7"><a href="ModelRun.html#cb12-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">parallel =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb12-8"><a href="ModelRun.html#cb12-8" aria-hidden="true" tabindex="-1"></a>                      <span class="at">inits =</span> <span class="cn">NULL</span>,</span>
-<span id="cb12-9"><a href="ModelRun.html#cb12-9" aria-hidden="true" tabindex="-1"></a>                      <span class="at">parameters_to_save =</span> <span class="fu">c</span>(<span class="st">&quot;n&quot;</span>,<span class="st">&quot;n3&quot;</span>,<span class="st">&quot;nu&quot;</span>,</span>
-<span id="cb12-10"><a href="ModelRun.html#cb12-10" aria-hidden="true" tabindex="-1"></a>                                             <span class="st">&quot;B.X&quot;</span>,<span class="st">&quot;beta.X&quot;</span>,<span class="st">&quot;strata&quot;</span>,</span>
-<span id="cb12-11"><a href="ModelRun.html#cb12-11" aria-hidden="true" tabindex="-1"></a>                                             <span class="st">&quot;sdbeta&quot;</span>,<span class="st">&quot;sdX&quot;</span>,<span class="st">&quot;alpha&quot;</span>))</span>
-<span id="cb12-12"><a href="ModelRun.html#cb12-12" aria-hidden="true" tabindex="-1"></a> </span></code></pre></div>
+<span id="cb12-9"><a href="ModelRun.html#cb12-9" aria-hidden="true" tabindex="-1"></a>                      <span class="at">parameters_to_save =</span> <span class="fu">c</span>(<span class="st">&quot;n&quot;</span>,<span class="st">&quot;n3&quot;</span>))</span>
+<span id="cb12-10"><a href="ModelRun.html#cb12-10" aria-hidden="true" tabindex="-1"></a> </span></code></pre></div>
 <p>There is only one critical argument in the <code>run_model()</code> function.</p>
 <ul>
 <li>jags_data - List output from the <code>prepare_jags_data()</code> function.</li>

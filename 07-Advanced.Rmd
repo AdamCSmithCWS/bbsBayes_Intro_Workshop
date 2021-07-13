@@ -3,10 +3,10 @@
 
 ## Custom regional summaries
 
-Yes, you can calculate the trend and trajectories for custom combinations of strata, such as a formal trend estimate for populations of Scarlet Tanager in the North East (BCRs 7, 8, 12, 13, and 14).
+Yes, you can calculate the trend and trajectories for custom combinations of strata, such as a formal trend estimate for populations of Barn Swallow in the South East portion of their range (e.g., BCRs 21,24,25,26,27,35,36, and 37).
 
 ``` {r A1}
-load("jags_mod_full.RData") #saved Scarlet Tanager model output and data
+load("data/gamye_Barn_Swallow/jags_mod_full.RData") #saved Barn Swallow model output and data
 ```
 
 
@@ -22,23 +22,26 @@ knitr::kable(head(st_comp_regions))
 Then add a column to the dataframe that groups the original strata into the desired custom regions.
 
 ``` {r A4}
-st_comp_regions$NorthEast <- ifelse(st_comp_regions$bcr %in% c(7,8,12:14),"NorthEast","Other")
+st_comp_regions$SouthEast <- ifelse(st_comp_regions$bcr %in% c(21,24:27,35:37),"SouthEast","Other")
 ```
 
 ### Use defined regions to estimate indices and trends
 
-st_comp_regions can now be used as the dataframe input to the argument alt_region_names in `generate_indices()`, with "NorthEast" as the value for the argument regions. The relevant trends can be calculated using just the `generate_trends()` function.
+st_comp_regions can now be used as the dataframe input to the argument alt_region_names in `generate_indices()`, with "SouthEast" as the value for the argument regions. The relevant trends can be calculated using just the `generate_trends()` function.
 
 ``` {r A5}
 library(patchwork)
 custom_indices <- generate_indices(jags_mod = jags_mod,
                                       jags_data = jags_data,
                                       alt_region_names = st_comp_regions,
-                                      regions = "NorthEast")
+                                      regions = "SouthEast")
 tp = plot_indices(indices = custom_indices,
-                         species = "Scarlet Tanager",
+                         species = "Barn Swallow",
                   add_observed_means = TRUE,
-                  add_number_routes = TRUE)
+                  add_number_routes = TRUE,
+  title_size = 20,
+  axis_title_size = 12,
+  axis_text_size = 12)
 ```
 
 ``` {r A5plot,fig.height=9}
@@ -78,15 +81,15 @@ Details coming soon...
 
 ## Customizing the JAGS model and data
 
-You can even export the bbsBayes model as text, and modify it to add in covariates. For example a GAM smooth to estimate the effect of the day of year on the observations, or an annual weather covariate, or... Then add the relevant covariate data to the jags_data object, and you're off! We'll add some more details and examples soon.
+You can even export the bbsBayes model as text, and modify it to add in covariates. For example a GAM smooth to estimate the effect of the day of year on the observations, or an annual weather covariate, or... Then add the relevant covariate data to the jags_data object, and you're off! 
 
 ## Comparing Models
 
-Finally, bbsBayes can be used to run Bayesian cross-validations. For example, the `get_final_values()` function is useful to provide an efficient starting point for a cross-validation runs, without having to wait for another full burn-in period.
+Finally, bbsBayes can be used to run cross-validations. For example, the `get_final_values()` function is useful to provide an efficient starting point for a cross-validation runs, without having to wait for another full burn-in period.
 
 Paper that includes an example of how to implement a cross-validation using bbsBayes.
 
-Pre-print: <https://doi.org/10.1101/2020.03.26.010215> 
+Ornithological Applications: <https://doi.org/10.1093/ornithapp/duaa065> 
 Supplement: <https://zenodo.org/badge/latestdoi/228419725>
 
 NOTE: although bbsBayes includes functions to calculate WAIC, recent work has shown that WAIC performs very poorly with the BBS data (<https://doi.org/10.1650/CONDOR-17-1.1>). We recommend a k-fold cross-validation approach, as in the above zenodo archive.

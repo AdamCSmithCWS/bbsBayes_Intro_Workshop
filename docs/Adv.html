@@ -24,7 +24,7 @@
 <meta name="author" content="Adam C. Smith, and Brandon P.M. Edwards" />
 
 
-<meta name="date" content="2020-12-16" />
+<meta name="date" content="2021-07-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,7 +33,7 @@
   
 <link rel="prev" href="GraphMap.html"/>
 <link rel="next" href="Ref.html"/>
-<script src="libs/header-attrs-2.4.4/header-attrs.js"></script>
+<script src="libs/header-attrs-2.6/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -51,8 +51,6 @@
 
 
 
-<link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-<script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
 
 
 <style type="text/css">
@@ -147,19 +145,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.2" data-path="Intro.html"><a href="Intro.html#installation"><i class="fa fa-check"></i><b>2.2</b> Installation</a></li>
 <li class="chapter" data-level="2.3" data-path="Intro.html"><a href="Intro.html#data-retrieval"><i class="fa fa-check"></i><b>2.3</b> Data Retrieval</a></li>
 <li class="chapter" data-level="2.4" data-path="Intro.html"><a href="Intro.html#install-jags"><i class="fa fa-check"></i><b>2.4</b> Install JAGS</a></li>
-<li class="chapter" data-level="2.5" data-path="Intro.html"><a href="Intro.html#example-data-for-scarlet-tanager"><i class="fa fa-check"></i><b>2.5</b> Example data for Scarlet Tanager</a></li>
+<li class="chapter" data-level="2.5" data-path="Intro.html"><a href="Intro.html#example-data-for-barns-swallow"><i class="fa fa-check"></i><b>2.5</b> Example data for Barns Swallow</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="Stratify.html"><a href="Stratify.html"><i class="fa fa-check"></i><b>3</b> Stratification</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="Stratify.html"><a href="Stratify.html#strata"><i class="fa fa-check"></i><b>3.1</b> Strata</a>
 <ul>
-<li class="chapter" data-level="3.1.1" data-path="Stratify.html"><a href="Stratify.html#useful-code-to-access-and-print-the-strata-maps-above"><i class="fa fa-check"></i><b>3.1.1</b> Useful code to access and print the strata maps above</a></li>
+<li class="chapter" data-level="3.1.1" data-path="Stratify.html"><a href="Stratify.html#accessing-the-strata-maps"><i class="fa fa-check"></i><b>3.1.1</b> Accessing the strata maps</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="DataPrep.html"><a href="DataPrep.html"><i class="fa fa-check"></i><b>4</b> Prepare the data for a model and species</a>
 <ul>
 <li class="chapter" data-level="4.1" data-path="DataPrep.html"><a href="DataPrep.html#prepare-data"><i class="fa fa-check"></i><b>4.1</b> Prepare data</a></li>
-<li class="chapter" data-level="4.2" data-path="DataPrep.html"><a href="DataPrep.html#models"><i class="fa fa-check"></i><b>4.2</b> Models</a>
+<li class="chapter" data-level="4.2" data-path="DataPrep.html"><a href="DataPrep.html#Model_list"><i class="fa fa-check"></i><b>4.2</b> Models</a>
 <ul>
 <li class="chapter" data-level="4.2.1" data-path="DataPrep.html"><a href="DataPrep.html#slope"><i class="fa fa-check"></i><b>4.2.1</b> slope</a></li>
 <li class="chapter" data-level="4.2.2" data-path="DataPrep.html"><a href="DataPrep.html#gam"><i class="fa fa-check"></i><b>4.2.2</b> gam</a></li>
@@ -224,8 +222,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">Chapter 8</span> Advanced options</h1>
 <div id="custom-regional-summaries" class="section level2" number="8.1">
 <h2><span class="header-section-number">8.1</span> Custom regional summaries</h2>
-<p>Yes, you can calculate the trend and trajectories for custom combinations of strata, such as a formal trend estimate for populations of Scarlet Tanager in the North East (BCRs 7, 8, 12, 13, and 14).</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="Adv.html#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;jags_mod_full.RData&quot;</span>) <span class="co">#saved Scarlet Tanager model output and data</span></span></code></pre></div>
+<p>Yes, you can calculate the trend and trajectories for custom combinations of strata, such as a formal trend estimate for populations of Barn Swallow in the South East portion of their range (e.g., BCRs 21,24,25,26,27,35,36, and 37).</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="Adv.html#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;data/gamye_Barn_Swallow/jags_mod_full.RData&quot;</span>) <span class="co">#saved Barn Swallow model output and data</span></span></code></pre></div>
 <div id="define-the-custom-regions-as-a-collection-of-the-existing-strata." class="section level3" number="8.1.1">
 <h3><span class="header-section-number">8.1.1</span> Define the custom regions as a collection of the existing strata.</h3>
 <p>First extract a dataframe that defines the original strata used in the analysis.</p>
@@ -318,20 +316,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tbody>
 </table>
 <p>Then add a column to the dataframe that groups the original strata into the desired custom regions.</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="Adv.html#cb47-1" aria-hidden="true" tabindex="-1"></a>st_comp_regions<span class="sc">$</span>NorthEast <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(st_comp_regions<span class="sc">$</span>bcr <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">7</span>,<span class="dv">8</span>,<span class="dv">12</span><span class="sc">:</span><span class="dv">14</span>),<span class="st">&quot;NorthEast&quot;</span>,<span class="st">&quot;Other&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="Adv.html#cb47-1" aria-hidden="true" tabindex="-1"></a>st_comp_regions<span class="sc">$</span>SouthEast <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(st_comp_regions<span class="sc">$</span>bcr <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">21</span>,<span class="dv">24</span><span class="sc">:</span><span class="dv">27</span>,<span class="dv">35</span><span class="sc">:</span><span class="dv">37</span>),<span class="st">&quot;SouthEast&quot;</span>,<span class="st">&quot;Other&quot;</span>)</span></code></pre></div>
 </div>
 <div id="use-defined-regions-to-estimate-indices-and-trends" class="section level3" number="8.1.2">
 <h3><span class="header-section-number">8.1.2</span> Use defined regions to estimate indices and trends</h3>
-<p>st_comp_regions can now be used as the dataframe input to the argument alt_region_names in <code>generate_indices()</code>, with “NorthEast” as the value for the argument regions. The relevant trends can be calculated using just the <code>generate_trends()</code> function.</p>
+<p>st_comp_regions can now be used as the dataframe input to the argument alt_region_names in <code>generate_indices()</code>, with “SouthEast” as the value for the argument regions. The relevant trends can be calculated using just the <code>generate_trends()</code> function.</p>
 <div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="Adv.html#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
 <span id="cb48-2"><a href="Adv.html#cb48-2" aria-hidden="true" tabindex="-1"></a>custom_indices <span class="ot">&lt;-</span> <span class="fu">generate_indices</span>(<span class="at">jags_mod =</span> jags_mod,</span>
 <span id="cb48-3"><a href="Adv.html#cb48-3" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">jags_data =</span> jags_data,</span>
 <span id="cb48-4"><a href="Adv.html#cb48-4" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">alt_region_names =</span> st_comp_regions,</span>
-<span id="cb48-5"><a href="Adv.html#cb48-5" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">regions =</span> <span class="st">&quot;NorthEast&quot;</span>)</span>
+<span id="cb48-5"><a href="Adv.html#cb48-5" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">regions =</span> <span class="st">&quot;SouthEast&quot;</span>)</span>
 <span id="cb48-6"><a href="Adv.html#cb48-6" aria-hidden="true" tabindex="-1"></a>tp <span class="ot">=</span> <span class="fu">plot_indices</span>(<span class="at">indices =</span> custom_indices,</span>
-<span id="cb48-7"><a href="Adv.html#cb48-7" aria-hidden="true" tabindex="-1"></a>                         <span class="at">species =</span> <span class="st">&quot;Scarlet Tanager&quot;</span>,</span>
+<span id="cb48-7"><a href="Adv.html#cb48-7" aria-hidden="true" tabindex="-1"></a>                         <span class="at">species =</span> <span class="st">&quot;Barn Swallow&quot;</span>,</span>
 <span id="cb48-8"><a href="Adv.html#cb48-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">add_observed_means =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb48-9"><a href="Adv.html#cb48-9" aria-hidden="true" tabindex="-1"></a>                  <span class="at">add_number_routes =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<span id="cb48-9"><a href="Adv.html#cb48-9" aria-hidden="true" tabindex="-1"></a>                  <span class="at">add_number_routes =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb48-10"><a href="Adv.html#cb48-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">title_size =</span> <span class="dv">20</span>,</span>
+<span id="cb48-11"><a href="Adv.html#cb48-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">axis_title_size =</span> <span class="dv">12</span>,</span>
+<span id="cb48-12"><a href="Adv.html#cb48-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">axis_text_size =</span> <span class="dv">12</span>)</span></code></pre></div>
 <div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="Adv.html#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(tp[[<span class="dv">1</span>]])</span>
 <span id="cb49-2"><a href="Adv.html#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(tp[[<span class="dv">2</span>]])</span></code></pre></div>
 <p><img src="bbsBayes_Workshop_files/figure-html/A5plot-1.png" width="\textwidth" style="display: block; margin: auto;" /><img src="bbsBayes_Workshop_files/figure-html/A5plot-2.png" width="\textwidth" style="display: block; margin: auto;" /></p>
@@ -353,13 +354,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="customizing-the-jags-model-and-data" class="section level2" number="8.3">
 <h2><span class="header-section-number">8.3</span> Customizing the JAGS model and data</h2>
-<p>You can even export the bbsBayes model as text, and modify it to add in covariates. For example a GAM smooth to estimate the effect of the day of year on the observations, or an annual weather covariate, or… Then add the relevant covariate data to the jags_data object, and you’re off! We’ll add some more details and examples soon.</p>
+<p>You can even export the bbsBayes model as text, and modify it to add in covariates. For example a GAM smooth to estimate the effect of the day of year on the observations, or an annual weather covariate, or… Then add the relevant covariate data to the jags_data object, and you’re off!</p>
 </div>
 <div id="comparing-models" class="section level2" number="8.4">
 <h2><span class="header-section-number">8.4</span> Comparing Models</h2>
-<p>Finally, bbsBayes can be used to run Bayesian cross-validations. For example, the <code>get_final_values()</code> function is useful to provide an efficient starting point for a cross-validation runs, without having to wait for another full burn-in period.</p>
+<p>Finally, bbsBayes can be used to run cross-validations. For example, the <code>get_final_values()</code> function is useful to provide an efficient starting point for a cross-validation runs, without having to wait for another full burn-in period.</p>
 <p>Paper that includes an example of how to implement a cross-validation using bbsBayes.</p>
-<p>Pre-print: <a href="https://doi.org/10.1101/2020.03.26.010215" class="uri">https://doi.org/10.1101/2020.03.26.010215</a>
+<p>Ornithological Applications: <a href="https://doi.org/10.1093/ornithapp/duaa065" class="uri">https://doi.org/10.1093/ornithapp/duaa065</a>
 Supplement: <a href="https://zenodo.org/badge/latestdoi/228419725" class="uri">https://zenodo.org/badge/latestdoi/228419725</a></p>
 <p>NOTE: although bbsBayes includes functions to calculate WAIC, recent work has shown that WAIC performs very poorly with the BBS data (<a href="https://doi.org/10.1650/CONDOR-17-1.1" class="uri">https://doi.org/10.1650/CONDOR-17-1.1</a>). We recommend a k-fold cross-validation approach, as in the above zenodo archive.</p>
 

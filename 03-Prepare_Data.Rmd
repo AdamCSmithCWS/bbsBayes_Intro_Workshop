@@ -23,12 +23,18 @@ The critical arguments are:
 write.csv(strat_data$species_strat,"Full_BBS_speciesList.csv")
 ```
 
-Also, if you'd like to select a species using the French name, you can try this approach:
+Also, if you'd like to select a species using the French or Spanish names, this should work:
 
 ```{r}
 espece = "Colibri à gorge rubis"
 species = strat_data$species_strat$english[which(strat_data$species_strat$french == espece)]
 species
+
+especies = "Archilochus colubris"
+species = strat_data$species_strat$english[which(strat_data$species_strat$spanish == especies)]
+species
+
+
 ```
 
 -  model: the model to use, options are "slope", "firstdiff", "gam", or "gamye"
@@ -50,7 +56,7 @@ There are additional, optional arguments:
 -  min_mean_route_years - Minimum average of years per route with the species observed. Defaults to 1.
 
 
-## Models
+## Models {#Model_list}
 
 The package has (currently) four status and trend models that differ in the way they model the time-series of observations. The four model options are slope, gam, gamye, and firstdiff. <img src="images/AMKE_all.png"/>
 
@@ -80,10 +86,10 @@ The firstdiff option models the time-series as a random-walk from the first year
 
 ## CWS analysis example
 
-The annual CWS analysis uses the heavy-tailed version of the GAMYE model. Here's the data function call that is used in the 2019 analysis for Scarlet Tanager:
+The annual CWS analysis uses the heavy-tailed version of the GAMYE model. Here's the data function call that is used in the 2019 analysis for Barn Swallow:
 ```{r prepdata, eval=FALSE}
 jags_data <- prepare_jags_data(strat_data = strat_data,
-                  species_to_run = "Scarlet Tanager",
+                  species_to_run = "Barn Swallow",
                   model = "gamye",
                   min_max_route_years = 2,
                   heavy_tailed = TRUE)

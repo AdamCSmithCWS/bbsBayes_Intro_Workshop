@@ -56,41 +56,26 @@ knitr::kable(head(strat_data$bird_strat[,c(1,2,6,7,14,16,17)]))
 knitr::kable(head(strat_data$route_strat[,c(2,3,8,13,33:35)]))
 ```
 
-### Useful code to access and print the strata maps above
+### Accessing the strata maps
 
-The package does not include functions to directly access the strata maps (other than the `generate_map()` function, which displays a map of estimated trends). However this code below should suffice to find the map files in your local installation.
+The package includes a function to directly access the strata maps (other than the `generate_map()` function, which displays a map of estimated trends). However this code below should suffice to find the map files in your local installation.
 
-```{r maps,echo=TRUE,eval = FALSE}
+```{r maps,echo=TRUE}
 library(sf)
-library(sp)
 library(ggplot2)
-laea = st_crs("+proj=laea +lat_0=40 +lon_0=-95") # Lambert equal area coord reference system
+laea = st_crs("+proj=laea +lat_0=40 +lon_0=-95") # Lambert equal area coordinate reference system for pretty mapping
 
-strat_maps <- c("BBS_CWS_strata",
-"BBS_USGS_strata",
-"BBS_BCR_strata",
-"BBS_LatLong_strata",
-"BBS_ProvState_strata")
 
-names(strat_maps) <- c("bbs_cws","bbs_usgs","bcr","latlong","state")
+stratifications <- c("bbs_cws","bbs_usgs","bcr","latlong","state")
 
-locat = system.file("maps",
-                    package = "bbsBayes")
-
-for(i in 1:length(strat_maps)){
-  map.file = strat_maps[i]
-  st_nm = names(strat_maps)[i]
-strata_map = read_sf(dsn = locat,
-                     layer = map.file)
-strata_map = st_transform(strata_map,crs = laea)
+strata_map = load_map(stratifications[2]) #selecting the map for "bbs_usgs" stratification
+strata_map = st_transform(strata_map,crs = laea) #transforming the coordinate reference system
+# mapping using geom_sf()
 st_gg = ggplot(data = strata_map)+
 geom_sf()+
-labs(title = paste("stratify(by =",st_nm,")"))
+labs(title = paste("stratify(by =",stratifications[2],")"))
+
+plot(st_gg)
 
 
-
-png(paste0("images/map_",st_nm,".png"))
-print(st_gg)
-dev.off()
-}
 ```

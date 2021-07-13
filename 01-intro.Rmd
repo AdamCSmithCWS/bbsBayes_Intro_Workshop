@@ -44,6 +44,6 @@ There are options to download the available stop-level data, so you can use the 
 
 The modeling functions of bbsBayes require an installation of JAGS. JAGS is installed from SourceForge, an open software distribution agent. Follow [this link](https://sourceforge.net/projects/mcmc-jags/) to install [<https://sourceforge.net/projects/mcmc-jags/>].
 
-## Example data for Scarlet Tanager
+## Example data for Barns Swallow
 
-This [link allows you to download some example model results for Scarlet Tanager](https://drive.google.com/file/d/1LCZrl0W0AEbXj8_MyUP-CXX3a-j77rFN/view?usp=sharing). This model output can be used with many of the visualization and estimation functions for the package (without having to wait \~24 hours for the model to run). To use this saved results to run some of the functions in this book, save it into your working directory.
+This [link allows you to download some example model results for Barn Swallow](https://drive.google.com/drive/folders/1ar7nUNI3GXm1A_Kcoc2cAUQQ7ZV37wC6?usp=sharing). This model output can be used with many of the visualization and estimation functions for the package (without having to wait hours-days for the models to run). To use these saved results, save these four folders to a relevant folder in your working directory. Each folder contains the input data object `jags_data` and the model output object `jags_mod`, stored as a saved R workspace. Each of the four folders contains the results from fitting one of the bbsBayes models to data for Barn Swallow. You can explore the differences among the four models in [section 4.2](#Model_list).  

@@ -5,7 +5,7 @@ options(digits = 3)
 knitr::opts_chunk$set(
   comment = "#>",
   collapse = TRUE,
-  cache = TRUE,
+  cache = FALSE,
   warning = FALSE,
   error = FALSE,
   message = FALSE,

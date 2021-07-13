@@ -5,12 +5,13 @@
 \documentclass[
 ]{book}
 \usepackage{lmodern}
-\usepackage{amssymb,amsmath}
+\usepackage{amsmath}
 \usepackage{ifxetex,ifluatex}
 \ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
   \usepackage{textcomp} % provide euro and other symbols
+  \usepackage{amssymb}
 \else % if luatex or xetex
   \usepackage{unicode-math}
   \defaultfontfeatures{Scale=MatchLowercase}
@@ -82,6 +83,7 @@
 \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
 \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
 \usepackage{longtable,booktabs}
+\usepackage{calc} % for calculating minipage widths
 % Correct order of tables after \paragraph or \subparagraph
 \usepackage{etoolbox}
 \makeatletter
@@ -114,27 +116,26 @@
 \setlength{\cslhangindent}{1.5em}
 \newlength{\csllabelwidth}
 \setlength{\csllabelwidth}{3em}
-\newenvironment{CSLReferences}[3] % #1 hanging-ident, #2 entry sp
+\newenvironment{CSLReferences}[2] % #1 hanging-ident, #2 entry spacing
  {% don't indent paragraphs
   \setlength{\parindent}{0pt}
   % turn on hanging indent if param 1 is 1
   \ifodd #1 \everypar{\setlength{\hangindent}{\cslhangindent}}\ignorespaces\fi
-  % set line spacing
   % set entry spacing
   \ifnum #2 > 0
-  \setlength{\parskip}{#3\baselineskip}
+  \setlength{\parskip}{#2\baselineskip}
   \fi
  }%
  {}
-\usepackage{calc} % for \widthof, \maxof
+\usepackage{calc}
 \newcommand{\CSLBlock}[1]{#1\hfill\break}
-\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\maxof{\widthof{#1}}{\csllabelwidth}}{#1}}
-\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth}{#1}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{#1}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{#1}\break}
 \newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
 
 \title{A Quick Introduction to bbsBayes}
 \author{Adam C. Smith, and Brandon P.M. Edwards}
-\date{2020-12-16}
+\date{2021-07-13}
 
 \begin{document}
 \maketitle
@@ -261,10 +262,10 @@ There are options to download the available stop-level data, so you can use the 
 
 The modeling functions of bbsBayes require an installation of JAGS. JAGS is installed from SourceForge, an open software distribution agent. Follow \href{https://sourceforge.net/projects/mcmc-jags/}{this link} to install {[}\url{https://sourceforge.net/projects/mcmc-jags/}{]}.
 
-\hypertarget{example-data-for-scarlet-tanager}{%
-\section{Example data for Scarlet Tanager}\label{example-data-for-scarlet-tanager}}
+\hypertarget{example-data-for-barns-swallow}{%
+\section{Example data for Barns Swallow}\label{example-data-for-barns-swallow}}
 
-This \href{https://drive.google.com/file/d/1LCZrl0W0AEbXj8_MyUP-CXX3a-j77rFN/view?usp=sharing}{link allows you to download some example model results for Scarlet Tanager}. This model output can be used with many of the visualization and estimation functions for the package (without having to wait \textasciitilde24 hours for the model to run). To use this saved results to run some of the functions in this book, save it into your working directory.
+This \href{https://drive.google.com/drive/folders/1ar7nUNI3GXm1A_Kcoc2cAUQQ7ZV37wC6?usp=sharing}{link allows you to download some example model results for Barn Swallow}. This model output can be used with many of the visualization and estimation functions for the package (without having to wait hours-days for the models to run). To use these saved results, save these four folders to a relevant folder in your working directory. Each folder contains the input data object \texttt{jags\_data} and the model output object \texttt{jags\_mod}, stored as a saved R workspace. Each of the four folders contains the results from fitting one of the bbsBayes models to data for Barn Swallow. You can explore the differences among the four models in \protect\hyperlink{Model_list}{section 4.2}.
 
 \hypertarget{Stratify}{%
 \chapter{Stratification}\label{Stratify}}
@@ -407,47 +408,32 @@ statenum & Route & BCR & Year & strat\_name & rt.uni & rt.uni.y\\
 \hline
 \end{tabular}
 
-\hypertarget{useful-code-to-access-and-print-the-strata-maps-above}{%
-\subsection{Useful code to access and print the strata maps above}\label{useful-code-to-access-and-print-the-strata-maps-above}}
+\hypertarget{accessing-the-strata-maps}{%
+\subsection{Accessing the strata maps}\label{accessing-the-strata-maps}}
 
-The package does not include functions to directly access the strata maps (other than the \texttt{generate\_map()} function, which displays a map of estimated trends). However this code below should suffice to find the map files in your local installation.
+The package includes a function to directly access the strata maps (other than the \texttt{generate\_map()} function, which displays a map of estimated trends). However this code below should suffice to find the map files in your local installation.
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \FunctionTok{library}\NormalTok{(sf)}
-\FunctionTok{library}\NormalTok{(sp)}
 \FunctionTok{library}\NormalTok{(ggplot2)}
-\NormalTok{laea }\OtherTok{=} \FunctionTok{st\_crs}\NormalTok{(}\StringTok{"+proj=laea +lat\_0=40 +lon\_0={-}95"}\NormalTok{) }\CommentTok{\# Lambert equal area coord reference system}
+\NormalTok{laea }\OtherTok{=} \FunctionTok{st\_crs}\NormalTok{(}\StringTok{"+proj=laea +lat\_0=40 +lon\_0={-}95"}\NormalTok{) }\CommentTok{\# Lambert equal area coordinate reference system for pretty mapping}
 
-\NormalTok{strat\_maps }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"BBS\_CWS\_strata"}\NormalTok{,}
-\StringTok{"BBS\_USGS\_strata"}\NormalTok{,}
-\StringTok{"BBS\_BCR\_strata"}\NormalTok{,}
-\StringTok{"BBS\_LatLong\_strata"}\NormalTok{,}
-\StringTok{"BBS\_ProvState\_strata"}\NormalTok{)}
 
-\FunctionTok{names}\NormalTok{(strat\_maps) }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"bbs\_cws"}\NormalTok{,}\StringTok{"bbs\_usgs"}\NormalTok{,}\StringTok{"bcr"}\NormalTok{,}\StringTok{"latlong"}\NormalTok{,}\StringTok{"state"}\NormalTok{)}
+\NormalTok{stratifications }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"bbs\_cws"}\NormalTok{,}\StringTok{"bbs\_usgs"}\NormalTok{,}\StringTok{"bcr"}\NormalTok{,}\StringTok{"latlong"}\NormalTok{,}\StringTok{"state"}\NormalTok{)}
 
-\NormalTok{locat }\OtherTok{=} \FunctionTok{system.file}\NormalTok{(}\StringTok{"maps"}\NormalTok{,}
-                    \AttributeTok{package =} \StringTok{"bbsBayes"}\NormalTok{)}
-
-\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(strat\_maps))\{}
-\NormalTok{  map.file }\OtherTok{=}\NormalTok{ strat\_maps[i]}
-\NormalTok{  st\_nm }\OtherTok{=} \FunctionTok{names}\NormalTok{(strat\_maps)[i]}
-\NormalTok{strata\_map }\OtherTok{=} \FunctionTok{read\_sf}\NormalTok{(}\AttributeTok{dsn =}\NormalTok{ locat,}
-                     \AttributeTok{layer =}\NormalTok{ map.file)}
-\NormalTok{strata\_map }\OtherTok{=} \FunctionTok{st\_transform}\NormalTok{(strata\_map,}\AttributeTok{crs =}\NormalTok{ laea)}
+\NormalTok{strata\_map }\OtherTok{=} \FunctionTok{load\_map}\NormalTok{(stratifications[}\DecValTok{2}\NormalTok{]) }\CommentTok{\#selecting the map for "bbs\_usgs" stratification}
+\NormalTok{strata\_map }\OtherTok{=} \FunctionTok{st\_transform}\NormalTok{(strata\_map,}\AttributeTok{crs =}\NormalTok{ laea) }\CommentTok{\#transforming the coordinate reference system}
+\CommentTok{\# mapping using geom\_sf()}
 \NormalTok{st\_gg }\OtherTok{=} \FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data =}\NormalTok{ strata\_map)}\SpecialCharTok{+}
 \FunctionTok{geom\_sf}\NormalTok{()}\SpecialCharTok{+}
-\FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \FunctionTok{paste}\NormalTok{(}\StringTok{"stratify(by ="}\NormalTok{,st\_nm,}\StringTok{")"}\NormalTok{))}
+\FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \FunctionTok{paste}\NormalTok{(}\StringTok{"stratify(by ="}\NormalTok{,stratifications[}\DecValTok{2}\NormalTok{],}\StringTok{")"}\NormalTok{))}
 
-
-
-\FunctionTok{png}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(}\StringTok{"images/map\_"}\NormalTok{,st\_nm,}\StringTok{".png"}\NormalTok{))}
-\FunctionTok{print}\NormalTok{(st\_gg)}
-\FunctionTok{dev.off}\NormalTok{()}
-\NormalTok{\}}
+\FunctionTok{plot}\NormalTok{(st\_gg)}
 \end{Highlighting}
 \end{Shaded}
+
+\begin{center}\includegraphics[width=\textwidth]{bbsBayes_Workshop_files/figure-latex/maps-1} \end{center}
 
 \hypertarget{DataPrep}{%
 \chapter{Prepare the data for a model and species}\label{DataPrep}}
@@ -474,12 +460,17 @@ The critical arguments are:
 \end{Highlighting}
 \end{Shaded}
 
-Also, if you'd like to select a species using the French name, you can try this approach:
+Also, if you'd like to select a species using the French or Spanish names, this should work:
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{espece }\OtherTok{=} \StringTok{"Colibri à gorge rubis"}
 \NormalTok{species }\OtherTok{=}\NormalTok{ strat\_data}\SpecialCharTok{$}\NormalTok{species\_strat}\SpecialCharTok{$}\NormalTok{english[}\FunctionTok{which}\NormalTok{(strat\_data}\SpecialCharTok{$}\NormalTok{species\_strat}\SpecialCharTok{$}\NormalTok{french }\SpecialCharTok{==}\NormalTok{ espece)]}
+\NormalTok{species}
+\CommentTok{\#\textgreater{} [1] "Ruby{-}throated Hummingbird"}
+
+\NormalTok{especies }\OtherTok{=} \StringTok{"Archilochus colubris"}
+\NormalTok{species }\OtherTok{=}\NormalTok{ strat\_data}\SpecialCharTok{$}\NormalTok{species\_strat}\SpecialCharTok{$}\NormalTok{english[}\FunctionTok{which}\NormalTok{(strat\_data}\SpecialCharTok{$}\NormalTok{species\_strat}\SpecialCharTok{$}\NormalTok{spanish }\SpecialCharTok{==}\NormalTok{ especies)]}
 \NormalTok{species}
 \CommentTok{\#\textgreater{} [1] "Ruby{-}throated Hummingbird"}
 \end{Highlighting}
@@ -510,8 +501,8 @@ There are additional, optional arguments:
   min\_mean\_route\_years - Minimum average of years per route with the species observed. Defaults to 1.
 \end{itemize}
 
-\hypertarget{models}{%
-\section{Models}\label{models}}
+\hypertarget{Model_list}{%
+\section{Models}\label{Model_list}}
 
 The package has (currently) four status and trend models that differ in the way they model the time-series of observations. The four model options are slope, gam, gamye, and firstdiff.
 
@@ -538,12 +529,12 @@ The firstdiff option models the time-series as a random-walk from the first year
 \hypertarget{cws-analysis-example}{%
 \section{CWS analysis example}\label{cws-analysis-example}}
 
-The annual CWS analysis uses the heavy-tailed version of the GAMYE model. Here's the data function call that is used in the 2019 analysis for Scarlet Tanager:
+The annual CWS analysis uses the heavy-tailed version of the GAMYE model. Here's the data function call that is used in the 2019 analysis for Barn Swallow:
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{jags\_data }\OtherTok{\textless{}{-}} \FunctionTok{prepare\_jags\_data}\NormalTok{(}\AttributeTok{strat\_data =}\NormalTok{ strat\_data,}
-                  \AttributeTok{species\_to\_run =} \StringTok{"Scarlet Tanager"}\NormalTok{,}
+                  \AttributeTok{species\_to\_run =} \StringTok{"Barn Swallow"}\NormalTok{,}
                   \AttributeTok{model =} \StringTok{"gamye"}\NormalTok{,}
                   \AttributeTok{min\_max\_route\_years =} \DecValTok{2}\NormalTok{,}
                   \AttributeTok{heavy\_tailed =} \ConstantTok{TRUE}\NormalTok{)}
@@ -559,7 +550,7 @@ Depending on the model and the size of the dataset (number of counts, number of 
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{\# Not Run}
+\CommentTok{\# Not Run {-} Note: for Barn Swallow, this may require \textasciitilde{} 6{-}days to run!}
 \NormalTok{jags\_mod }\OtherTok{\textless{}{-}} \FunctionTok{run\_model}\NormalTok{(}\AttributeTok{jags\_data =}\NormalTok{ jags\_data,}
                       \AttributeTok{n\_iter =} \DecValTok{24000}\NormalTok{, }\CommentTok{\#higher than the default 10,000}
                       \AttributeTok{n\_burnin =} \DecValTok{20000}\NormalTok{,}
@@ -567,9 +558,7 @@ Depending on the model and the size of the dataset (number of counts, number of 
                       \AttributeTok{n\_thin =} \DecValTok{20}\NormalTok{, }\CommentTok{\#saves memory by retaining only 1/20 posterior samples}
                       \AttributeTok{parallel =} \ConstantTok{TRUE}\NormalTok{,}
                       \AttributeTok{inits =} \ConstantTok{NULL}\NormalTok{,}
-                      \AttributeTok{parameters\_to\_save =} \FunctionTok{c}\NormalTok{(}\StringTok{"n"}\NormalTok{,}\StringTok{"n3"}\NormalTok{,}\StringTok{"nu"}\NormalTok{,}
-                                             \StringTok{"B.X"}\NormalTok{,}\StringTok{"beta.X"}\NormalTok{,}\StringTok{"strata"}\NormalTok{,}
-                                             \StringTok{"sdbeta"}\NormalTok{,}\StringTok{"sdX"}\NormalTok{,}\StringTok{"alpha"}\NormalTok{))}
+                      \AttributeTok{parameters\_to\_save =} \FunctionTok{c}\NormalTok{(}\StringTok{"n"}\NormalTok{,}\StringTok{"n3"}\NormalTok{))}
  
 \end{Highlighting}
 \end{Shaded}
@@ -669,7 +658,7 @@ bbsBayes also includes a function to help re-start an MCMC chain, so that you av
 \hypertarget{IndicesTrends}{%
 \chapter{Estimating Annual Indices and Trends}\label{IndicesTrends}}
 
-Once the model has finished running, we can use the saved output to calculate the population trajectories and trends. As an example, we'll load some saved model output for Scarlet Tanager, from the gamye model. If you haven't already, you can download the model output file \href{https://drive.google.com/file/d/1LCZrl0W0AEbXj8_MyUP-CXX3a-j77rFN/view?usp=sharing}{here}, then save it into your working directory.
+Once the model has finished running, we can use the saved output to calculate the population trajectories and trends. As an example, we'll load some saved model output for Barn Swallow, from the gamye model. If you haven't already, you can download the model output file \href{https://drive.google.com/drive/folders/1ar7nUNI3GXm1A_Kcoc2cAUQQ7ZV37wC6?usp=sharing}{here}, then save it into your working directory.
 
 This saved workspace includes two objects:
 
@@ -683,7 +672,7 @@ This saved workspace includes two objects:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{load}\NormalTok{(}\StringTok{"jags\_mod\_full.RData"}\NormalTok{)}
+\FunctionTok{load}\NormalTok{(}\StringTok{"data/gamye\_Barn\_Swallow/jags\_mod\_full.RData"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -727,17 +716,17 @@ The \texttt{generate\_indices()} function creates a list that includes an object
 \hline
 Year & Region & Region\_type & Index & Index\_q\_0.025 & Index\_q\_0.975 & obs\_mean & nrts & nnzero\\
 \hline
-1966 & Continental & continental & 1.06 & 0.957 & 1.19 & 0.675 & 325 & 173\\
+1966 & Continental & continental & 9.48 & 8.64 & 10.8 & 2.36 & 396 & 338\\
 \hline
-1967 & Continental & continental & 1.02 & 0.930 & 1.12 & 0.677 & 546 & 277\\
+1967 & Continental & continental & 9.78 & 9.05 & 10.8 & 4.87 & 814 & 670\\
 \hline
-1968 & Continental & continental & 1.04 & 0.964 & 1.13 & 0.797 & 516 & 270\\
+1968 & Continental & continental & 10.23 & 9.59 & 11.1 & 7.64 & 869 & 711\\
 \hline
-1969 & Continental & continental & 1.04 & 0.972 & 1.12 & 0.877 & 692 & 352\\
+1969 & Continental & continental & 10.66 & 10.10 & 11.4 & 8.75 & 1187 & 963\\
 \hline
-1970 & Continental & continental & 1.03 & 0.966 & 1.10 & 0.826 & 733 & 387\\
+1970 & Continental & continental & 11.09 & 10.57 & 11.7 & 9.45 & 1276 & 1047\\
 \hline
-1971 & Continental & continental & 1.06 & 1.007 & 1.14 & 0.974 & 779 & 404\\
+1971 & Continental & continental & 11.36 & 10.89 & 11.9 & 9.84 & 1368 & 1158\\
 \hline
 \end{tabular}
 
@@ -745,7 +734,7 @@ For example, one may wish to export the annual indices to a text file that can b
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{write.csv}\NormalTok{(indices}\SpecialCharTok{$}\NormalTok{data\_summary, }\StringTok{"Scarlet\_Tanager\_trajectories.csv"}\NormalTok{)}
+\FunctionTok{write.csv}\NormalTok{(indices}\SpecialCharTok{$}\NormalTok{data\_summary, }\StringTok{"Barn\_Swallow\_trajectories.csv"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -792,17 +781,17 @@ The \texttt{generate\_trends()} function returns a dataframe with 1 row for each
 \hline
 Start\_year & Region & Trend & Trend\_Q0.025 & Trend\_Q0.975\\
 \hline
-1970 & Continental & 0.041 & -0.141 & 0.222\\
+1970 & Continental & -0.816 & -0.941 & -0.699\\
 \hline
-1970 & CA & -0.439 & -1.090 & 0.171\\
+1970 & CA & -2.419 & -2.736 & -2.115\\
 \hline
-1970 & US & 0.097 & -0.090 & 0.288\\
+1970 & US & -0.314 & -0.427 & -0.213\\
 \hline
-1970 & AL & 1.956 & 0.797 & 3.102\\
+1970 & AB & -1.961 & -2.723 & -1.257\\
 \hline
-1970 & AR & 0.306 & -0.684 & 1.335\\
+1970 & AK & -5.451 & -8.247 & -2.611\\
 \hline
-1970 & CT & -0.580 & -1.633 & 0.432\\
+1970 & AL & 2.439 & 1.805 & 3.053\\
 \hline
 \end{tabular}
 
@@ -810,7 +799,7 @@ The \texttt{generate\_trends} function includes some other arguments that allow 
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{trends }\OtherTok{\textless{}{-}} \FunctionTok{generate\_trends}\NormalTok{(}\AttributeTok{indices =}\NormalTok{ indices,}
+\NormalTok{trends\_10 }\OtherTok{\textless{}{-}} \FunctionTok{generate\_trends}\NormalTok{(}\AttributeTok{indices =}\NormalTok{ indices,}
                           \AttributeTok{Min\_year =} \DecValTok{2009}\NormalTok{,}
                           \AttributeTok{Max\_year =} \DecValTok{2019}\NormalTok{,}
                           \AttributeTok{prob\_decrease =} \FunctionTok{c}\NormalTok{(}\DecValTok{30}\NormalTok{,}\DecValTok{50}\NormalTok{),}
@@ -826,27 +815,33 @@ The \texttt{generate\_trends} function includes some other arguments that allow 
 
 \begin{tabular}{r|l|r|r|r}
 \hline
-Start\_year & Region\_alt & Trend & Percent\_Change & prob\_decrease\_30\_percent\\
+Start\_year & Region\_alt & Trend & Percent\_Change & Relative\_Abundance\\
 \hline
-2009 & Continental & -0.816 & -7.87 & 0.000\\
+1970 & Continental & -0.816 & -33.1 & 10.95\\
 \hline
-2009 & Canada & -0.114 & -1.13 & 0.001\\
+1970 & Canada & -2.419 & -69.9 & 6.35\\
 \hline
-2009 & United States of America & -0.884 & -8.49 & 0.000\\
+1970 & United States of America & -0.314 & -14.3 & 13.85\\
 \hline
-2009 & ALABAMA & -1.121 & -10.66 & 0.046\\
+1970 & Alberta & -1.961 & -62.1 & 6.72\\
 \hline
-2009 & ARKANSAS & 0.631 & 6.49 & 0.010\\
+1970 & ALASKA & -5.451 & -93.6 & 1.94\\
 \hline
-2009 & CONNECTICUT & -2.625 & -23.35 & 0.335\\
+1970 & ALABAMA & 2.439 & 225.7 & 18.58\\
 \hline
 \end{tabular}
 
-And trends calculated from the smooth component only can be derived from the related annual indices.
+And trends calculated from the smooth component can be derived from the related annual indices.
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{trends\_smooth }\OtherTok{\textless{}{-}} \FunctionTok{generate\_trends}\NormalTok{(}\AttributeTok{indices =}\NormalTok{ indices\_smooth,}
+                          \AttributeTok{Min\_year =} \DecValTok{1970}\NormalTok{,}
+                          \AttributeTok{Max\_year =} \DecValTok{2019}\NormalTok{,}
+                          \AttributeTok{prob\_decrease =} \FunctionTok{c}\NormalTok{(}\DecValTok{30}\NormalTok{,}\DecValTok{50}\NormalTok{),}
+                          \AttributeTok{prob\_increase =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{))}
+
+\NormalTok{trends\_smooth\_10 }\OtherTok{\textless{}{-}} \FunctionTok{generate\_trends}\NormalTok{(}\AttributeTok{indices =}\NormalTok{ indices\_smooth,}
                           \AttributeTok{Min\_year =} \DecValTok{2009}\NormalTok{,}
                           \AttributeTok{Max\_year =} \DecValTok{2019}\NormalTok{,}
                           \AttributeTok{prob\_decrease =} \FunctionTok{c}\NormalTok{(}\DecValTok{30}\NormalTok{,}\DecValTok{50}\NormalTok{),}
@@ -857,7 +852,7 @@ And trends calculated from the smooth component only can be derived from the rel
 \hypertarget{alternative-time-spans-for-trends}{%
 \section{Alternative time-spans for trends}\label{alternative-time-spans-for-trends}}
 
-It is simple to estimate trends for alternative intervals of time. For example, calculating a 15 year trend for Scarlet Tanager.
+It is simple to estimate trends for alternative intervals of time. For example, calculating a 15 year trend for Barn Swallow.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -913,17 +908,17 @@ Setting \texttt{slope\ =\ TRUE} adds the slope-trend calculation to the output d
 \hline
 Start\_year & Region\_alt & Trend & Slope\_Trend\\
 \hline
-2004 & Continental & -0.793 & -1.040\\
+2004 & Continental & -1.262 & -1.282\\
 \hline
-2004 & Canada & -0.004 & -0.218\\
+2004 & Canada & -0.524 & -0.274\\
 \hline
-2004 & United States of America & -0.866 & -1.115\\
+2004 & United States of America & -1.386 & -1.443\\
 \hline
-2004 & ALABAMA & -0.521 & -0.728\\
+2004 & Alberta & -1.832 & -1.750\\
 \hline
-2004 & ARKANSAS & 0.769 & 0.328\\
+2004 & ALASKA & -4.449 & -4.828\\
 \hline
-2004 & CONNECTICUT & -1.956 & -2.186\\
+2004 & ALABAMA & -2.652 & -2.414\\
 \hline
 \end{tabular}
 
@@ -944,17 +939,17 @@ In addition, the function can optionally calculate the posterior conditional pro
 \hline
 Start\_year & Region\_alt & Trend & Percent\_Change & prob\_decrease\_30\_percent\\
 \hline
-2004 & Continental & -0.798 & -11.32 & 0.000\\
+2004 & Continental & -1.119 & -15.53 & 0.000\\
 \hline
-2004 & Canada & 0.182 & 2.77 & 0.000\\
+2004 & Canada & -0.315 & -4.62 & 0.000\\
 \hline
-2004 & United States of America & -0.888 & -12.52 & 0.000\\
+2004 & United States of America & -1.255 & -17.26 & 0.000\\
 \hline
-2004 & ALABAMA & -0.260 & -3.83 & 0.008\\
+2004 & Alberta & -1.854 & -24.47 & 0.246\\
 \hline
-2004 & ARKANSAS & 0.404 & 6.23 & 0.009\\
+2004 & ALASKA & -4.551 & -50.28 & 0.806\\
 \hline
-2004 & CONNECTICUT & -1.774 & -23.54 & 0.344\\
+2004 & ALABAMA & -2.481 & -31.40 & 0.597\\
 \hline
 \end{tabular}
 
@@ -1003,17 +998,17 @@ Changes in populations, both annual rates of change (trends) and overall changes
 \hline
 Start\_year & End\_year & Region\_alt & Trend & prob\_decrease\_30\_percent\\
 \hline
-1966 & 1976 & Continental & 1.287 & 0.000\\
+1966 & 1976 & Continental & 3.54 & 0.000\\
 \hline
-1966 & 1976 & Canada & -1.071 & 0.061\\
+1966 & 1976 & Canada & 1.36 & 0.002\\
 \hline
-1966 & 1976 & United States of America & 1.611 & 0.000\\
+1966 & 1976 & United States of America & 4.72 & 0.000\\
 \hline
-1967 & 1977 & Continental & 1.875 & 0.000\\
+1967 & 1977 & Continental & 3.42 & 0.000\\
 \hline
-1967 & 1977 & Canada & -0.451 & 0.015\\
+1967 & 1977 & Canada & 1.40 & 0.001\\
 \hline
-1967 & 1977 & United States of America & 2.172 & 0.000\\
+1967 & 1977 & United States of America & 4.47 & 0.000\\
 \hline
 \end{tabular}
 
@@ -1063,7 +1058,7 @@ Now the \texttt{trends\_out} object is a dataframe with all of the trend estimat
       
 \NormalTok{    cpt }\OtherTok{=} \FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data =}\NormalTok{ trends\_canada,}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ End\_year,}\AttributeTok{y =}\NormalTok{ Trend))}\SpecialCharTok{+}
       \FunctionTok{theme\_minimal}\NormalTok{()}\SpecialCharTok{+}
-      \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \FunctionTok{paste}\NormalTok{(}\StringTok{"Scarlet Tanager rolling"}\NormalTok{,trend\_time,}\StringTok{"year trends for Canada"}\NormalTok{),}
+      \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \FunctionTok{paste}\NormalTok{(}\StringTok{"Barn Swallow rolling"}\NormalTok{,trend\_time,}\StringTok{"year trends for Canada"}\NormalTok{),}
            \AttributeTok{subtitle =} \FunctionTok{paste}\NormalTok{(}\StringTok{"Based on Trend in"}\NormalTok{,last\_year,}\StringTok{":"}\NormalTok{,pth\_30\_labs,}\StringTok{"and"}\NormalTok{,pth\_50\_labs))}\SpecialCharTok{+}
            \FunctionTok{xlab}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"Ending year of"}\NormalTok{,trend\_time,}\StringTok{"trend"}\NormalTok{))}\SpecialCharTok{+}
            \FunctionTok{ylab}\NormalTok{(}\FunctionTok{paste}\NormalTok{(trend\_time,}\StringTok{"year trends"}\NormalTok{))}\SpecialCharTok{+}
@@ -1095,8 +1090,8 @@ Now that we have calculated values for the trends and trajectories, bbsBayes als
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{\# load the trend and indices objects for Scarlet Tanager}
-\FunctionTok{load}\NormalTok{(}\StringTok{"Scarlet\_Tanager\_trends\_indices.RData"}\NormalTok{)}
+\CommentTok{\# load the trend and indices objects for Barn Swallow}
+\FunctionTok{load}\NormalTok{(}\StringTok{"Barn\_Swallow\_trends\_indices.RData"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1109,8 +1104,11 @@ The \texttt{plot\_indices()} function produces a list of ggplot figures that can
 \begin{Highlighting}[]
 \CommentTok{\# Not run}
 \NormalTok{tp }\OtherTok{=} \FunctionTok{plot\_indices}\NormalTok{(}\AttributeTok{indices =}\NormalTok{ indices,}
-                         \AttributeTok{species =} \StringTok{"Scarlet Tanager"}\NormalTok{)}
-\FunctionTok{pdf}\NormalTok{(}\AttributeTok{file =} \StringTok{"Scarlet Tanager Trajectories.pdf"}\NormalTok{)}
+                         \AttributeTok{species =} \StringTok{"Barn Swallow"}\NormalTok{,}
+                  \AttributeTok{title\_size =} \DecValTok{20}\NormalTok{,}
+                  \AttributeTok{axis\_title\_size =} \DecValTok{12}\NormalTok{,}
+                  \AttributeTok{axis\_text\_size =} \DecValTok{12}\NormalTok{)}
+\FunctionTok{pdf}\NormalTok{(}\AttributeTok{file =} \StringTok{"Barn Swallow Trajectories.pdf"}\NormalTok{)}
 \FunctionTok{print}\NormalTok{(tp)}
 \FunctionTok{dev.off}\NormalTok{()}
 \end{Highlighting}
@@ -1121,7 +1119,10 @@ Or, we can print plots to individual devices:
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{tp }\OtherTok{=} \FunctionTok{plot\_indices}\NormalTok{(}\AttributeTok{indices =}\NormalTok{ indices,}
-                         \AttributeTok{species =} \StringTok{"Scarlet Tanager"}\NormalTok{)}
+                         \AttributeTok{species =} \StringTok{"Barn Swallow"}\NormalTok{,}
+                  \AttributeTok{title\_size =} \DecValTok{20}\NormalTok{,}
+                  \AttributeTok{axis\_title\_size =} \DecValTok{12}\NormalTok{,}
+                  \AttributeTok{axis\_text\_size =} \DecValTok{12}\NormalTok{)}
 \FunctionTok{print}\NormalTok{(tp[[}\DecValTok{1}\NormalTok{]])}
 \end{Highlighting}
 \end{Shaded}
@@ -1133,9 +1134,12 @@ Or, we can print plots to individual devices:
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{tp2 }\OtherTok{=} \FunctionTok{plot\_indices}\NormalTok{(}\AttributeTok{indices =}\NormalTok{ indices,}
-                         \AttributeTok{species =} \FunctionTok{paste}\NormalTok{(}\StringTok{"Scarlet Tanager"}\NormalTok{,}\StringTok{"Full"}\NormalTok{),}
+                         \AttributeTok{species =} \FunctionTok{paste}\NormalTok{(}\StringTok{"Barn Swallow"}\NormalTok{,}\StringTok{"Full"}\NormalTok{),}
                   \AttributeTok{add\_observed\_means =} \ConstantTok{TRUE}\NormalTok{,}
-                  \AttributeTok{add\_number\_routes =} \ConstantTok{TRUE}\NormalTok{)}
+                  \AttributeTok{add\_number\_routes =} \ConstantTok{TRUE}\NormalTok{,}
+                  \AttributeTok{title\_size =} \DecValTok{20}\NormalTok{,}
+                  \AttributeTok{axis\_title\_size =} \DecValTok{12}\NormalTok{,}
+                  \AttributeTok{axis\_text\_size =} \DecValTok{12}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1144,9 +1148,12 @@ And we can compare these indices plots with those generated using only the smoot
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{tp3 }\OtherTok{=} \FunctionTok{plot\_indices}\NormalTok{(}\AttributeTok{indices =}\NormalTok{ indices\_smooth,}
-                         \AttributeTok{species =} \FunctionTok{paste}\NormalTok{(}\StringTok{"Scarlet Tanager"}\NormalTok{,}\StringTok{"Smooth"}\NormalTok{),}
+                         \AttributeTok{species =} \FunctionTok{paste}\NormalTok{(}\StringTok{"Barn Swallow"}\NormalTok{,}\StringTok{"Smooth"}\NormalTok{),}
                   \AttributeTok{add\_observed\_means =} \ConstantTok{TRUE}\NormalTok{,}
-                  \AttributeTok{add\_number\_routes =} \ConstantTok{TRUE}\NormalTok{)}
+                  \AttributeTok{add\_number\_routes =} \ConstantTok{TRUE}\NormalTok{,}
+                  \AttributeTok{title\_size =} \DecValTok{20}\NormalTok{,}
+                  \AttributeTok{axis\_title\_size =} \DecValTok{12}\NormalTok{,}
+                  \AttributeTok{axis\_text\_size =} \DecValTok{12}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1208,7 +1215,7 @@ The trends can be mapped to produce strata maps coloured by species population t
 \NormalTok{mp }\OtherTok{=} \FunctionTok{generate\_map}\NormalTok{(trends\_smooth,}
                   \AttributeTok{select =} \ConstantTok{TRUE}\NormalTok{,}
                   \AttributeTok{stratify\_by =} \StringTok{"bbs\_cws"}\NormalTok{,}
-                  \AttributeTok{species =} \StringTok{"Scarlet Tanager Smooth"}\NormalTok{)}
+                  \AttributeTok{species =} \StringTok{"Barn Swallow Smooth"}\NormalTok{)}
 \FunctionTok{print}\NormalTok{(mp)}
 \end{Highlighting}
 \end{Shaded}
@@ -1225,10 +1232,10 @@ For stratifications that can be compiled by political regions (i.e., \texttt{bbs
 \NormalTok{  gf }\OtherTok{\textless{}{-}} \FunctionTok{geofacet\_plot}\NormalTok{(}\AttributeTok{indices\_list =}\NormalTok{ indices\_smooth,}
                      \AttributeTok{select =} \ConstantTok{TRUE}\NormalTok{,}
                      \AttributeTok{stratify\_by =} \StringTok{"bbs\_cws"}\NormalTok{,}
-                     \AttributeTok{multiple =} \ConstantTok{TRUE}\NormalTok{,}
+                     \AttributeTok{multiple =} \ConstantTok{FALSE}\NormalTok{,}
                      \AttributeTok{trends =}\NormalTok{ trends\_smooth,}
                      \AttributeTok{slope =}\NormalTok{ F,}
-                     \AttributeTok{species =} \StringTok{"Scarlet Tanager Smooth"}\NormalTok{)}
+                     \AttributeTok{species =} \StringTok{"Barn Swallow Smooth"}\NormalTok{)}
   
   \FunctionTok{print}\NormalTok{(gf)}
 \end{Highlighting}
@@ -1242,11 +1249,11 @@ For stratifications that can be compiled by political regions (i.e., \texttt{bbs
 \hypertarget{custom-regional-summaries}{%
 \section{Custom regional summaries}\label{custom-regional-summaries}}
 
-Yes, you can calculate the trend and trajectories for custom combinations of strata, such as a formal trend estimate for populations of Scarlet Tanager in the North East (BCRs 7, 8, 12, 13, and 14).
+Yes, you can calculate the trend and trajectories for custom combinations of strata, such as a formal trend estimate for populations of Barn Swallow in the South East portion of their range (e.g., BCRs 21,24,25,26,27,35,36, and 37).
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{load}\NormalTok{(}\StringTok{"jags\_mod\_full.RData"}\NormalTok{) }\CommentTok{\#saved Scarlet Tanager model output and data}
+\FunctionTok{load}\NormalTok{(}\StringTok{"data/gamye\_Barn\_Swallow/jags\_mod\_full.RData"}\NormalTok{) }\CommentTok{\#saved Barn Swallow model output and data}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1284,14 +1291,14 @@ Then add a column to the dataframe that groups the original strata into the desi
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{st\_comp\_regions}\SpecialCharTok{$}\NormalTok{NorthEast }\OtherTok{\textless{}{-}} \FunctionTok{ifelse}\NormalTok{(st\_comp\_regions}\SpecialCharTok{$}\NormalTok{bcr }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\DecValTok{7}\NormalTok{,}\DecValTok{8}\NormalTok{,}\DecValTok{12}\SpecialCharTok{:}\DecValTok{14}\NormalTok{),}\StringTok{"NorthEast"}\NormalTok{,}\StringTok{"Other"}\NormalTok{)}
+\NormalTok{st\_comp\_regions}\SpecialCharTok{$}\NormalTok{SouthEast }\OtherTok{\textless{}{-}} \FunctionTok{ifelse}\NormalTok{(st\_comp\_regions}\SpecialCharTok{$}\NormalTok{bcr }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\DecValTok{21}\NormalTok{,}\DecValTok{24}\SpecialCharTok{:}\DecValTok{27}\NormalTok{,}\DecValTok{35}\SpecialCharTok{:}\DecValTok{37}\NormalTok{),}\StringTok{"SouthEast"}\NormalTok{,}\StringTok{"Other"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \hypertarget{use-defined-regions-to-estimate-indices-and-trends}{%
 \subsection{Use defined regions to estimate indices and trends}\label{use-defined-regions-to-estimate-indices-and-trends}}
 
-st\_comp\_regions can now be used as the dataframe input to the argument alt\_region\_names in \texttt{generate\_indices()}, with ``NorthEast'' as the value for the argument regions. The relevant trends can be calculated using just the \texttt{generate\_trends()} function.
+st\_comp\_regions can now be used as the dataframe input to the argument alt\_region\_names in \texttt{generate\_indices()}, with ``SouthEast'' as the value for the argument regions. The relevant trends can be calculated using just the \texttt{generate\_trends()} function.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1299,11 +1306,14 @@ st\_comp\_regions can now be used as the dataframe input to the argument alt\_re
 \NormalTok{custom\_indices }\OtherTok{\textless{}{-}} \FunctionTok{generate\_indices}\NormalTok{(}\AttributeTok{jags\_mod =}\NormalTok{ jags\_mod,}
                                       \AttributeTok{jags\_data =}\NormalTok{ jags\_data,}
                                       \AttributeTok{alt\_region\_names =}\NormalTok{ st\_comp\_regions,}
-                                      \AttributeTok{regions =} \StringTok{"NorthEast"}\NormalTok{)}
+                                      \AttributeTok{regions =} \StringTok{"SouthEast"}\NormalTok{)}
 \NormalTok{tp }\OtherTok{=} \FunctionTok{plot\_indices}\NormalTok{(}\AttributeTok{indices =}\NormalTok{ custom\_indices,}
-                         \AttributeTok{species =} \StringTok{"Scarlet Tanager"}\NormalTok{,}
+                         \AttributeTok{species =} \StringTok{"Barn Swallow"}\NormalTok{,}
                   \AttributeTok{add\_observed\_means =} \ConstantTok{TRUE}\NormalTok{,}
-                  \AttributeTok{add\_number\_routes =} \ConstantTok{TRUE}\NormalTok{)}
+                  \AttributeTok{add\_number\_routes =} \ConstantTok{TRUE}\NormalTok{,}
+  \AttributeTok{title\_size =} \DecValTok{20}\NormalTok{,}
+  \AttributeTok{axis\_title\_size =} \DecValTok{12}\NormalTok{,}
+  \AttributeTok{axis\_text\_size =} \DecValTok{12}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1352,16 +1362,16 @@ Details coming soon\ldots{}
 \hypertarget{customizing-the-jags-model-and-data}{%
 \section{Customizing the JAGS model and data}\label{customizing-the-jags-model-and-data}}
 
-You can even export the bbsBayes model as text, and modify it to add in covariates. For example a GAM smooth to estimate the effect of the day of year on the observations, or an annual weather covariate, or\ldots{} Then add the relevant covariate data to the jags\_data object, and you're off! We'll add some more details and examples soon.
+You can even export the bbsBayes model as text, and modify it to add in covariates. For example a GAM smooth to estimate the effect of the day of year on the observations, or an annual weather covariate, or\ldots{} Then add the relevant covariate data to the jags\_data object, and you're off!
 
 \hypertarget{comparing-models}{%
 \section{Comparing Models}\label{comparing-models}}
 
-Finally, bbsBayes can be used to run Bayesian cross-validations. For example, the \texttt{get\_final\_values()} function is useful to provide an efficient starting point for a cross-validation runs, without having to wait for another full burn-in period.
+Finally, bbsBayes can be used to run cross-validations. For example, the \texttt{get\_final\_values()} function is useful to provide an efficient starting point for a cross-validation runs, without having to wait for another full burn-in period.
 
 Paper that includes an example of how to implement a cross-validation using bbsBayes.
 
-Pre-print: \url{https://doi.org/10.1101/2020.03.26.010215}
+Ornithological Applications: \url{https://doi.org/10.1093/ornithapp/duaa065}
 Supplement: \url{https://zenodo.org/badge/latestdoi/228419725}
 
 NOTE: although bbsBayes includes functions to calculate WAIC, recent work has shown that WAIC performs very poorly with the BBS data (\url{https://doi.org/10.1650/CONDOR-17-1.1}). We recommend a k-fold cross-validation approach, as in the above zenodo archive.
