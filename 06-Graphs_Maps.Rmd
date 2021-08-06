@@ -2,7 +2,7 @@
 
 Now that we have calculated values for the trends and trajectories, bbsBayes also includes functions to plot and map the values.
 
-```{r GM1, cache=FALSE,echo=TRUE}
+```{r GM1, cache=FALSE,echo=FALSE}
 # load the trend and indices objects for Barn Swallow
 load("Barn_Swallow_trends_indices.RData")
 ```

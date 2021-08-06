@@ -5,7 +5,7 @@
 
 Yes, you can calculate the trend and trajectories for custom combinations of strata, such as a formal trend estimate for populations of Barn Swallow in the South East portion of their range (e.g., BCRs 21,24,25,26,27,35,36, and 37).
 
-``` {r A1}
+``` {r A1, echo = FALSE}
 load("data/gamye_Barn_Swallow/jags_mod_full.RData") #saved Barn Swallow model output and data
 ```
 
@@ -69,7 +69,11 @@ model_to_file(model = "slope",
               filename = "my_slope_model.txt")
 ```
 
-Then, you can modify the model text (e.g., try a different prior) and run the modified model
+This is the best way to confirm all of the priors, and model structures.
+
+## Customizing the JAGS model and data
+
+You can also modify the model text (e.g., try a different prior) and run the modified model
 
 ``` {r A7, eval=FALSE}
 run_model <- function(... ,
@@ -77,11 +81,13 @@ run_model <- function(... ,
                       ... )
 ```
 
-Details coming soon...
 
-## Customizing the JAGS model and data
+Or, you could add covariates.
+For example a GAM smooth to estimate the effect of the day of year on the observations, or an annual weather covariate, or... Then add the relevant covariate data to the jags_data object, and you're off! 
 
-You can even export the bbsBayes model as text, and modify it to add in covariates. For example a GAM smooth to estimate the effect of the day of year on the observations, or an annual weather covariate, or... Then add the relevant covariate data to the jags_data object, and you're off! 
+Here's a GitHub repo with an example of a modified `bbsBayes` model. The modified model includes a series of GAM smooths to account for variation in counts over the course of the BBS observation season (mid-May through early July). In addition these seasonal smooths are allowed to vary by decade to account for possible shifts in phenology through time.
+
+https://github.com/AdamCSmithCWS/BBS_seasonal_shift_ALHU
 
 ## Comparing Models
 
