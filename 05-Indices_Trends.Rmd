@@ -66,7 +66,7 @@ indices_smooth <- generate_indices(jags_mod = jags_mod,
 
 ## Population Trends
 
-Population trends can be calculated from the output of `generate_indices()`. The trends are expressed as geometric mean rates of change (%/year) between two points in time. $Trend = (\frac {n[Minyear]}{n[Maxyear]})^{(1/(Maxyear-Minyear))}$
+Population trends can be calculated from the output of `generate_indices()`. The trends are expressed as geometric mean rates of change (%/year) between two points in time. $Trend = 100*( (\frac {n[Maxyear]}{n[Minyear]})^\frac {1}{(Maxyear-Minyear)}} {)-1)}$
 
 ```{r IT7}
 trends <- generate_trends(indices = indices,
