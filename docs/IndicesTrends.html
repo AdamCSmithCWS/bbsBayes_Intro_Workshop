@@ -24,7 +24,7 @@
 <meta name="author" content="Adam C. Smith, and Brandon P.M. Edwards" />
 
 
-<meta name="date" content="2021-07-13" />
+<meta name="date" content="2021-08-11" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -343,7 +343,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="population-trends" class="section level2" number="6.2">
 <h2><span class="header-section-number">6.2</span> Population Trends</h2>
-<p>Population trends can be calculated from the output of <code>generate_indices()</code>. The trends are expressed as geometric mean rates of change (%/year) between two points in time. <span class="math inline">\(Trend = (\frac {n[Minyear]}{n[Maxyear]})^{(1/(Maxyear-Minyear))}\)</span></p>
+<p>Population trends can be calculated from the output of <code>generate_indices()</code>. The trends are expressed as geometric mean rates of change (%/year) between two points in time. <span class="math inline">\(Trend = 100*((\frac {n[Maxyear]}{n[Minyear]})^\frac {1}{(Maxyear-Minyear)}{)-1)}\)</span></p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="IndicesTrends.html#cb23-1" aria-hidden="true" tabindex="-1"></a>trends <span class="ot">&lt;-</span> <span class="fu">generate_trends</span>(<span class="at">indices =</span> indices,</span>
 <span id="cb23-2"><a href="IndicesTrends.html#cb23-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">Min_year =</span> <span class="dv">1970</span>,</span>
 <span id="cb23-3"><a href="IndicesTrends.html#cb23-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">Max_year =</span> <span class="dv">2019</span>)</span></code></pre></div>
@@ -496,7 +496,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="alternative-definitions-of-trends" class="section level2" number="6.4">
 <h2><span class="header-section-number">6.4</span> Alternative definitions of trends</h2>
-<p>The end-point trend definition introduced by <span class="citation">(<a href="Ref.html#ref-link2002a" role="doc-biblioref">Link and Sauer 2002b</a>)</span> is only one possible metric to measure a population trend. The default trend calculation is an interval-specific estimate of the geometric mean annual change in the population. <span class="math inline">\(Trend = (\frac {n[Minyear]}{n[Maxyear]})^{(1/(Maxyear-Minyear))}\)</span> It relies on a comparison of the annual indices in the first and last years of the trend period to quantify the mean rate of population change. However, it ignores the pattern of change between the two end-points.</p>
+<p>The end-point trend definition introduced by <span class="citation">(<a href="Ref.html#ref-link2002a" role="doc-biblioref">Link and Sauer 2002b</a>)</span> is only one possible metric to measure a population trend. The default trend calculation is an interval-specific estimate of the geometric mean annual change in the population. <span class="math inline">\(Trend = 100*((\frac {n[Maxyear]}{n[Minyear]})^\frac {1}{(Maxyear-Minyear)}{)-1)}\)</span> It relies on a comparison of the annual indices in the first and last years of the trend period to quantify the mean rate of population change. However, it ignores the pattern of change between the two end-points.</p>
 <p>The user can choose an alternative estimate of change that is calculated by fitting a log-linear slope to the series of all annual indices between the two end-points (e.g., all 11 years in a 10-year trend from 2008-2018). The slope of this line could be expressed as an average annual percent change across the time-period of interest. If working with estimates derived from a model with strong annual fluctuations and for which no decomposition is possible (e.g., “firstdiff” model), this slope-based trend may be a more comprehensive measure of the average population change, that is less dependent on the particular end-point years. These slope trends can be added to the trend output table by setting the <code>slope = TRUE</code> argument in <code>generate_trends()</code>. The standard trends are still calculated, but additional columns are added that include the alternate estimates. NOTE: the <code>generate_map()</code> function can map slope trends as well with the same <code>slope = TRUE</code> argument.</p>
 <p>For example, we could use the full annual indices from the gamye model (indices including the annual fluctuations) to calculate both the default end-point trends and the alternative slope trends.</p>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="IndicesTrends.html#cb30-1" aria-hidden="true" tabindex="-1"></a>trends_15_slope <span class="ot">&lt;-</span> <span class="fu">generate_trends</span>(<span class="at">indices =</span> indices,</span>

@@ -135,7 +135,7 @@
 
 \title{A Quick Introduction to bbsBayes}
 \author{Adam C. Smith, and Brandon P.M. Edwards}
-\date{2021-07-13}
+\date{2021-08-11}
 
 \begin{document}
 \maketitle
@@ -759,7 +759,7 @@ The function also accepts the alternative annual indices, such as the smooth-onl
 \hypertarget{population-trends}{%
 \section{Population Trends}\label{population-trends}}
 
-Population trends can be calculated from the output of \texttt{generate\_indices()}. The trends are expressed as geometric mean rates of change (\%/year) between two points in time. \(Trend = (\frac {n[Minyear]}{n[Maxyear]})^{(1/(Maxyear-Minyear))}\)
+Population trends can be calculated from the output of \texttt{generate\_indices()}. The trends are expressed as geometric mean rates of change (\%/year) between two points in time. \(Trend = 100*((\frac {n[Maxyear]}{n[Minyear]})^\frac {1}{(Maxyear-Minyear)}{)-1)}\)
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -879,7 +879,7 @@ Or, a 15-year trend for the previous 15 years, i.e., the interval from 1989-2004
 \hypertarget{alternative-definitions-of-trends}{%
 \section{Alternative definitions of trends}\label{alternative-definitions-of-trends}}
 
-The end-point trend definition introduced by (\protect\hyperlink{ref-link2002a}{Link and Sauer 2002b}) is only one possible metric to measure a population trend. The default trend calculation is an interval-specific estimate of the geometric mean annual change in the population. \(Trend = (\frac {n[Minyear]}{n[Maxyear]})^{(1/(Maxyear-Minyear))}\) It relies on a comparison of the annual indices in the first and last years of the trend period to quantify the mean rate of population change. However, it ignores the pattern of change between the two end-points.
+The end-point trend definition introduced by (\protect\hyperlink{ref-link2002a}{Link and Sauer 2002b}) is only one possible metric to measure a population trend. The default trend calculation is an interval-specific estimate of the geometric mean annual change in the population. \(Trend = 100*((\frac {n[Maxyear]}{n[Minyear]})^\frac {1}{(Maxyear-Minyear)}{)-1)}\) It relies on a comparison of the annual indices in the first and last years of the trend period to quantify the mean rate of population change. However, it ignores the pattern of change between the two end-points.
 
 The user can choose an alternative estimate of change that is calculated by fitting a log-linear slope to the series of all annual indices between the two end-points (e.g., all 11 years in a 10-year trend from 2008-2018). The slope of this line could be expressed as an average annual percent change across the time-period of interest. If working with estimates derived from a model with strong annual fluctuations and for which no decomposition is possible (e.g., ``firstdiff'' model), this slope-based trend may be a more comprehensive measure of the average population change, that is less dependent on the particular end-point years. These slope trends can be added to the trend output table by setting the \texttt{slope\ =\ TRUE} argument in \texttt{generate\_trends()}. The standard trends are still calculated, but additional columns are added that include the alternate estimates. NOTE: the \texttt{generate\_map()} function can map slope trends as well with the same \texttt{slope\ =\ TRUE} argument.
 
@@ -1088,13 +1088,6 @@ And here's the population trajectory for comparison. Note: the \texttt{plot\_ind
 
 Now that we have calculated values for the trends and trajectories, bbsBayes also includes functions to plot and map the values.
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\# load the trend and indices objects for Barn Swallow}
-\FunctionTok{load}\NormalTok{(}\StringTok{"Barn\_Swallow\_trends\_indices.RData"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
 \hypertarget{graphing-the-trajectories-annual-indices}{%
 \section{Graphing the trajectories (annual indices)}\label{graphing-the-trajectories-annual-indices}}
 
@@ -1251,12 +1244,6 @@ For stratifications that can be compiled by political regions (i.e., \texttt{bbs
 
 Yes, you can calculate the trend and trajectories for custom combinations of strata, such as a formal trend estimate for populations of Barn Swallow in the South East portion of their range (e.g., BCRs 21,24,25,26,27,35,36, and 37).
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{load}\NormalTok{(}\StringTok{"data/gamye\_Barn\_Swallow/jags\_mod\_full.RData"}\NormalTok{) }\CommentTok{\#saved Barn Swallow model output and data}
-\end{Highlighting}
-\end{Shaded}
-
 \hypertarget{define-the-custom-regions-as-a-collection-of-the-existing-strata.}{%
 \subsection{Define the custom regions as a collection of the existing strata.}\label{define-the-custom-regions-as-a-collection-of-the-existing-strata.}}
 
@@ -1347,7 +1334,12 @@ You can easily export any of the bbsBayes models to a text file.
 \end{Highlighting}
 \end{Shaded}
 
-Then, you can modify the model text (e.g., try a different prior) and run the modified model
+This is the best way to confirm all of the priors, and model structures.
+
+\hypertarget{customizing-the-jags-model-and-data}{%
+\section{Customizing the JAGS model and data}\label{customizing-the-jags-model-and-data}}
+
+You can also modify the model text (e.g., try a different prior) and run the modified model
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1357,12 +1349,12 @@ Then, you can modify the model text (e.g., try a different prior) and run the mo
 \end{Highlighting}
 \end{Shaded}
 
-Details coming soon\ldots{}
+Or, you could add covariates.
+For example a GAM smooth to estimate the effect of the day of year on the observations, or an annual weather covariate, or\ldots{} Then add the relevant covariate data to the jags\_data object, and you're off!
 
-\hypertarget{customizing-the-jags-model-and-data}{%
-\section{Customizing the JAGS model and data}\label{customizing-the-jags-model-and-data}}
+Here's a GitHub repo with an example of a modified \texttt{bbsBayes} model. The modified model includes a series of GAM smooths to account for variation in counts over the course of the BBS observation season (mid-May through early July). In addition these seasonal smooths are allowed to vary by decade to account for possible shifts in phenology through time.
 
-You can even export the bbsBayes model as text, and modify it to add in covariates. For example a GAM smooth to estimate the effect of the day of year on the observations, or an annual weather covariate, or\ldots{} Then add the relevant covariate data to the jags\_data object, and you're off!
+\url{https://github.com/AdamCSmithCWS/BBS_seasonal_shift_ALHU}
 
 \hypertarget{comparing-models}{%
 \section{Comparing Models}\label{comparing-models}}
